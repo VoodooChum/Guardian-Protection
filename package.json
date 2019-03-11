@@ -1,5 +1,5 @@
 {
-  "name": "pets-life",
+  "name": "guardian",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/serverusnola/PetsLife.git"
+    "url": "git+https://github.com/serverusnola/Guardian.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/serverusnola/PetsLife/issues"
+    "url": "https://github.com/serverusnola/Guardian/issues"
   },
-  "homepage": "https://github.com/serverusnola/PetsLife#readme"
+  "homepage": "https://github.com/serverusnola/Guardian#readme"
 }
