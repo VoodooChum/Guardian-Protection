@@ -1,11 +1,26 @@
 {
   "name": "guardian",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "expo start --offline",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
   },
+  "dependencies": {
+    "@types/react": "^16.8.7",
+    "@types/react-native": "^0.57.38",
+    "expo": "^32.0.0",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "react-native-typescript-transformer": "^1.2.12",
+    "typescript": "^3.3.3333"
+  },
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/serverusnola/Guardian.git"
