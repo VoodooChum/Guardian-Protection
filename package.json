@@ -10,7 +10,8 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@types/jest": "^24.0.11",

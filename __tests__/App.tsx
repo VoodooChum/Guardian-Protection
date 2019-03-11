@@ -1,10 +1,13 @@
 import * as React from 'react';
-import renderer from 'react-test-renderer'
+import 'react-native';
+import App from "../App";
+import renderer from 'react-test-renderer';
 
 
-import  App  from "../App"
 
 test("renders correctly with defaults", () => {
-    const app = renderer.create(<App />); 
+    const app = renderer.create(App.default).toJSON(); 
+    console.log(app);
+    app;
     expect(app).toMatchSnapshot();
 })
