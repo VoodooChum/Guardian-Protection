@@ -20,5 +20,15 @@
     "react-native-typescript-transformer": "^1.2.12",
     "typescript": "^3.3.3333"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serverusnola/Guardian.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/serverusnola/Guardian/issues"
+  },
+  "homepage": "https://github.com/serverusnola/Guardian#readme"
 }
