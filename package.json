@@ -27,6 +27,10 @@
   "devDependencies": {
     "@types/react-test-renderer": "^16.8.1",
     "babel-preset-expo": "^5.0.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
     "nodemon": "^1.18.10",
     "jest": "^24.4.0",
     "react-addons-test-utils": "^15.6.2",
