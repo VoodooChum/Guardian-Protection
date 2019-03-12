@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
   "hostType": "tunnel",
   "lanType": "ip",
   "dev": true,
   "minify": false,
   "urlRandomness": "v3-pez"
+=======
+  "hostType": "lan",
+  "lanType": "ip",
+  "dev": true,
+  "minify": false,
+  "urlRandomness": null
+>>>>>>> dfea19fa57ba7c5732d1eee0fa1b70f65356db2a
 }
