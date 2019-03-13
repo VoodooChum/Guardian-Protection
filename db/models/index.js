@@ -8,3 +8,9 @@ const sequelize = new Sequelize('postgres', process.env.DB_USER, process.env.DB_
     dialect: 'postgres',
 }); 
 
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
+
+sequelize.sync();
