@@ -1,19 +1,9 @@
 {
   "devToolsPort": 19002,
-<<<<<<< HEAD
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 2333,
-  "webpackServerPort": null,
-  "expoServerNgrokUrl": "https://k3-i9y.anonymous.guardian.exp.direct",
-  "packagerNgrokUrl": "https://packager.k3-i9y.anonymous.guardian.exp.direct",
-  "ngrokPid": 2411
-=======
   "expoServerNgrokUrl": null,
   "packagerNgrokUrl": null,
   "ngrokPid": null,
   "expoServerPort": 19000,
   "packagerPort": 19001,
   "packagerPid": 41012
->>>>>>> 61753824c79fb4e1da0a113ae33bf42aa88c49dd
 }
