@@ -12,6 +12,13 @@ const errorHandler = (req, res, err) => {
 
 const requestHandler = {
 
+    /**
+     * createUser: a test function to test if we can successfully query/create a user in
+     * our database via postman
+     * @param {object} req: the incoming request message 
+     * @param {object} res: the outcoming response message
+     */
+
     createUser(req, res){
         const newUser = req.body;
         db.User.create(newUser)
