@@ -1,4 +1,4 @@
-require('dotenv'); // this allows us to use the process variables
+require('dotenv').config(); // this allows us to use the process variables
 const express = require('express');
 
 const app = express();

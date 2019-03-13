@@ -30,6 +30,9 @@
         "tsx"
       ],
       "transformer": "node_modules/react-native-typescript-transformer/index.js"
+    }, 
+    "android": {
+      "package": "com.serverus.guardian"
     }
   }
 }
