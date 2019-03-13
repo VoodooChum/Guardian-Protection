@@ -1,4 +1,4 @@
-require('dotenv'); // this allows us to use the process variables
+require('dotenv').config(); // this allows us to use the process variables
 const express = require('express');
 const bodyParser = require("body-parser"); // Requiring body-parser to obtain the body from post requests
 const app = express();
