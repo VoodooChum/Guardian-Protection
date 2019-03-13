@@ -17,7 +17,7 @@ const requestHandler = {
         db.User.create(newUser)
             .then((returnedUser) => {
                 res.send('created!')
-                console.log(returnedUser);
+                console.log('created');
             })
             .catch(err => errorHandler(req, res, err));
     }
