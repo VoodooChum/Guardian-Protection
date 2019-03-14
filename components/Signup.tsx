@@ -8,7 +8,7 @@ class SignupView extends React.Component {
   render() {
     return (
       <View>
-        <Button title='SignIn' onPress={this.logSuccess}>Sign In Here</Button>
+        <Button title='Sign In Success' onPress={this.logSuccess}>Sign In Here</Button>
       </View>
     )
   }
