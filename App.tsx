@@ -2,8 +2,9 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import LoginView from './components/Login';
 import {Google} from 'expo';
-import Environment from 'dotenv';
-Environment.config();
+// import Environment from 'dotenv';
+// Environment.config();
+import { ANDROID_CLIENT_ID } from "react-native-dotenv";
  class App extends React.Component {
   constructor(props:object){
     super(props);
@@ -18,8 +19,9 @@ Environment.config();
   signIn = async () => {
     try{
       const result = await Google.logInAsync({
-        androidClientId: process.env.ANDROID_CLIENT_ID,
-        scopes: ['profile', 'email'],
+        // androidClientId: process.env.ANDROID_CLIENT_ID,
+        androidClientId: ANDROID_CLIENT_ID,
+        scopes: ["profile", "email"]
       });
       if (result.type === 'success') {
         this.setState({
