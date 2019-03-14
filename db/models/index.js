@@ -12,7 +12,9 @@ const models = [
     'UserGroup', 
     'Group',
     'GroupMessage',
-    'Message'
+    'Message',
+    'Receipt',
+    'UserReceipt'
 ];
 
 models.forEach((model) => {
