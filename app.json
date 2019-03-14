@@ -23,7 +23,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.serverus.guardian",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.561644087081-artjdceefg20lb2c3s25scpd9vljahdh"
+        }
+      }
     }, "packagerOpts": {
       "sourceExts": [
         "ts",
