@@ -9,6 +9,18 @@ const sequelize = new Sequelize('postgres', process.env.DB_USER, process.env.DB_
 
 const models = [
     'User',
+    'UserGroup', 
+    'Group',
+    'GroupMessage',
+    'Message',
+    'Receipt',
+    'UserReceipt', 
+    'Panic',
+    'Schedule',
+    'Location',
+    'UserLocation',
+    'Route',
+    'RouteLocation'
 ];
 
 models.forEach((model) => {
