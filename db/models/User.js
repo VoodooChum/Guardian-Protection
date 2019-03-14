@@ -9,5 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         email: { type: DataTypes.STRING, unique: true },
     });
 
+    User.associate = (models) => {
+        User.belongsToMany(models.Group, { through: models.UserGroup });
+        User.hasMany(models.Group, { constraints: false });
+    };
+
     return User;
 }
