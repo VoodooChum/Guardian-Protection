@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button, View} from 'react-native';
+import {Button, View, Text} from 'react-native';
 
 class LoginView extends React.Component {
   constructor(props:object){
@@ -8,6 +8,7 @@ class LoginView extends React.Component {
   logSuccess() {
     console.log('WHOO');
   }
+  
   render(){
     return (
     <View>
