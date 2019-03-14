@@ -14,7 +14,13 @@ const models = [
     'GroupMessage',
     'Message',
     'Receipt',
-    'UserReceipt'
+    'UserReceipt', 
+    'Panic',
+    'Schedule',
+    'Location',
+    'UserLocation',
+    'Route',
+    'RouteLocation'
 ];
 
 models.forEach((model) => {
