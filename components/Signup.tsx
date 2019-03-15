@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
+import axios from 'axios';
 
 const Form = t.form.Form;
+
 
 var User = t.struct({
   streetAddress: t.String,
@@ -16,24 +18,36 @@ var options = {
   auto: "placeholders"
 };
 
-export default class SignupView extends React.Component {
+
+
+export default class SignupView extends React.Component{
+  constructor(props: object) {
+    super(props);
+  }
 
   clearForm = () => {
     this.setState({value: null});
   }
 
-  onPressCreateGroup = () => {
-  // call getValue() to get the values of the form
-  var value = this.refs.form.getValue();
-  if (value) { // if validation fails, value will be null
-    let groupStatus = 'create'; // Sets value of groupStatus to create
-    console.log(value, 'groupStatus:', groupStatus); // value here is an instance of User 
+  onPressCreateGroup = async () => {
+    try {
+      // call getValue() to get the values of the form
+      let user = this.refs.form.getValue();
+      if (user) { // if validation fails, value will be null
+        // let groupStatus = 'create'; // Sets value of groupStatus to create
+        console.log(user); // value here is an instance of User 
+        // user.email = this.props.email;
+        // console.log(this.state);
+      }
+      let result = await axios.post('http://localhost:3000/signup', { "user": user, 'props': this.props })
+    } catch (error) {
+      console.log(JSON.stringify(error)); 
+    }
     this.clearForm();
-  }
-}
+  } 
 
   onPressJoinGroup = () => {
-    // call getValue() to get the values of the form
+    // call getValue() to get the values of the form 
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
       let groupStatus = 'join'; // Sets value of groupStatus to join

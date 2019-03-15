@@ -4,7 +4,10 @@ import LoginView from './components/Login';
 import {Google} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
-import SignupView from "./components/Signup";
+import Signup from "./components/Signup";
+// import console = require('console');
+
+
 
  class App extends React.Component {
   constructor(props:object){
@@ -49,7 +52,6 @@ import SignupView from "./components/Signup";
         } catch(e){ 
           console.log(e.message)
         }
-        
         this.setState({
           signedIn: true,
           name: result.user.name,
@@ -78,7 +80,7 @@ import SignupView from "./components/Signup";
             }}
           />
           <Text>{this.state.name}</Text>
-          <SignupView photoUrl={this.state.photoUrl} />
+          <Signup url_profile_pic={this.state.photoUrl} email={this.state.email} name_first={this.state.name.split(' ')[0]} name_last={this.state.name.split(' ')[1]}/>
         </View>
       );
     } else {
