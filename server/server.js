@@ -6,7 +6,7 @@ const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const port = process.env.PORT || 3000;
-const { createUser, login } = require('../db/helpers/request-handlers')
+const { createUser, login, signup } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -18,6 +18,7 @@ passport.use(new LocalStrategy(
     db.User.findOne({ where: { email: username } }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
+        done(null, 'user not in db')
         res.status(401)
       } 
       return done(null, user);
@@ -33,10 +34,7 @@ app.get("/", (req, res) => {
 app.post('/login', passport.authenticate('local'), login); 
 
 
-app.post("/signup", (req, res) => {
-  const userInfo = req.body;
-  res.status(201).send(userInfo);
-});
+app.post("/signup", signup);
 
 app.post('/create', createUser);
 
