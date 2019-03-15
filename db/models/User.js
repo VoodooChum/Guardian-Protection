@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         name_first: { type: DataTypes.STRING, unique: true, allowNull: false },
@@ -15,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Group, { constraints: false });
         User.hasMany(models.UserLocation, { constraints: false });
     };
+
 
     return User;
 }

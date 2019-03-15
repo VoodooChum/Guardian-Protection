@@ -2,9 +2,9 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import LoginView from './components/Login';
 import {Google} from 'expo';
+import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
-
 
  class App extends React.Component {
   constructor(props:object){
@@ -12,16 +12,24 @@ import SignupView from "./components/Signup";
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: ''
+      photoUrl: '',
+      email: '',
+      accessToken: '',
+      accessTokenExpirationDate: '',
     }
     this.signInAsync = this.signInAsync.bind(this);
-    this.handleGoogleSessionAsync = this.handleGoogleSessionAsync.bind(this);
+    this.handleGoogleSession = this.handleGoogleSession.bind(this);
   }
-  componentDidMount = async () => {
-    this.handleGoogleSessionAsync();
-  }
-  handleGoogleSessionAsync = async () => {
-    
+
+  handleGoogleSession = () => {
+    const date = Date.parse(this.state.accessTokenExpirationDate);
+    const newDate = new Date();
+    console.log(date, newDate.getTime());
+    if(date < newDate.getTime()){
+      this.setState({
+        signedIn: false
+      })
+    }
   }
 
   signInAsync = async () => {
@@ -32,10 +40,23 @@ import SignupView from "./components/Signup";
       });
       if (result.type === 'success') {
         console.log(result);
+        try{
+          const params = {
+            "username": result.user.email,
+            "password": result.user.name
+          }
+          let sentCredential = await axios.post('http://localhost:3000/login', params)
+        } catch(e){ 
+          console.log(e.message)
+        }
+        
         this.setState({
           signedIn: true,
           name: result.user.name,
-          photoUrl: result.user.photoUrl
+          photoUrl: result.user.photoUrl, 
+          email: result.user.email,
+          accessTokenExpirationDate: result.accessTokenExpirationDate,
+          accessToken: result.accessToken
         })
       } else {
         console.log('cancelled');
@@ -46,6 +67,7 @@ import SignupView from "./components/Signup";
   }
   render() {
     if(this.state.signedIn === true) {
+      this.handleGoogleSession();
       return (
         <View style={styles.container}>
           <Image
