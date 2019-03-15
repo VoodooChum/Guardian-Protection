@@ -19,6 +19,7 @@ import Signup from "./components/Signup";
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
+      existingUser: false
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
@@ -42,16 +43,20 @@ import Signup from "./components/Signup";
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
-        console.log(result);
+        // console.log(result);
         try{
           const params = {
             "username": result.user.email,
             "password": result.user.name
           }
-          let sentCredential = await axios.post('http://localhost:3000/login', params)
+          let sentUser = await axios.post('http://172.24.0.117:3000/login', params)
+          if (sentUser.data.id){
+            this.setState({existingUser: true})
+          }
         } catch(e){ 
           console.log(e.message)
         }
+        
         this.setState({
           signedIn: true,
           name: result.user.name,

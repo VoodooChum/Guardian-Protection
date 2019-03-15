@@ -21,7 +21,8 @@ passport.use(new LocalStrategy(
         done(null, 'user not in db')
         res.status(401)
       } 
-      return done(null, user);
+      console.log(user); 
+      return done(null, user);    
     });
   }
 ));
