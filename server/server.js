@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
 
 app.post("/signup", (req, res) => {
   const userInfo = req.body;
+  console.log(userInfo);
   res.status(201).send(userInfo);
 });
 
