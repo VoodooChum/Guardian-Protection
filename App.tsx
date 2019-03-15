@@ -31,7 +31,7 @@ import SignupView from "./components/Signup";
             "username": result.user.email,
             "password": result.user.name
           }
-          let sentCredential = await axios.post('http://localhost:3000/login', params)
+          let sentCredential = await axios.post(`${process.env.API_HOST}/login`, params)
         } catch(e){ 
           console.log(e.message)
         }

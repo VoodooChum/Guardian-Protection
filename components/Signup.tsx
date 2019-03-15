@@ -35,8 +35,8 @@ export default class SignupView extends React.Component {
     // let groupStatus = 'create'; // Sets value of groupStatus to create
     console.log(user); // value here is an instance of User 
     // console.log(this.state);
-    let result = await axios.post("http://127.0.0.1:3000/signup", {user})
-    }
+  }
+  let result = await axios.post(`${process.env.API_HOST}/signup`, {user})
   } catch(error) {
     console.log(JSON.stringify(error));
   }
