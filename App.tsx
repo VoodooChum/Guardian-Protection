@@ -4,7 +4,7 @@ import LoginView from './components/Login';
 import {Google} from 'expo';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
-// import console = require('console');
+import console = require('console');
 
  class App extends React.Component {
   constructor(props:object){
@@ -15,9 +15,39 @@ import SignupView from "./components/Signup";
       photoUrl: ''
     }
     this.signIn = this.signIn.bind(this);
+    this.handleGoogleSessionAsync = this.handleGoogleSessionAsync.bind(this);
+  }
+  componentDidMount = async () => {
+    this.handleGoogleSessionAsync();
+  }
+  handleGoogleSessionAsync = async () => {
+    try {
+      const loggedIn = await Google.isSignedInAsync();
+      if (loggedIn) {
+        try {
+          const result = Google.signInSilentlyAsync({
+            clientId: ANDROID_CLIENT_ID,
+            scopes: ['profile', 'email']
+          });
+          if (result.type === 'success') {
+            this.setState({
+              signedIn: true,
+              name: result.user.name,
+              photoUrl: result.user.photoUrl
+            })
+          } else {
+            console.log('no sign in silently');
+          }
+        } catch ({ message }) {
+          console.error('ERR FROM GOOGLE in ComponentDidMount' + message);
+        }
+      }
+    } catch ({ message }) {
+      console.log('ERROR FROM GOOGLE: ' + message)
+    }
   }
 
-  signIn = async () => {
+  signInAsync = async () => {
     try{
       const result = await Google.logInAsync({
         clientId: ANDROID_CLIENT_ID,
