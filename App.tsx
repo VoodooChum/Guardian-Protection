@@ -2,7 +2,8 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import LoginView from './components/Login';
 import {Google} from 'expo';
-import { ANDROID_CLIENT_ID } from 'react-native-dotenv';
+import axios from 'axios';
+import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
 // import console = require('console');
 
@@ -13,7 +14,7 @@ import SignupView from "./components/Signup";
       signedIn: false,
       name: '',
       photoUrl: '',
-      groupStatus: ''
+      email: ''
     }
     this.signIn = this.signIn.bind(this);
   }
@@ -21,16 +22,26 @@ import SignupView from "./components/Signup";
   signIn = async () => {
     try{
       const result = await Google.logInAsync({
-        androidClientId: ANDROID_CLIENT_ID,
+        clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
+        try{
+          const params = {
+            "username": result.user.email,
+            "password": result.user.name
+          }
+          let sentCredential = await axios.post('http://localhost:3000/login', params)
+        } catch(e){ 
+          console.log(e.message)
+        }
+        
         this.setState({
           signedIn: true,
           name: result.user.name,
-          photoUrl: result.user.photoUrl
+          photoUrl: result.user.photoUrl, 
+          email: result.user.email 
         })
-        console.log(this.state);
       } else {
         console.log('cancelled');
       }
@@ -50,7 +61,7 @@ import SignupView from "./components/Signup";
             }}
           />
           <Text>{this.state.name}</Text>
-          <SignupView photoUrl={this.state.photoUrl} groupStatus={this.state.groupStatus} />
+          <SignupView photoUrl={this.state.photoUrl} />
         </View>
       );
     } else {
