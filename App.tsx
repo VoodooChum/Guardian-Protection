@@ -4,12 +4,8 @@ import LoginView from './components/Login';
 import {Google} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
-<<<<<<< HEAD
 import Signup from "./components/Signup";
 // import console = require('console');
-=======
-import SignupView from "./components/Signup";
->>>>>>> ce8c519bfee4f8e461684ad3cf839e1961e59fc7
 
 
 
