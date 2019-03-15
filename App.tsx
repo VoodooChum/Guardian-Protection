@@ -4,7 +4,7 @@ import LoginView from './components/Login';
 import {Google} from 'expo';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
-import console = require('console');
+
 
  class App extends React.Component {
   constructor(props:object){
@@ -14,37 +14,14 @@ import console = require('console');
       name: '',
       photoUrl: ''
     }
-    this.signIn = this.signIn.bind(this);
+    this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSessionAsync = this.handleGoogleSessionAsync.bind(this);
   }
   componentDidMount = async () => {
     this.handleGoogleSessionAsync();
   }
   handleGoogleSessionAsync = async () => {
-    try {
-      const loggedIn = await Google.isSignedInAsync();
-      if (loggedIn) {
-        try {
-          const result = Google.signInSilentlyAsync({
-            clientId: ANDROID_CLIENT_ID,
-            scopes: ['profile', 'email']
-          });
-          if (result.type === 'success') {
-            this.setState({
-              signedIn: true,
-              name: result.user.name,
-              photoUrl: result.user.photoUrl
-            })
-          } else {
-            console.log('no sign in silently');
-          }
-        } catch ({ message }) {
-          console.error('ERR FROM GOOGLE in ComponentDidMount' + message);
-        }
-      }
-    } catch ({ message }) {
-      console.log('ERROR FROM GOOGLE: ' + message)
-    }
+    
   }
 
   signInAsync = async () => {
@@ -54,6 +31,7 @@ import console = require('console');
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
+        console.log(result);
         this.setState({
           signedIn: true,
           name: result.user.name,
@@ -92,7 +70,7 @@ import console = require('console');
             }}
           />
           <Text>The Premier App in Family Protection!</Text>
-          <LoginView signIn={this.signIn}/>
+          <LoginView signIn={this.signInAsync}/>
         </View>
       );
     }
