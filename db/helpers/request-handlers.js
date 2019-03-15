@@ -27,8 +27,16 @@ const requestHandler = {
                 console.log('created');
             })
             .catch(err => errorHandler(req, res, err));
-    }
+    },
 
+    login(req, res, next) {
+    let email = req.body.email
+    db.User.findOne({ where: { email: email } })
+      .then((foundUser) => {
+        console.log(foundUser);
+        res.send(foundUser);
+      })
+  }, 
 }
 
 module.exports = requestHandler;
