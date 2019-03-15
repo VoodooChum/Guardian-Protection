@@ -32,7 +32,7 @@ export default class SignupView extends React.Component{
   onPressCreateGroup = async () => {
     try {
       // call getValue() to get the values of the form
-      let user = this.refs.form.getValue();
+      let user = this.refs.form.getValue();  
       if (user) { // if validation fails, value will be null
         // let groupStatus = 'create'; // Sets value of groupStatus to create
         console.log(user); // value here is an instance of User 
@@ -46,14 +46,19 @@ export default class SignupView extends React.Component{
     this.clearForm();
   } 
 
-  onPressJoinGroup = () => {
-    // call getValue() to get the values of the form 
-    var value = this.refs.form.getValue();
-    if (value) { // if validation fails, value will be null
-      let groupStatus = 'join'; // Sets value of groupStatus to join
-      console.log(value, 'groupStatus:', groupStatus); // value here is an instance of Person
-      this.clearForm();
+  onPressJoinGroup = async () => {
+    try{ 
+      var user = this.refs.form.getValue();
+      if (user) { // if validation fails, value will be null
+        let result = await axios.post('http://localhost:3000/signup', { "user": user, 'props': this.props })
+        let groupStatus = 'join'; // Sets value of groupStatus to join
+        // console.log(user, 'groupStatus:', groupStatus); // value here is an instance of Person
+        this.clearForm();
+      }
+    } catch(e){
+      console.log(e.message)
     }
+    // call getValue() to get the values of the form 
   }
 
   
