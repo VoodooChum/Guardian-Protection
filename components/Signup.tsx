@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
+import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { Google, Constants } from 'expo';
@@ -65,30 +65,37 @@ export default class SignupView extends React.Component{
   
   render() {
     return (
-      <View style={styles.container}>
-        {/* display */}
-        <Form ref="form" type={User} options={options} />
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.onPressCreateGroup}
-          underlayColor="#99d9f4"
-        >
-          <Text style={styles.buttonText}>Save and Create New Group</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.onPressJoinGroup}
-          underlayColor="#99d9f4"
-        >
-          <Text style={styles.buttonText}>Save and Join Existing Group</Text>
-        </TouchableHighlight>
-        {/* <Text>{this.state.groupStatus}</Text> */}
-      </View>
+        <View style={styles.container}>
+          <ScrollView contentContainerStyle={scroll.contentContainer}>
+          {/* display */}
+          <Form ref="form" type={User} options={options} />
+          <TouchableHighlight
+            style={styles.button}
+            onPress={this.onPressCreateGroup}
+            underlayColor="#99d9f4"
+          >
+            <Text style={styles.buttonText}>Create New Group</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={styles.button}
+            onPress={this.onPressJoinGroup}
+            underlayColor="#99d9f4"
+          >
+            <Text style={styles.buttonText}>Join Existing Group</Text>
+          </TouchableHighlight>
+        </ScrollView>
+          {/* <Text>{this.state.groupStatus}</Text> */}
+        </View>
     );
   }
 }
+const scroll = StyleSheet.create({
+  contentContainer: {
+    paddingVertical: 20
+  }
+});
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     width: 300,
