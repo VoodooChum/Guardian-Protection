@@ -4,8 +4,12 @@ import LoginView from './components/Login';
 import {Google} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
+<<<<<<< HEAD
 import Signup from "./components/Signup";
 // import console = require('console');
+=======
+import SignupView from "./components/Signup";
+>>>>>>> ce8c519bfee4f8e461684ad3cf839e1961e59fc7
 
 
 
@@ -16,18 +20,33 @@ import Signup from "./components/Signup";
       signedIn: false,
       name: '',
       photoUrl: '',
-      email: ''
+      email: '',
+      accessToken: '',
+      accessTokenExpirationDate: '',
     }
-    this.signIn = this.signIn.bind(this);
+    this.signInAsync = this.signInAsync.bind(this);
+    this.handleGoogleSession = this.handleGoogleSession.bind(this);
   }
 
-  signIn = async () => {
+  handleGoogleSession = () => {
+    const date = Date.parse(this.state.accessTokenExpirationDate);
+    const newDate = new Date();
+    console.log(date, newDate.getTime());
+    if(date < newDate.getTime()){
+      this.setState({
+        signedIn: false
+      })
+    }
+  }
+
+  signInAsync = async () => {
     try{
       const result = await Google.logInAsync({
         clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
+        console.log(result);
         try{
           const params = {
             "username": result.user.email,
@@ -41,7 +60,9 @@ import Signup from "./components/Signup";
           signedIn: true,
           name: result.user.name,
           photoUrl: result.user.photoUrl, 
-          email: result.user.email 
+          email: result.user.email,
+          accessTokenExpirationDate: result.accessTokenExpirationDate,
+          accessToken: result.accessToken
         })
       } else {
         console.log('cancelled');
@@ -52,6 +73,7 @@ import Signup from "./components/Signup";
   }
   render() {
     if(this.state.signedIn === true) {
+      this.handleGoogleSession();
       return (
         <View style={styles.container}>
           <Image
@@ -76,7 +98,7 @@ import Signup from "./components/Signup";
             }}
           />
           <Text>The Premier App in Family Protection!</Text>
-          <LoginView signIn={this.signIn}/>
+          <LoginView signIn={this.signInAsync}/>
         </View>
       );
     }
