@@ -2,7 +2,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const db = require('../models');
 
 module.exports = (passport) => {
-    passport.use(new LocalStrategy((email, done) => {
+    passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: null
+    },(email, password, done) => {
         // passport needs to "use" a "strategy" http://www.passportjs.org/docs/configure/
         db.User.findOne({ where: { email: email } })
             .then((foundUser) => {
