@@ -27,8 +27,39 @@ const requestHandler = {
                 console.log('created');
             })
             .catch(err => errorHandler(req, res, err));
-    }
+    },
 
+    /*
+  signup
+  on POST /signup
+  expects:
+    req.body: JSON => { "username", "password" }
+  if username in db: 401
+  else on creation: login, send 200, {username, id}
+  */
+    signup(req, res, next) {
+        const newUser = req.body;
+        db.User.create(newUser)
+            .then((returnedUser) => {
+                req.login({ username: returnedUser.username, id: returnedUser.id }, (err) => {
+                    if (err) return next(err);
+                    return res.json(201, {
+                        username: returnedUser.username,
+                        id: returnedUser.id,
+                    });
+                });
+            })
+            .catch(err => errorHandler(req, res, err));
+    },
+
+    login(req, res, next) {
+    let email = req.body.email
+    db.User.findOne({ where: { email: email } }) 
+      .then((foundUser) => {
+        console.log(foundUser);
+        res.send(foundUser);
+      }).catch((err) => console.log(err))
+  }, 
 }
 
 module.exports = requestHandler;

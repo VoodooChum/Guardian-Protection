@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import LoginView from './components/Login';
 import {Google} from 'expo';
+import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
 // import console = require('console');
@@ -12,7 +13,8 @@ import SignupView from "./components/Signup";
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: ''
+      photoUrl: '',
+      email: ''
     }
     this.signIn = this.signIn.bind(this);
   }
@@ -24,10 +26,21 @@ import SignupView from "./components/Signup";
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
+        try{
+          const params = {
+            "username": result.user.email,
+            "password": result.user.name
+          }
+          let sentCredential = await axios.post('http://localhost:3000/login', params)
+        } catch(e){ 
+          console.log(e.message)
+        }
+        
         this.setState({
           signedIn: true,
           name: result.user.name,
-          photoUrl: result.user.photoUrl
+          photoUrl: result.user.photoUrl, 
+          email: result.user.email 
         })
       } else {
         console.log('cancelled');
