@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npm install && expo start --offline",
+    "start": "expo start --offline",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
@@ -27,7 +27,8 @@
     "pg-hstore": "^2.3.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-test-renderer": "^16.8.4"
+    "react-test-renderer": "^16.8.4",
+    "tcomb-form-native": "^0.6.20"
   },
   "devDependencies": {
     "@types/expo": "^32.0.7",

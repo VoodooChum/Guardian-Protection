@@ -2,3 +2,4 @@ node_modules
 .idea
 google-services.json
 .env
+GoogleService-Info.plist
