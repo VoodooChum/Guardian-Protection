@@ -8,6 +8,7 @@ const {API_HOST} = Constants.manifest.extra;
 
 const Form = t.form.Form;
 
+
 var User = t.struct({
   streetAddress: t.String,
   city: t.String,
@@ -20,7 +21,9 @@ var options = {
   auto: "placeholders"
 };
 
-export default class SignupView extends React.Component {
+
+
+export default class SignupView extends React.Component{
   constructor(props: object) {
     super(props);
   }
@@ -31,22 +34,23 @@ export default class SignupView extends React.Component {
 
   onPressCreateGroup = async () => {
     try {
-  // call getValue() to get the values of the form
-  let user = this.refs.form.getValue();
-  if (user) { // if validation fails, value will be null
-    // let groupStatus = 'create'; // Sets value of groupStatus to create
-    console.log(user); // value here is an instance of User 
-    // console.log(this.state);
-  }
-  let result = await axios.post(`${API_HOST}/signup`, {user})
-  } catch(error) {
-    console.log(JSON.stringify(error));
-  }
-  this.clearForm();
-}
+      // call getValue() to get the values of the form
+      let user = this.refs.form.getValue();
+      if (user) { // if validation fails, value will be null
+        // let groupStatus = 'create'; // Sets value of groupStatus to create
+        console.log(user); // value here is an instance of User 
+        // user.email = this.props.email;
+        // console.log(this.state);
+      }
+      let result = await axios.post(`${API_HOST}/signup`, { "user": user, 'props': this.props })
+    } catch (error) {
+      console.log(JSON.stringify(error)); 
+    }
+    this.clearForm();
+  } 
 
   onPressJoinGroup = () => {
-    // call getValue() to get the values of the form
+    // call getValue() to get the values of the form 
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
       this.setState({
