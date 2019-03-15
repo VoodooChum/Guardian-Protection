@@ -18,18 +18,19 @@ passport.use(new LocalStrategy(
     db.User.findOne({ where: { email: username } }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        res.status(401)
       } 
       return done(null, user);
     });
   }
 ));
 
+
 app.get("/", (req, res) => {
-  res.status(200).send("Yea this works");
+  res.status(200).send("Yea this works"); 
 });
 
-app.post('/login', passport.authenticate('local'),  login);  
+app.post('/login', passport.authenticate('local'), login); 
 
 
 app.post("/signup", (req, res) => {

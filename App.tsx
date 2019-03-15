@@ -35,7 +35,6 @@ import SignupView from "./components/Signup";
         } catch(e){ 
           console.log(e.message)
         }
-        
         this.setState({
           signedIn: true,
           name: result.user.name,
