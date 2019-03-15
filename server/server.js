@@ -26,6 +26,14 @@ passport.use(new LocalStrategy(
   }
 ));
 
+passport.serializeUser((user, done) => done(null, user.id));
+// saves user id on session
+
+passport.deserializeUser((id, done) => db.User.findOne({ where: { id } })
+  .then(user => done(null, user))
+  .catch(err => done(err)));
+  // associates session with user
+
 
 app.get("/", (req, res) => {
   res.status(200).send("Yea this works"); 
