@@ -62,7 +62,7 @@ import Signup from "./components/Signup";
             }}
           />
           <Text>{this.state.name}</Text>
-          <Signup photoUrl={this.state.photoUrl} email={this.state.email} firstName={this.state.name.split(' ')[0]} lastName={this.state.name.split(' ')[1]}/>
+          <Signup url_profile_pic={this.state.photoUrl} email={this.state.email} name_first={this.state.name.split(' ')[0]} name_last={this.state.name.split(' ')[1]}/>
         </View>
       );
     } else {

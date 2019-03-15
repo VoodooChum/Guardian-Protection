@@ -41,15 +41,19 @@ const requestHandler = {
         const newUser = {};
         Object.assign(newUser, req.body.props);
         Object.assign(newUser, req.body.user);
+        newUser.radius = 30;
+        newUser.update_interval = 24;
         db.User.create(newUser) 
             .then((returnedUser) => {
                 req.login({ username: returnedUser.username, id: returnedUser.id }, (err) => {
                     if (err) return next(err);
+                    console.log('loggedin')
                     return res.json(201, {
                         username: returnedUser.username,
                         id: returnedUser.id,
                     });
                 });
+                console.log('created');
             })
             .catch(err => errorHandler(req, res, err));
     },
