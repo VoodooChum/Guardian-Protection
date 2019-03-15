@@ -1,27 +1,4 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import LoginView from './components/Login';
-import {Google, Constants} from 'expo';
-import axios from 'axios';
-import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
-import SignupView from "./components/Signup";
-import CreateGroupView from "./components/CreateGroup";
-const {API_HOST} = Constants.manifest.extra;
-
-
-
- class App extends React.Component {
-  constructor(props:object){
-    super(props);
-    this.state = {
-      signedIn: false,
-      name: '',
-      photoUrl: '',
-      email: ''
-    }
-    this.signIn = this.signIn.bind(this);
-  }
-
+import * as React from 'react';Fixed 
   signIn = async () => {
     try{
       const result = await Google.logInAsync({
