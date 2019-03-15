@@ -54,11 +54,11 @@ const requestHandler = {
 
     login(req, res, next) {
     let email = req.body.email
-    db.User.findOne({ where: { email: email } })
+    db.User.findOne({ where: { email: email } }) 
       .then((foundUser) => {
         console.log(foundUser);
         res.send(foundUser);
-      })
+      }).catch((err) => console.log(err))
   }, 
 }
 
