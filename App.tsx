@@ -4,7 +4,7 @@ import LoginView from './components/Login';
 import {Google, Constants} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
-import SignupView from "./components/Signup";
+import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
 const {API_HOST} = Constants.manifest.extra;
 
