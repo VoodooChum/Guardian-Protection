@@ -5,7 +5,7 @@ import {Google} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
-
+import PanicButton from './components/PanicButton';
  class App extends React.Component {
   constructor(props:object){
     super(props);
@@ -93,6 +93,7 @@ import SignupView from "./components/Signup";
           />
           <Text>The Premier App in Family Protection!</Text>
           <LoginView signIn={this.signInAsync}/>
+          <PanicButton />
         </View>
       );
     }
