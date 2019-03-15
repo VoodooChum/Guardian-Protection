@@ -12,7 +12,8 @@ import SignupView from "./components/Signup";
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: ''
+      photoUrl: '',
+      groupStatus: ''
     }
     this.signIn = this.signIn.bind(this);
   }
@@ -49,7 +50,7 @@ import SignupView from "./components/Signup";
             }}
           />
           <Text>{this.state.name}</Text>
-          <SignupView photoUrl={this.state.photoUrl} />
+          <SignupView photoUrl={this.state.photoUrl} groupStatus={this.state.groupStatus} />
         </View>
       );
     } else {
