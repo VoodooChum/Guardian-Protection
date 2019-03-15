@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import LoginView from './components/Login';
-import {Google} from 'expo';
+import {Google, Constants} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import SignupView from "./components/Signup";
-// import console = require('console');
+import CreateGroupView from "./components/CreateGroup";
+const {API_HOST} = Constants.manifest.extra;
+
+
 
  class App extends React.Component {
   constructor(props:object){
@@ -31,7 +34,7 @@ import SignupView from "./components/Signup";
             "username": result.user.email,
             "password": result.user.name
           }
-          let sentCredential = await axios.post(`${process.env.API_HOST}/login`, params)
+          let sentCredential = await axios.post(`${API_HOST}/login`, params)
         } catch(e){ 
           console.log(e.message)
         }
@@ -40,7 +43,8 @@ import SignupView from "./components/Signup";
           signedIn: true,
           name: result.user.name,
           photoUrl: result.user.photoUrl, 
-          email: result.user.email 
+          email: result.user.email,
+          view: ''  // Temporary change view variable
         })
       } else {
         console.log('cancelled');
@@ -50,7 +54,21 @@ import SignupView from "./components/Signup";
     }
   }
   render() {
-    if(this.state.signedIn === true) {
+    if (this.state.view === 'createGroup') {
+      return (
+        <View style={styles.container}>
+          <Image
+            style={{ borderRadius: 20, width: 155, height: 153 }}
+            source={{
+              uri:
+                `${this.state.photoUrl}`
+            }}
+          />
+          <Text>{this.state.name}</Text>
+          <CreateGroupView photoUrl={this.state.photoUrl} />
+        </View>
+      );
+    } else if(this.state.signedIn === true) {
       return (
         <View style={styles.container}>
           <Image
