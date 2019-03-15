@@ -42,7 +42,11 @@ app.get("/", (req, res) => {
 app.post('/login', passport.authenticate('local'), login); 
 
 
-app.post("/signup", signup);
+app.post("/signup", (req, res) => {
+  const userInfo = req.body;
+  console.log(userInfo);
+  res.status(201).send(userInfo);
+});
 
 app.post('/create', createUser);
 

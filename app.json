@@ -1,5 +1,8 @@
 {
   "expo": {
+    "extra": {
+      "API_HOST": "http://172.24.7.86:4567"
+    },
     "name": "Guardian",
     "slug": "thesis",
     "privacy": "public",

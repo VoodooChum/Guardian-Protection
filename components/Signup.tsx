@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
+import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
-import axios from 'axios';
+import axios from "axios";
+import { Google, Constants } from 'expo';
+const {API_HOST} = Constants.manifest.extra;
+
 
 const Form = t.form.Form;
 
@@ -39,7 +42,7 @@ export default class SignupView extends React.Component{
         // user.email = this.props.email;
         // console.log(this.state);
       }
-      let result = await axios.post('http://localhost:3000/signup', { "user": user, 'props': this.props })
+      let result = await axios.post(`${API_HOST}/signup`, { "user": user, 'props': this.props })
     } catch (error) {
       console.log(JSON.stringify(error)); 
     }
@@ -50,8 +53,11 @@ export default class SignupView extends React.Component{
     // call getValue() to get the values of the form 
     var value = this.refs.form.getValue();
     if (value) { // if validation fails, value will be null
-      let groupStatus = 'join'; // Sets value of groupStatus to join
-      console.log(value, 'groupStatus:', groupStatus); // value here is an instance of Person
+      this.setState({
+        groupStatus: 'join'
+      })
+      // let groupStatus = 'join'; // Sets value of groupStatus to join
+      console.log(value); // value here is an instance of Person
       this.clearForm();
     }
   }
@@ -59,34 +65,43 @@ export default class SignupView extends React.Component{
   
   render() {
     return (
-      <View style={styles.container}>
-        {/* display */}
-        <Form ref="form" type={User} options={options} />
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.onPressCreateGroup}
-          underlayColor="#99d9f4"
-        >
-          <Text style={styles.buttonText}>Save and Create New Group</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.onPressJoinGroup}
-          underlayColor="#99d9f4"
-        >
-          <Text style={styles.buttonText}>Save and Join Existing Group</Text>
-        </TouchableHighlight>
-      </View>
+        <View style={styles.container}>
+          <ScrollView contentContainerStyle={scroll.contentContainer}>
+          {/* display */}
+          <Form ref="form" type={User} options={options} />
+          <TouchableHighlight
+            style={styles.button}
+            onPress={this.onPressCreateGroup}
+            underlayColor="#99d9f4"
+          >
+            <Text style={styles.buttonText}>Create New Group</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={styles.button}
+            onPress={this.onPressJoinGroup}
+            underlayColor="#99d9f4"
+          >
+            <Text style={styles.buttonText}>Join Existing Group</Text>
+          </TouchableHighlight>
+        </ScrollView>
+          {/* <Text>{this.state.groupStatus}</Text> */}
+        </View>
     );
   }
 }
+const scroll = StyleSheet.create({
+  contentContainer: {
+    paddingVertical: 20
+  }
+});
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     width: 300,
     marginTop: 0,
     padding: 30,
+    borderRadius: 8,
     backgroundColor: "#0078ef"
   },
   buttonText: {
