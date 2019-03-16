@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
-import { Camera, Permissions, DocumentPicker } from 'expo';
+import { Camera, Permissions, DocumentPicker, MediaLibrary } from 'expo';
 
-
-console.log(Camera);
 class PanicButton extends React.Component {
   constructor(props:object){
     super(props);
     this.state = {
       hasAudioPermission: null,
       hasCameraPermission: null,
-      type: Camera.Constants.Type.back,
+      type: Camera.Constants.Type.front,
       recording: false,
-      image: '',
     }
     this.camera = null;
+    this.record = this.record.bind(this);
   }
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -24,6 +22,40 @@ class PanicButton extends React.Component {
       hasCameraPermission: status === 'granted'
   });
   }
+
+  async record() {
+    const { camera } = this;
+  if (camera) {
+    console.log('Camera does exist');
+    try {
+      const video = await camera.recordAsync({
+        maxDuration: 30,
+      });
+      console.log(video);
+      if (!video.cancelled) {
+        const { uri } = video;
+        const formData = new FormData();
+        formData.append('video',{
+          uri: uri,
+          name: 'video.mp4',
+          type: 'video/mp4'
+        });
+        const options = {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          }
+        }
+        const response = await fetch('localhost:3000/upload', options);
+        console.log(response);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
   render() {
     const { hasCameraPermission, hasAudioPermission } = this.state;
     if (hasCameraPermission === null && hasAudioPermission === null) {
@@ -64,28 +96,10 @@ class PanicButton extends React.Component {
                   alignSelf: 'flex-end',
                   alignItems: 'center',
                 }}
-                onPress={ async () => {
-                  if(this.camera){
-                    console.log('Camera does exist');
-                    try {
-                      const video = await this.camera.recordAsync({
-                        maxDuration: 30,
-                      });
-                      console.log(video);
-                      const result = await DocumentPicker.getDocumentAsync({});
-                      if (!result.cancelled) {
-                        this.setState({
-                          image: result
-                        })
-                      }
-                    } catch(e){
-                      console.log(e);
-                    }
-                  }
-                }}
+                onPress={this.record}
               >
               <Text
-                  style={{ fontSize: 30, marginBottom: 10, color: 'white' }}>
+                  style={{ fontSize: 10, marginBottom: 10, color: 'white' }}>
                   Record
                 </Text>
               </TouchableOpacity>
