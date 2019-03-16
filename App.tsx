@@ -92,7 +92,7 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <CreateGroupView />
+          <DashboardView></DashboardView>
           </View >
       );
   }
