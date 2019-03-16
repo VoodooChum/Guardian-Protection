@@ -17,7 +17,7 @@ const {API_HOST} = Constants.manifest.extra;
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: 'a',
+      photoUrl: 'a', 
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
