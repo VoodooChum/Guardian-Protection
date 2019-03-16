@@ -55,7 +55,7 @@ const {API_HOST} = Constants.manifest.extra;
         }
        let sentUser = await axios.post(`${API_HOST}/login`, params)
         // console.log(sentUser); 
-        this.setState({existingUser: sentUser})
+        this.setState({existingUser: sentUser.data})
       } catch(e){   
         console.log(e.message) 
       } 
@@ -80,7 +80,7 @@ const {API_HOST} = Constants.manifest.extra;
    }
 
   render() {
-    if (typeof this.state.existingUser === 'object') {
+    if (typeof this.state.existingUser === 'object') { 
       return (
         <View style={styles.container}>
           <Image
@@ -90,7 +90,7 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <CreateGroupView />
+          <CreateGroupView userData={this.state.existingUser}/>
           </View >
       );
   }
