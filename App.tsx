@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
+// import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
 
 
@@ -16,15 +17,16 @@ const {API_HOST} = Constants.manifest.extra;
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: '',
+      photoUrl: 'a', 
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
-      existingUser: false
+      existingUser: false,
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
   }
+ 
 
   handleGoogleSession = () => {
     const date = Date.parse(this.state.accessTokenExpirationDate);
@@ -38,39 +40,60 @@ const {API_HOST} = Constants.manifest.extra;
   }
 
   signInAsync = async () => {
-    try {
+    try {  
       const result = await Google.logInAsync({
         clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
-        console.log(result);
+        // console.log(result);
+      var output;
       try {
         const params = {
           "username": result.user.email,
           "password": result.user.name
         }
-       let sentCredential = await axios.post(`${API_HOST}/login`, params)
-      } catch(e){ 
-        console.log(e.message)
-      }
-        
+       let sentUser = await axios.post(`${API_HOST}/login`, params)
+        // console.log(sentUser); 
+        this.setState({existingUser: sentUser})
+      } catch(e){   
+        console.log(e.message) 
+      } 
       this.setState({
         signedIn: true,
         name: result.user.name,
         photoUrl: result.user.photoUrl,
         email: result.user.email,
         accessTokenExpirationDate: result.accessTokenExpirationDate,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
       })
-    } else {
+    } else { 
       console.log('cancelled');
     }
   } catch(e){
     console.error(e.message);
   }
 }
+
+   componentDidMount = () => {
+    console.log(this.state.existingUser);
+   }
+
   render() {
+    if (typeof this.state.existingUser === 'object') {
+      return (
+        <View style={styles.container}>
+          <Image
+            style={{ borderRadius: 20, width: 155, height: 153 }}
+            source={{
+              uri: `${this.state.photoUrl}`
+            }}
+          />
+          <Text>{this.state.name}</Text>
+          <CreateGroupView />
+          </View >
+      );
+  }
     if (this.state.signedIn === true) {
       this.handleGoogleSession();
       return (
