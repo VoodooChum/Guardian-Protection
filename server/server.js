@@ -45,7 +45,16 @@ app.post('/login', passport.authenticate('local'), login);
 
 app.post("/signup", signup);
 
-app.post('/create', createUser);
+
+app.post("/createGroup", (req, res) => {
+  console.log(req.body);
+  res.status(201).send('You hit the create Group Endpoint');
+});
+
+app.post("/joinGroup", (req, res) => {
+  console.log(req.body);
+  res.status(201).send("You hit the join Group Endpoint");
+});
 
 app.post('/upload', upload);
 

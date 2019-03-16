@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         safeword: { type: DataTypes.STRING, unique: false, allowNull: false },
         radius: { type: DataTypes.INTEGER, unique: false, allowNull: true },
         update_interval: { type: DataTypes.INTEGER, unique: false, allowNull: true },
-        url_profile_pic: { type: DataTypes.STRING, unique: true, allowNull: false },
-        email: { type: DataTypes.STRING, unique: true }, 
+        url_profile_pic: { type: DataTypes.STRING, unique: false, allowNull: false },
+        email: { type: DataTypes.STRING, unique: true },
     });
 
     User.associate = (models) => {
