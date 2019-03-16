@@ -36,12 +36,12 @@ export default class SignupView extends React.Component{
   onPressCreateGroup = async () => {
     try {
       // call getValue() to get the values of the form
-      let user = this.refs.form.getValue();
+      let user = this.refs.form.getValue();  
       if (user) { // if validation fails, value will be null
         // let groupStatus = 'create'; // Sets value of groupStatus to create
         console.log(user); // value here is an instance of User 
         // user.email = this.props.email;
-        // console.log(this.state);
+        // console.log(this.state); 
       }
       let result = await axios.post(`${API_HOST}/signup`, { "user": user, 'props': this.props })
     } catch (error) {
@@ -61,6 +61,7 @@ export default class SignupView extends React.Component{
       console.log(value); // value here is an instance of Person
       this.clearForm();
     }
+    // call getValue() to get the values of the form 
   }
 
   

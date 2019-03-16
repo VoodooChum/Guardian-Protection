@@ -47,7 +47,7 @@ const requestHandler = {
             .then((returnedUser) => {
                 req.login({ username: returnedUser.username, id: returnedUser.id }, (err) => {
                     if (err) return next(err);
-                    console.log('loggedin')
+                    console.log('loggedin') 
                     return res.json(201, {
                         username: returnedUser.username,
                         id: returnedUser.id,
