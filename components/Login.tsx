@@ -12,9 +12,11 @@ class LoginView extends React.Component {
   render(){
     return (
     <View>
-      <Button title='Login w/ Google' onPress={this.props.signIn}> Login w/ google</Button>
+        <Button color="#006edc" title='Login w/ Google' onPress={this.props.signIn}> Login w/ google</Button>
     </View>
     )
   }
 }
+
+
 export default LoginView;

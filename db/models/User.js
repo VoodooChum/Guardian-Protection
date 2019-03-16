@@ -2,13 +2,13 @@ const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
-        name_first: { type: DataTypes.STRING, unique: true, allowNull: false },
-        name_last: { type: DataTypes.STRING, unique: true, allowNull: false },
-        safeword: { type: DataTypes.STRING, unique: true, allowNull: false },
-        radius: { type: DataTypes.INTEGER, unique: true, allowNull: false },
-        update_interval: { type: DataTypes.INTEGER, unique: true, allowNull: false },
+        name_first: { type: DataTypes.STRING, unique: false, allowNull: false },
+        name_last: { type: DataTypes.STRING, unique: false, allowNull: false },
+        safeword: { type: DataTypes.STRING, unique: false, allowNull: false },
+        radius: { type: DataTypes.INTEGER, unique: false, allowNull: true },
+        update_interval: { type: DataTypes.INTEGER, unique: false, allowNull: true },
         url_profile_pic: { type: DataTypes.STRING, unique: true, allowNull: false },
-        email: { type: DataTypes.STRING, unique: true },
+        email: { type: DataTypes.STRING, unique: true }, 
     });
 
     User.associate = (models) => {

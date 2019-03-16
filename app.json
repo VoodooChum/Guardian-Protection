@@ -1,5 +1,8 @@
 {
   "expo": {
+    "extra": {
+      "API_HOST": "http://172.24.0.117:3000" 
+    },
     "name": "Guardian",
     "slug": "thesis",
     "privacy": "public",
@@ -11,7 +14,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
+    "splash": { 
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
