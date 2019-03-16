@@ -54,7 +54,7 @@ const {API_HOST} = Constants.manifest.extra;
           "password": result.user.name
         }
        let sentUser = await axios.post(`${API_HOST}/login`, params)
-        console.log(sentUser);
+        // console.log(sentUser); 
         this.setState({existingUser: sentUser})
       } catch(e){   
         console.log(e.message) 

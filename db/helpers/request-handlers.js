@@ -8,7 +8,7 @@ const errorHandler = (req, res, err) => {
         return res.send(201, 'No events found');
     }
     return res.send(500, 'Something went wrong on our part'); 
-};
+}; 
 
 const requestHandler = {
 
@@ -61,7 +61,7 @@ const requestHandler = {
     login(req, res, next) {
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
-        console.log(foundUser);
+        console.log(foundUser); 
         res.send(foundUser);
       }).catch((err) => console.log(err))
   }, 
