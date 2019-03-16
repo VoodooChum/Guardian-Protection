@@ -9,7 +9,7 @@ const { API_HOST } = Constants.manifest.extra;
 const Form = t.form.Form;
 
 var Group = t.struct({
-  groupName: t.String,
+  name: t.String,
   passcode: t.String,
 });
 
@@ -35,7 +35,7 @@ export default class CreatGroupView extends React.Component {
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
   }
-  let result = await axios.post(`${API_HOST}/createGroup`, {group})
+      let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": this.props.userData})
   } catch(error) {
     console.log(JSON.stringify(error));
   }
