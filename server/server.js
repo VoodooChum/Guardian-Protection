@@ -6,7 +6,7 @@ const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const port = process.env.PORT || 3000;
-const { createUser, login, signup } = require('../db/helpers/request-handlers')
+const { createUser, login, signup, upload } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -47,6 +47,6 @@ app.post("/signup", signup);
 
 app.post('/create', createUser);
 
-
+app.post('/upload', upload);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

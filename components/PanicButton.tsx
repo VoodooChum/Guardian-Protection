@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
 import { Camera, Permissions, DocumentPicker, MediaLibrary } from 'expo';
-
+import axios from 'axios';
 class PanicButton extends React.Component {
   constructor(props:object){
     super(props);
@@ -48,7 +48,7 @@ class PanicButton extends React.Component {
             'Content-Type': 'multipart/form-data',
           }
         }
-        const response = await fetch('localhost:3000/upload', options);
+        const response = await axios.post('localhost:3000/upload', options);
         console.log(response);
       }
     } catch (e) {

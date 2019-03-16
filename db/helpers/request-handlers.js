@@ -1,4 +1,5 @@
 const db = require('../models');
+const cloudinary = require('cloudinary');
 
 const errorHandler = (req, res, err) => {
     console.error(err);
@@ -64,7 +65,12 @@ const requestHandler = {
         console.log(foundUser);
         res.send(foundUser);
       }).catch((err) => console.log(err))
-  }, 
+  },
+
+    upload(req, res, next) {
+        console.log(req.files);
+        res.status(200).send('sent file');
+    }
 }
 
 module.exports = requestHandler;
