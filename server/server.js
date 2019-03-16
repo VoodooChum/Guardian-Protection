@@ -21,7 +21,8 @@ passport.use(new LocalStrategy(
         done(null, 'user not in db')
         res.status(401)
       } 
-      return done(null, user);
+      console.log(user); 
+      return done(null, user);    
     });
   }
 ));
@@ -42,11 +43,7 @@ app.get("/", (req, res) => {
 app.post('/login', passport.authenticate('local'), login); 
 
 
-app.post("/signup", (req, res) => {
-  const userInfo = req.body;
-  console.log(userInfo);
-  res.status(201).send(userInfo);
-});
+app.post("/signup", signup);
 
 app.post('/create', createUser);
 

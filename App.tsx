@@ -20,6 +20,7 @@ const {API_HOST} = Constants.manifest.extra;
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
+      existingUser: false
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
@@ -49,7 +50,7 @@ const {API_HOST} = Constants.manifest.extra;
           "username": result.user.email,
           "password": result.user.name
         }
-       // let sentCredential = await axios.post(`${API_HOST}/login`, params)
+       let sentCredential = await axios.post(`${API_HOST}/login`, params)
       } catch(e){ 
         console.log(e.message)
       }
