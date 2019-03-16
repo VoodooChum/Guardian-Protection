@@ -18,7 +18,8 @@ var User = t.struct({
 });
 
 var options = {
-  auto: "placeholders"
+  auto: "placeholders",
+  returnKeyType: "done"
 };
 
 
