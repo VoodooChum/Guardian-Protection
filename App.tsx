@@ -6,6 +6,8 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
+import DashboardView from "./components/Dashboard";
+
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
 
