@@ -22,7 +22,7 @@ const requestHandler = {
     createUser(req, res){
         const newUser = req.body;
         db.User.create(newUser)
-            .then((returnedUser) => {
+            .then((returnedUser) => { 
                 res.send('created!')
                 console.log('created');
             })

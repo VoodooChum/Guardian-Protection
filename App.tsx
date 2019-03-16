@@ -21,7 +21,7 @@ const {API_HOST} = Constants.manifest.extra;
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
-      existingUser: false
+      existingUser: false,
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
