@@ -58,6 +58,12 @@ const requestHandler = {
             .catch(err => errorHandler(req, res, err));
     },
 
+    /**
+     * login: logs a user in that has an existing account 
+     * @param {object} req: the incoming request message
+     * @param {object} res: the outcoming response message
+     */
+
     login(req, res, next) {
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
@@ -65,6 +71,24 @@ const requestHandler = {
         res.send(foundUser);
       }).catch((err) => console.log(err))
   }, 
+/**
+    * createGroup: creates a new group for an exisitng user
+    * @param {object} req: the incoming request message
+    * @param {object} res: the outcoming response message
+    */
+    createGroup(req, res, next){
+        let newGroup = {};
+        Object.assign(newGroup, req.body.userData);
+        Object.assign(newGroup, req.body.group);
+
+        newGroup.id_user_creator = newGroup.id;
+        delete newGroup.id;
+        db.Group.create(newGroup) 
+            .then((group)=>{
+                console.log(group, 'created');
+        })
+   }
+
 }
 
 module.exports = requestHandler;

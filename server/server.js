@@ -6,7 +6,11 @@ const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const port = process.env.PORT || 3000;
-const { createUser, login, signup } = require('../db/helpers/request-handlers')
+const { 
+        createUser, 
+        login, 
+        signup, 
+        createGroup } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -52,10 +56,7 @@ app.post('/login', passport.authenticate('local'), login);
 app.post("/signup", signup);
 
 
-app.post("/createGroup", (req, res) => {
-  console.log(req.body);
-  res.status(201).send('You hit the create Group Endpoint');
-});
+app.post("/createGroup", createGroup);
 
 app.post("/joinGroup", (req, res) => {
   console.log(req.body);
