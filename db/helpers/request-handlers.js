@@ -85,8 +85,17 @@ const requestHandler = {
         delete newGroup.id;
         db.Group.create(newGroup) 
             .then((group)=>{
-                console.log(group, 'created');
-        })
+                // console.log(group);
+                res.send
+                let groupMember = {
+                    'id_user': group.id_user_creator,
+                    'id_group': group.id,
+                    "UserId": group.id_user_creator,
+                    "GroupId": group.id
+                }
+                return db.UserGroup.create(groupMember);
+            }).catch(err => errorHandler(req, res, err));  
+
    }
 
 }

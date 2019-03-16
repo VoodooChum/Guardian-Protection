@@ -92,8 +92,8 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <DashboardView></DashboardView>
-          {/* <CreateGroupView userData={this.state.existingUser}/> */}
+          {/* <DashboardView></DashboardView> */}
+          <CreateGroupView userData={this.state.existingUser}/>  
           </View >
       );
   }
