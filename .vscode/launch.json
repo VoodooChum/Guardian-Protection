@@ -4,6 +4,7 @@
     {
         "type": "node",
         "request": "launch",
+        "useWSL": true,
         "name": "Launch Program",
         "program": "${workspaceFolder}/server/server.js"
     },
