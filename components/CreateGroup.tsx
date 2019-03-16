@@ -86,8 +86,4 @@ var styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "center"
   }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 3520cd8586c63fbf7af89601f37defd625b85d5f
