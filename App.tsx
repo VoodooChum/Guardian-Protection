@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
+import PanicButton from './components/PanicButton';
 const {API_HOST} = Constants.manifest.extra;
 
 
@@ -109,6 +110,7 @@ const {API_HOST} = Constants.manifest.extra;
           />
           <Text>The Premier App in Family Protection!</Text>
           <LoginView signIn={this.signInAsync} />
+          <Button title='PANIC!' onPress={this.startPanic}/>
           </View>
       );
     } else {
