@@ -51,4 +51,4 @@ View the project roadmap [here](https://github.com/serverusnola/Guardian/issues)
 
 ## Contributing
 
-See [CONTRIBUTING.md](_CONTRIBUTING.md) for contribution guidelines.
+See [CONTRIBUTING.md](https://github.com/serverusnola/Guardian/blob/master/CONTRIBUTING.md) for contribution guidelines.
