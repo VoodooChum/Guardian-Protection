@@ -3,7 +3,7 @@ import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text 
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { Google, Constants } from 'expo';
-// const { API_HOST } = Constants.manifest.extra;
+const { API_HOST } = Constants.manifest.extra;
 
 
 const Form = t.form.Form;
@@ -35,7 +35,11 @@ export default class CreatGroupView extends React.Component {
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
   }
+<<<<<<< HEAD
         let result = await axios.post('http://localhost:3000/createGroup', {group})
+=======
+  let result = await axios.post(`${API_HOST}/createGroup`, {group})
+>>>>>>> 3520cd8586c63fbf7af89601f37defd625b85d5f
   } catch(error) {
     console.log(JSON.stringify(error));
   }
@@ -86,4 +90,8 @@ var styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "center"
   }
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 3520cd8586c63fbf7af89601f37defd625b85d5f
