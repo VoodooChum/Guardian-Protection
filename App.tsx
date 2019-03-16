@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import LoginView from './components/Login';
 import {Google} from 'expo';
 import axios from 'axios';
@@ -16,9 +16,11 @@ import PanicButton from './components/PanicButton';
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
+      panic: false
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
+    this.startPanic = this.startPanic.bind(this);
   }
 
   handleGoogleSession = () => {
@@ -32,6 +34,11 @@ import PanicButton from './components/PanicButton';
     }
   }
 
+  startPanic() {
+    this.setState({
+      panic: true
+    });
+  };
   signInAsync = async () => {
     try{
       const result = await Google.logInAsync({
@@ -66,7 +73,7 @@ import PanicButton from './components/PanicButton';
     }
   }
   render() {
-    if(this.state.signedIn === true) {
+    if(this.state.signedIn === true && this.state.panic === false) {
       this.handleGoogleSession();
       return (
         <View style={styles.container}>
@@ -79,9 +86,10 @@ import PanicButton from './components/PanicButton';
           />
           <Text>{this.state.name}</Text>
           <SignupView photoUrl={this.state.photoUrl} />
+          <Button title='PANIC!' onPress={this.startPanic} />
         </View>
       );
-    } else {
+    } else if(this.state.signedIn === false && this.state.panic === false) {
       return (
         <View style={styles.container}>
           <Image
@@ -93,9 +101,13 @@ import PanicButton from './components/PanicButton';
           />
           <Text>The Premier App in Family Protection!</Text>
           <LoginView signIn={this.signInAsync}/>
-          <PanicButton />
+          <Button title='PANIC!' onPress={this.startPanic}/>
         </View>
       );
+    } else {
+      return (
+        <PanicButton />
+      )
     }
   }
 }
