@@ -1,28 +1,25 @@
 import * as React from 'react';
-import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
+import { AppRegistry, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
+import { ThemeProvider, Button } from "react-native-elements";
 import { Google, Constants } from 'expo';
+import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
 
 
-const Form = t.form.Form;
-
-
-var User = t.struct({
-  streetAddress: t.String,
-  city: t.String,
-  state: t.String,
-  zipCode: t.Number,
-  safeword: t.String
-});
-
-var options = {
-  auto: "placeholders",
-  returnKeyType: "done"
+const theme = {
+  Button: {
+    containerStyle: {
+      marginTop: 10
+    },
+    raised: true,
+    color: 'red',
+    borderWidth: 3,
+    borderRadius: 10
+    // color: "#006edc",
+  }
 };
-
-
 
 export default class DashboardView extends React.Component{
   constructor(props: object) {
@@ -33,61 +30,70 @@ export default class DashboardView extends React.Component{
     this.setState({value: null});
   }
 
-  onPressCreateGroup = async () => {
-    try {
-      // call getValue() to get the values of the form
-      let user = this.refs.form.getValue();  
-      if (user) { // if validation fails, value will be null
-        // let groupStatus = 'create'; // Sets value of groupStatus to create
-        console.log(user); // value here is an instance of User 
-        // user.email = this.props.email;
-        // console.log(this.state); 
-      }
-      let result = await axios.post(`${API_HOST}/signup`, { "user": user, 'props': this.props })
-    } catch (error) {
-      console.log(JSON.stringify(error)); 
-    }
-    this.clearForm();
+  onPressCreateGroup = () => {
+       // Do whatever you need here to switch to Creating a group View
+      console.log('Create Group Button Pressed');
   } 
 
   onPressJoinGroup = () => {
-    // call getValue() to get the values of the form 
-    var value = this.refs.form.getValue();
-    if (value) { // if validation fails, value will be null
-      this.setState({
-        groupStatus: 'join'
-      })
-      // let groupStatus = 'join'; // Sets value of groupStatus to join
-      console.log(value); // value here is an instance of Person
-      this.clearForm();
-    }
-    // call getValue() to get the values of the form 
+    // Do whatever you need here to switch to Joining a group View
+    console.log('Join Group Button Pressed');
+  }
+
+  onPressPanic = () => {
+    // Do whatever you need here to switch to Joining a group View
+    console.log('Panic Button Pressed');
+  }
+
+  onPressViewGroup1 = () => {
+    // Do whatever you need here to switch to Joining a group View
+    console.log(`View Group: 1`);
+  }
+  onPressViewGroup2 = () => {
+    // Do whatever you need here to switch to Joining a group View
+    console.log(`View Group: 2`);
   }
 
   
   render() {
     return (
-        <View style={styles.container}>
-          <ScrollView contentContainerStyle={scroll.contentContainer}>
-          {/* display */}
-          <Form ref="form" type={User} options={options} />
-          <TouchableHighlight
-            style={styles.button}
-            onPress={this.onPressCreateGroup}
-            underlayColor="#99d9f4"
-          >
-            <Text style={styles.buttonText}>Create New Group</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            style={styles.button}
-            onPress={this.onPressJoinGroup}
-            underlayColor="#99d9f4"
-          >
-            <Text style={styles.buttonText}>Join Existing Group</Text>
-          </TouchableHighlight>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={scroll.contentContainer}>
+          <ThemeProvider theme={theme}>
+            <Button
+              group={1}
+              title="Team SeverUs"
+              onPress={this.onPressViewGroup1}
+            />
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Button
+              group={2}
+              title="Family Members"
+              onPress={this.onPressViewGroup2}
+            />
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Create Group"
+              onPress={this.onPressCreateGroup}
+            />
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Button
+              title="Join Group"
+              onPress={this.onPressJoinGroup}
+            />
+          </ThemeProvider>
+            <TouchableHighlight
+              style={styles.button}
+              onPress={this.onPressPanic}
+              underlayColor="#99d9f4"
+            >
+              <Text style={styles.buttonText}>Panic</Text>
+            </TouchableHighlight>
         </ScrollView>
-          {/* <Text>{this.state.groupStatus}</Text> */}
-        </View>
+      </View>
     );
   }
 }
@@ -107,16 +113,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#0078ef"
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 20,
     color: "white",
     alignSelf: "center"
   },
   button: {
-    height: 30,
-    backgroundColor: "#006edc",
-    borderColor: "#006edc",
+    height: 50,
+    backgroundColor: "#800000",
+    borderColor: "#800000",
     borderWidth: 1,
     borderRadius: 8,
+    marginTop: 10,
     marginBottom: 10,
     alignSelf: "stretch",
     justifyContent: "center"
