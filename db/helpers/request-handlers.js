@@ -119,6 +119,21 @@ const requestHandler = {
    
     upload(req, res, next) {
         res.status(200).send('u connected chief');
+    },
+
+    async getMyGroups(req, res){
+        let myId = req.params.id;
+        db.UserGroup.findAll({ where: { id_user: myId} })
+            .then( async (groups)=>{
+                // console.log(groups);
+                let myGroups = groups.map((group)=>{
+                return group.id_group;
+                })
+                let allGroups = await db.Group.findAll({ where: { id: myGroups } });
+                res.json(allGroups);
+                return allGroups;
+            }).then(() => console.log('groups sent')) 
+            .catch(err => errorHandler(req, res, err));  
     }
 
 }
