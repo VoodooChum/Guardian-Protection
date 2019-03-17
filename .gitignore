@@ -3,9 +3,4 @@ node_modules
 google-services.json
 .env
 GoogleService-Info.plist
-<<<<<<< HEAD
 .env
-=======
-.expo
-app.json
->>>>>>> 6c8458a349bdf4d8843090ca1da401b1444bbdd2
