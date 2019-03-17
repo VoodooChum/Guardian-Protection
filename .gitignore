@@ -3,3 +3,4 @@ google-services.json
 GoogleService-Info.plist
 app.json
 node_modules
+.idea
