@@ -116,9 +116,29 @@ const requestHandler = {
                 return db.UserGroup.create(groupMember);
             }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));  
    }, 
-   
+   /**
+    * @function upload
+    * @param {object} req 
+    * @param {object} res 
+    * @param {function} next
+    * this function takes the body of the req param, that should
+    * be an object with id_user and url_video as properties and saves
+    * them to the database, and sends back the status code and the url 
+    */
     upload(req, res, next) {
-        res.status(200).send('u connected chief');
+        console.log(req.body);
+        if (req.body.id_user && req.body.url_video) {
+            const newPanic = {};
+            Object.assign(newPanic, req.body.id_user);
+            Object.assign(newPanic, req.body.url_video);
+            db.Panic.create(req.body).then((createdPanic) => {
+                res.status(201).send(createdPanic.url_video);
+            }).catch((e) => {
+                res.status(401).send(e.message);
+            })
+        } else {
+            res.status(400).send('bad request');
+        }
     },
 
     async getMyGroups(req, res){
@@ -134,6 +154,7 @@ const requestHandler = {
                 return allGroups;
             }).then(() => console.log('groups sent')) 
             .catch(err => errorHandler(req, res, err));  
+        
     }
 
 }
