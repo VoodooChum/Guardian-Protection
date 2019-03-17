@@ -11,16 +11,19 @@ const list = [
   {
     name: "Brian Miller",
     avatar_url:
-      "https://avatars3.githubusercontent.com/u/39815179?s=400&u=a69fa34fedf78b44cdfcb30cd276b6d519c4cad5&v=4"
+      "https://avatars3.githubusercontent.com/u/39815179?s=400&u=a69fa34fedf78b44cdfcb30cd276b6d519c4cad5&v=4",
+    icon: 'chat'
   },
   {
     name: "Akin Pounds",
-    avatar_url: "https://avatars2.githubusercontent.com/u/42776703?s=460&v=4"
+    avatar_url: "https://avatars2.githubusercontent.com/u/42776703?s=460&v=4",
+    icon: 'chat'
   },
   {
     name: "Michael LeMaire",
-    avatar_url: "https://avatars0.githubusercontent.com/u/29212401?s=400&v=4"
-  }
+    avatar_url: "https://avatars0.githubusercontent.com/u/29212401?s=400&v=4",
+    icon: 'chat'
+  },
 ];
 
 
@@ -37,15 +40,19 @@ export default class GroupView extends React.Component{
 
   onUserPress = (objects) => {
     console.log(objects.nativeEvent.changedTouches);
-    let position = objects.nativeEvent.changedTouches[0].target;
-    console.log('position:', position);
-    if(position < 60) {
-      console.log('Brian: User 1')
-    } else if(position < 90) {
-      console.log('Akin: User 2')
-    } else {
-      console.log('Michael: User 3')
+    let position = objects.nativeEvent.changedTouches[0].pageY;
+    let isChat = false;
+    if (objects.nativeEvent.changedTouches[0].pageX >= 310) {
+      isChat = true;
     }
+    if(position <= 417) {
+      console.log('Brian: User 1', 'Chat: ', isChat);
+    } else if(position < 489) {
+      console.log('Akin: User 2', 'Chat: ', isChat);
+    } else {
+      console.log('Michael: User 3', 'Chat: ', isChat);
+    }
+    isChat = false;
   }
   
 
@@ -59,6 +66,7 @@ export default class GroupView extends React.Component{
             key={i}
             leftAvatar={{ source: { uri: l.avatar_url } }}
             title={l.name}
+            rightIcon={{name: l.icon}}
             onPress={this.onUserPress}
           />
         ))}
@@ -82,7 +90,7 @@ const scroll = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    width: 350,
+    width: 400,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
@@ -106,12 +114,13 @@ const styles = StyleSheet.create({
   },
   user: {
     backgroundColor: "#0078ef",
-    padding: 2
+    padding: 2,
+    alignSelf: "stretch"
   },
   name: {
     fontSize: 14,
     color: "white",
-    alignSelf: "auto"
+    alignSelf: "stretch"
   },
   image: {
     width: 80,
