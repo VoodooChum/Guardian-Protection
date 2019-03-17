@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
-import { Camera, Permissions, DocumentPicker, MediaLibrary } from 'expo';
+import { Camera, Permissions, DocumentPicker, MediaLibrary, FileSystem } from 'expo';
 import axios from 'axios';
+
 class PanicButton extends React.Component {
   constructor(props:object){
     super(props);
@@ -28,33 +29,39 @@ class PanicButton extends React.Component {
   if (camera) {
     console.log('Camera does exist');
     try {
-      const video = await camera.recordAsync({
-        maxDuration: 30,
+      const { uri } = await camera.recordAsync({
+        maxDuration: 1,
       });
-      console.log(video);
-      if (!video.cancelled) {
-        const { uri } = video;
-        const formData = new FormData();
-        formData.append('video',{
-          uri: uri,
-          name: 'video.mp4',
-          type: 'video/mp4'
-        });
-        const options = {
-          method: 'POST',
-          body: formData,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+      const file = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingTypes.Base64
+      })
+      console.log('GOT THE FILE', file.slice(0, 10), file.length);
+          const options = {
+            file: "data:image/jpeg;base64," + file,
+            upload_preset: "lk917uwv"
           }
-        }
-        const response = await axios.post('localhost:3000/upload', options);
-        console.log(response);
-      }
+          console.log('We should send the request');
+          const upload:{data: object} = await axios.post('https://api.cloudinary.com/v2/banditation/video/upload', 
+          {
+            body:{
+              "upload_preset": "lk917uwv",
+              "file": "data:image/jpeg;base64," + file
+            }
+          }
+          );
+          console.log(upload.data);
     } catch (e) {
       console.log(e);
     }
   }
+}
+  async getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
 }
   render() {
     const { hasCameraPermission, hasAudioPermission } = this.state;

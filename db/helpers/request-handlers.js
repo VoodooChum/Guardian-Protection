@@ -68,7 +68,7 @@ const requestHandler = {
   },
 
     upload(req, res, next) {
-        console.log(req.files);
+        console.log(req);
         res.status(200).send('sent file');
     }
 }
