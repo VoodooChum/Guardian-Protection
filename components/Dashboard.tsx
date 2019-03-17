@@ -5,8 +5,10 @@ import axios from "axios";
 import { ThemeProvider, Button } from "react-native-elements";
 import { Google, Constants } from 'expo';
 import { cpus } from 'os';
+import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
+import AppContainer from '../App'
 const {API_HOST} = Constants.manifest.extra;
-
+ 
 
 const theme = {
   Button: {
@@ -21,7 +23,7 @@ const theme = {
   }
 };
 
-export default class DashboardView extends React.Component{
+class DashboardView extends React.Component{
   constructor(props: object) {
     super(props);
   }
@@ -33,11 +35,15 @@ export default class DashboardView extends React.Component{
   onPressCreateGroup = () => {
        // Do whatever you need here to switch to Creating a group View
       console.log('Create Group Button Pressed');
+    this.props.navigation.navigate('CreatGroupView');
   } 
 
   onPressJoinGroup = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Join Group Button Pressed');
+    this.props.navigation.navigate('JoinGroup', {
+      userInfo: this.props.userData,
+    });
   }
 
   onPressPanic = () => {
@@ -129,3 +135,5 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+export default withNavigation(DashboardView);

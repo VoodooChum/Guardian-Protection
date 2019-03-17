@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
+import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { Google, Constants } from 'expo';
+import CreateGroupView from './CreateGroup'
 const {API_HOST} = Constants.manifest.extra;
 
 
@@ -64,7 +66,11 @@ export default class SignupView extends React.Component{
     // call getValue() to get the values of the form 
   }
 
-  
+  switchToCreteGroupView = () => {
+    this.onPressCreateGroup()
+    this.props.navigation.navigate(CreateGroupView)
+  }
+
   render() {
     return (
         <View style={styles.container}>
@@ -73,7 +79,7 @@ export default class SignupView extends React.Component{
           <Form ref="form" type={User} options={options} />
           <TouchableHighlight
             style={styles.button}
-            onPress={this.onPressCreateGroup}
+            onPress={this.switchToCreteGroupView} 
             underlayColor="#99d9f4"
           >
             <Text style={styles.buttonText}>Create New Group</Text>
@@ -122,3 +128,6 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+
+
