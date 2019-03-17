@@ -45,7 +45,9 @@ class DashboardView extends React.Component{
   onPressCreateGroup = () => {
        // Do whatever you need here to switch to Creating a group View
       console.log('Create Group Button Pressed');
-    this.props.navigation.navigate('CreatGroupView');
+    this.props.navigation.navigate('CreatGroupView', {  
+      userInfo: this.props.userData,
+    });
   } 
 
   onPressJoinGroup = () => {
