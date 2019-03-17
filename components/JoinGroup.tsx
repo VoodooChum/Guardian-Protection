@@ -36,14 +36,15 @@ class JoinGroupView extends React.Component {
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
   }
-  let result = await axios.post(`${API_HOST}/joinGroup`, {group})
+  let userData = this.props.navigation.state.params.userInfo;
+  let result = await axios.post(`${API_HOST}/joinGroup`, { "group": group, "user": userData})
   } catch(error) {
     console.log(JSON.stringify(error));
   }
   this.clearForm();
 }
-
  
+
 
   
   render() {

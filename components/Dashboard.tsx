@@ -41,7 +41,9 @@ class DashboardView extends React.Component{
   onPressJoinGroup = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Join Group Button Pressed');
-    this.props.navigation.navigate('JoinGroup');
+    this.props.navigation.navigate('JoinGroup', {
+      userInfo: this.props.userData,
+    });
   }
 
   onPressPanic = () => {

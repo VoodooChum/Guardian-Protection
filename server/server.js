@@ -10,6 +10,7 @@ const {
         createUser, 
         login, 
         signup, 
+        joinGroup,
         createGroup } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -60,10 +61,7 @@ app.post("/signup", signup);
 
 app.post("/createGroup", createGroup);
 
-app.post("/joinGroup", (req, res) => {
-  console.log(req.body);
-  res.status(201).send("You hit the join Group Endpoint");
-});
+app.post("/joinGroup", joinGroup); 
 
 app.get("/myGroups/:id", (req, res)=>{
   console.log(req.params);

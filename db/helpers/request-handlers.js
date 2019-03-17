@@ -67,7 +67,7 @@ const requestHandler = {
     login(req, res, next) {
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
-        console.log(foundUser); 
+        // console.log(foundUser); 
         res.send(foundUser);
       }).catch((err) => console.log(err))
   }, 
@@ -94,7 +94,27 @@ const requestHandler = {
                 }
                 return db.UserGroup.create(groupMember);
             }).catch(err => errorHandler(req, res, err));  
-
+   }, 
+/**
+ * joinGroup: allows an exisitng user to join a group
+ * @param {object} req: the incoming request message
+ * @param {object} res: the outcoming response message
+ */
+    joinGroup(req, res, next){
+        let group = req.body.group;
+        let user = req.body.user;
+        db.Group.findOne({ where: { name: group.groupName, passcode: group.passcode } })
+            .then((group)=>{
+                res.send(group) 
+                console.log(group)
+                let groupMember = {
+                    'id_user': user.id,
+                    'id_group': group.id,
+                    "UserId": user.id,
+                    "GroupId": group.id
+                }
+                return db.UserGroup.create(groupMember);
+            }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));  
    }
 
 }

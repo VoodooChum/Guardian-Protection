@@ -96,7 +96,7 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <DashboardView></DashboardView>
+          <DashboardView userData={this.state.existingUser}></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
       ); 
@@ -161,7 +161,7 @@ const AppNavigator = createStackNavigator({
     screen: CreateGroupView
   }, 
   Dashboard: {
-    screen: DashboardView
+    screen: DashboardView 
   }, 
   JoinGroup: {
     screen: JoinGroupView
