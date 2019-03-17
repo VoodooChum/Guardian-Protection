@@ -36,20 +36,18 @@ class PanicButton extends React.Component {
         encoding: FileSystem.EncodingTypes.Base64
       })
       console.log('GOT THE FILE', file.slice(0, 10), file.length);
-          const options = {
-            file: "data:image/jpeg;base64," + file,
-            upload_preset: "lk917uwv"
-          }
-          console.log('We should send the request');
-          const upload:{data: object} = await axios.post('https://api.cloudinary.com/v2/banditation/video/upload', 
+      try {
+        console.log('We should send the request');
+        const upload = await axios.post('https://api.cloudinary.com/v1_1/banditation/video/upload', 
           {
-            body:{
-              "upload_preset": "lk917uwv",
-              "file": "data:image/jpeg;base64," + file
-            }
+            "upload_preset": "lk917uwv",
+            "file": "data:image/jpeg;base64," + file
           }
-          );
-          console.log(upload.data);
+          )
+          console.log(upload.data.url);
+          } catch(e){
+            console.log(e);
+          }
     } catch (e) {
       console.log(e);
     }
