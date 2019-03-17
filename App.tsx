@@ -6,14 +6,11 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
-<<<<<<< HEAD
 import PanicButton from './components/PanicButton';
-=======
 import DashboardView from "./components/Dashboard";
 import GroupView from "./components/Group";
 
 // import console = require('console');
->>>>>>> 4d1175c34186b31097fc155cba29641623302f72
 const {API_HOST} = Constants.manifest.extra;
 
 
@@ -28,11 +25,8 @@ const {API_HOST} = Constants.manifest.extra;
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
-<<<<<<< HEAD
       panic: false
-=======
       existingUser: false,
->>>>>>> 4d1175c34186b31097fc155cba29641623302f72
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
@@ -97,28 +91,8 @@ const {API_HOST} = Constants.manifest.extra;
    }
 
   render() {
-<<<<<<< HEAD
 
     if (this.state.signedIn === true && this.state.panic === false) {
-=======
-    if (typeof this.state.existingUser === 'object') { 
-      return (
-        <View style={styles.container}>
-          <Image
-            style={{ borderRadius: 20, width: 155, height: 153 }}
-            source={{
-              uri: `${this.state.photoUrl}`
-            }}
-          />
-          <Text>{this.state.name}</Text>
-          <GroupView></GroupView>
-          {/* <DashboardView></DashboardView> */}
-          {/* <CreateGroupView userData={this.state.existingUser}/> */}
-          </View >
-      );
-  }
-    if (this.state.signedIn === true) {
->>>>>>> 4d1175c34186b31097fc155cba29641623302f72
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
