@@ -37,9 +37,10 @@ class CreatGroupView extends React.Component {
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
   }
-      let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": this.props.userData})
+      let userData = this.props.navigation.state.params.userInfo;
+      let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": userData})
   } catch(error) {
-    console.log(JSON.stringify(error));
+    console.log(JSON.stringify(error)); 
   }
   this.clearForm();
 }

@@ -26,6 +26,16 @@ const theme = {
 class DashboardView extends React.Component{
   constructor(props: object) {
     super(props);
+    this.state = {
+      groups: [] 
+    }
+  }
+   
+  componentDidMount = async () => {
+    let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
+   
+    this.setState({ groups: myGroups.data })
+    
   }
 
   clearForm = () => {
@@ -35,7 +45,9 @@ class DashboardView extends React.Component{
   onPressCreateGroup = () => {
        // Do whatever you need here to switch to Creating a group View
       console.log('Create Group Button Pressed');
-    this.props.navigation.navigate('CreatGroupView');
+    this.props.navigation.navigate('CreatGroupView', {  
+      userInfo: this.props.userData,
+    });
   } 
 
   onPressJoinGroup = () => {
@@ -51,40 +63,38 @@ class DashboardView extends React.Component{
     // Do whatever you need here to switch to Joining a group View
     console.log('Panic Button Pressed');
   }
-
+ 
   onPressViewGroup1 = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log(`View Group: 1`);
   }
   onPressViewGroup2 = () => {
     // Do whatever you need here to switch to Joining a group View
-    console.log(`View Group: 2`);
+    // console.log(`View Group: 2`);
+    // console.log(this.state.groups);
   }
 
   
   render() {
+    // console.log(this.state.groups); 
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={scroll.contentContainer}>
           <ThemeProvider theme={theme}>
-            <Button
-              group={1}
-              title="Team SeverUs"
-              onPress={this.onPressViewGroup1}
-            />
-          </ThemeProvider>
-          <ThemeProvider theme={theme}>
-            <Button
-              group={2}
-              title="Family Members"
-              onPress={this.onPressViewGroup2}
-            />
+            {
+              this.state.groups.map((group) => <Button
+                group={group.id}
+                title={group.name}
+                key={group.id}
+                onPress={this.onPressViewGroup2}
+              />)
+            }
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Button
               title="Create Group"
               onPress={this.onPressCreateGroup}
-            />
+            /> 
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Button

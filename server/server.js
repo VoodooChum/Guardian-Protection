@@ -12,6 +12,7 @@ const {
         signup, 
         joinGroup,
         createGroup,
+        getMyGroups,
         upload} = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -66,10 +67,8 @@ app.post('/upload', upload);
 app.post("/createGroup", createGroup);
 
 app.post("/joinGroup", joinGroup); 
-
-app.get("/myGroups/:id", (req, res)=>{
-  console.log(req.params);
-})
+ 
+app.get("/myGroups/:id", getMyGroups ); 
 
 
 
