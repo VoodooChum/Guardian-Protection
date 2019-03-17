@@ -9,7 +9,7 @@ const errorHandler = (req, res, err) => {
         return res.send(201, 'No events found');
     }
     return res.send(500, 'Something went wrong on our part'); 
-};
+}; 
 
 const requestHandler = {
 
@@ -23,7 +23,7 @@ const requestHandler = {
     createUser(req, res){
         const newUser = req.body;
         db.User.create(newUser)
-            .then((returnedUser) => {
+            .then((returnedUser) => { 
                 res.send('created!')
                 console.log('created');
             })
@@ -59,18 +59,46 @@ const requestHandler = {
             .catch(err => errorHandler(req, res, err));
     },
 
+    /**
+     * login: logs a user in that has an existing account 
+     * @param {object} req: the incoming request message
+     * @param {object} res: the outcoming response message
+     */
+
     login(req, res, next) {
-    db.User.findOne({ where: { email: email } }) 
+    db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
-        console.log(foundUser);
+        console.log(foundUser); 
         res.send(foundUser);
       }).catch((err) => console.log(err))
+<<<<<<< HEAD
   },
 
     upload(req, res, next) {
         console.log(req);
         res.status(200).send('sent file');
     }
+=======
+  }, 
+/**
+    * createGroup: creates a new group for an exisitng user
+    * @param {object} req: the incoming request message
+    * @param {object} res: the outcoming response message
+    */
+    createGroup(req, res, next){
+        let newGroup = {};
+        Object.assign(newGroup, req.body.userData);
+        Object.assign(newGroup, req.body.group);
+
+        newGroup.id_user_creator = newGroup.id;
+        delete newGroup.id;
+        db.Group.create(newGroup) 
+            .then((group)=>{
+                console.log(group, 'created');
+        })
+   }
+
+>>>>>>> 4d1175c34186b31097fc155cba29641623302f72
 }
 
 module.exports = requestHandler;

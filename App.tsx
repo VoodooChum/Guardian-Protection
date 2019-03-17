@@ -6,7 +6,14 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
+<<<<<<< HEAD
 import PanicButton from './components/PanicButton';
+=======
+import DashboardView from "./components/Dashboard";
+import GroupView from "./components/Group";
+
+// import console = require('console');
+>>>>>>> 4d1175c34186b31097fc155cba29641623302f72
 const {API_HOST} = Constants.manifest.extra;
 
 
@@ -17,16 +24,21 @@ const {API_HOST} = Constants.manifest.extra;
     this.state = {
       signedIn: false,
       name: '',
-      photoUrl: '',
+      photoUrl: 'a', 
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
+<<<<<<< HEAD
       panic: false
+=======
+      existingUser: false,
+>>>>>>> 4d1175c34186b31097fc155cba29641623302f72
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
     this.startPanic = this.startPanic.bind(this);
   }
+ 
 
   handleGoogleSession = () => {
     const date = Date.parse(this.state.accessTokenExpirationDate);
@@ -45,41 +57,68 @@ const {API_HOST} = Constants.manifest.extra;
     });
   };
   signInAsync = async () => {
-    try {
+    try {  
       const result = await Google.logInAsync({
         clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
       if (result.type === 'success') {
-        console.log(result);
+        // console.log(result);
+      var output;
       try {
         const params = {
           "username": result.user.email,
           "password": result.user.name
         }
-       let sentCredential = await axios.post(`${API_HOST}/login`, params)
-      } catch(e){ 
-        console.log(e.message)
-      }
-        
+       let sentUser = await axios.post(`${API_HOST}/login`, params)
+        // console.log(sentUser); 
+        this.setState({existingUser: sentUser.data})
+      } catch(e){   
+        console.log(e.message) 
+      } 
       this.setState({
         signedIn: true,
         name: result.user.name,
         photoUrl: result.user.photoUrl,
         email: result.user.email,
         accessTokenExpirationDate: result.accessTokenExpirationDate,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
       })
-    } else {
+    } else { 
       console.log('cancelled');
     }
   } catch(e){
     console.error(e.message);
   }
 }
+
+   componentDidMount = () => {
+    console.log(this.state.existingUser);
+   }
+
   render() {
+<<<<<<< HEAD
 
     if (this.state.signedIn === true && this.state.panic === false) {
+=======
+    if (typeof this.state.existingUser === 'object') { 
+      return (
+        <View style={styles.container}>
+          <Image
+            style={{ borderRadius: 20, width: 155, height: 153 }}
+            source={{
+              uri: `${this.state.photoUrl}`
+            }}
+          />
+          <Text>{this.state.name}</Text>
+          <GroupView></GroupView>
+          {/* <DashboardView></DashboardView> */}
+          {/* <CreateGroupView userData={this.state.existingUser}/> */}
+          </View >
+      );
+  }
+    if (this.state.signedIn === true) {
+>>>>>>> 4d1175c34186b31097fc155cba29641623302f72
       this.handleGoogleSession();
       return (
           <View style={styles.container}>

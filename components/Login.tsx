@@ -1,5 +1,17 @@
 import * as React from 'react';
-import {Button, View, Text} from 'react-native';
+import {View, Text} from 'react-native';
+import { ThemeProvider, Button } from "react-native-elements";
+
+const theme = {
+  Button: {
+    containerStyle: {
+      marginTop: 100,
+      marginBottom: 150,
+    },
+    raised: true,
+    color: "#006edc",
+  }
+};
 
 class LoginView extends React.Component {
   constructor(props:object){
@@ -9,12 +21,17 @@ class LoginView extends React.Component {
     console.log('WHOO');
   }
   
+
   render(){
     return (
-    <View>
-        <Button color="#006edc" title='Login w/ Google' onPress={this.props.signIn}> Login w/ google</Button>
-    </View>
-    )
+      <View>
+        <ThemeProvider theme={theme}>
+          <Button title="Google Login"
+            onPress={this.props.signIn}
+          />
+        </ThemeProvider>
+      </View>
+    );
   }
 }
 

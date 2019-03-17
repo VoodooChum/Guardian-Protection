@@ -6,24 +6,35 @@ const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const port = process.env.PORT || 3000;
-const { createUser, login, signup, upload } = require('../db/helpers/request-handlers')
+const { 
+        createUser, 
+        login, 
+        signup, 
+        createGroup,
+        upload} = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.all('*', (req, res, next) => {
+  // ugly hack to let the browser know the user is logged in
+  // not sure if secure
+  if (req.isAuthenticated()) {
+    res.set({ Login: 'true', User: req.user.username });
+  } else {
+    res.set({ Login: '', User: '' });
+  }
+  next();
+});
+
 passport.use(new LocalStrategy(
   function (username, password, done) {
-    db.User.findOne({ where: { email: username } }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        done(null, 'user not in db')
-        res.status(401)
-      } 
-      console.log(user); 
-      return done(null, user);    
-    });
+    db.User.findOne({ where: { email: username } })
+    .then((user)=>{
+      return done(null, user); 
+    })
   }
 ));
 
@@ -40,7 +51,7 @@ app.get("/", (req, res) => {
   res.status(200).send("Yea this works"); 
 });
 
-app.post('/login', passport.authenticate('local'), login); 
+app.post('/login', passport.authenticate('local'), login);
 
 
 app.post("/signup", signup);
@@ -48,5 +59,14 @@ app.post("/signup", signup);
 app.post('/create', createUser);
 
 app.post('/upload', upload);
+
+app.post("/createGroup", createGroup);
+
+app.post("/joinGroup", (req, res) => {
+  console.log(req.body);
+  res.status(201).send("You hit the join Group Endpoint");
+});
+
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
