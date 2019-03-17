@@ -1,6 +1,7 @@
 .env
 google-services.json
 GoogleService-Info.plist
+.env
 app.json
 node_modules
 .idea

@@ -139,6 +139,22 @@ const requestHandler = {
         } else {
             res.status(400).send('bad request');
         }
+    },
+
+    async getMyGroups(req, res){
+        let myId = req.params.id;
+        db.UserGroup.findAll({ where: { id_user: myId} })
+            .then( async (groups)=>{
+                // console.log(groups);
+                let myGroups = groups.map((group)=>{
+                return group.id_group;
+                })
+                let allGroups = await db.Group.findAll({ where: { id: myGroups } });
+                res.json(allGroups);
+                return allGroups;
+            }).then(() => console.log('groups sent')) 
+            .catch(err => errorHandler(req, res, err));  
+        
     }
 
 }
