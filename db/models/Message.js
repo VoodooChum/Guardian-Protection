@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Message.associate = (models) => {
-        Message.belongsToMany(models.Group, { through: models.UserGroup });
         Message.belongsTo(models.User, { constraints: false });
     };
 

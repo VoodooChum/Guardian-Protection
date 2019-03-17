@@ -67,7 +67,7 @@ const requestHandler = {
     login(req, res, next) {
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
-        console.log(foundUser); 
+        // console.log(foundUser); 
         res.send(foundUser);
       }).catch((err) => console.log(err))
   }, 
@@ -85,13 +85,49 @@ const requestHandler = {
         delete newGroup.id;
         db.Group.create(newGroup) 
             .then((group)=>{
-                console.log(group, 'created');
-        })
-    },
-
-    upload(req, res, next){
+                // console.log(group);
+                let groupMember = {
+                    'id_user': group.id_user_creator,
+                    'id_group': group.id,
+                    "UserId": group.id_user_creator,
+                    "GroupId": group.id
+                }
+                return db.UserGroup.create(groupMember);
+            }).catch(err => errorHandler(req, res, err));  
+   }, 
+/**
+ * joinGroup: allows an exisitng user to join a group
+ * @param {object} req: the incoming request message
+ * @param {object} res: the outcoming response message
+ */
+    joinGroup(req, res, next){
+        let group = req.body.group;
+        let user = req.body.user;
+        db.Group.findOne({ where: { name: group.groupName, passcode: group.passcode } })
+            .then((group)=>{
+                res.send(group) 
+                console.log(group)
+                let groupMember = {
+                    'id_user': user.id,
+                    'id_group': group.id,
+                    "UserId": user.id,
+                    "GroupId": group.id
+                }
+                return db.UserGroup.create(groupMember);
+            }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));  
+   }, 
+   /**
+    * @function upload
+    * @param {object} req 
+    * @param {object} res 
+    * @param {function} next
+    * this function takes the body of the req param, that should
+    * be an object with id_user and url_video as properties and saves
+    * them to the database, and sends back the status code and the url 
+    */
+    upload(req, res, next) {
         console.log(req.body);
-        if(req.body.id_user && req.body.url_video){
+        if (req.body.id_user && req.body.url_video) {
             const newPanic = {};
             Object.assign(newPanic, req.body.id_user);
             Object.assign(newPanic, req.body.url_video);
@@ -104,6 +140,7 @@ const requestHandler = {
             res.status(400).send('bad request');
         }
     }
+
 }
 
 module.exports = requestHandler;

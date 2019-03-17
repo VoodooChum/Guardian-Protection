@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
+import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
 
@@ -17,7 +18,7 @@ var options = {
   auto: "placeholders"
 };
 
-export default class JoinGroupView extends React.Component {
+class JoinGroupView extends React.Component {
   constructor(props: object) {
     super(props);
   }
@@ -35,14 +36,15 @@ export default class JoinGroupView extends React.Component {
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
   }
-  let result = await axios.post(`${API_HOST}/joinGroup`, {group})
+  let userData = this.props.navigation.state.params.userInfo;
+  let result = await axios.post(`${API_HOST}/joinGroup`, { "group": group, "user": userData})
   } catch(error) {
     console.log(JSON.stringify(error));
   }
   this.clearForm();
 }
-
  
+
 
   
   render() {
@@ -87,3 +89,5 @@ var styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+export default withNavigation(JoinGroupView);
