@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
-import { Camera, Permissions, DocumentPicker, MediaLibrary, FileSystem } from 'expo';
+import { Camera, FileSystem } from 'expo';
 import axios from 'axios';
 
 class PanicButton extends React.Component {
   constructor(props:object){
     super(props);
     this.state = {
-      hasAudioPermission: null,
-      hasCameraPermission: null,
       type: Camera.Constants.Type.front,
       recording: false,
     }
@@ -16,12 +14,7 @@ class PanicButton extends React.Component {
     this.record = this.record.bind(this);
   }
   async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    const audioStatus = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-    this.setState({
-      hasAudioPermission: audioStatus.status === 'granted',
-      hasCameraPermission: status === 'granted'
-  });
+    setTimeout(this.record, 1000);
   }
 
   async record() {
@@ -30,7 +23,7 @@ class PanicButton extends React.Component {
     console.log('Camera does exist');
     try {
       const { uri } = await camera.recordAsync({
-        maxDuration: 1,
+        maxDuration: 10,
       });
       const file = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingTypes.Base64
@@ -54,7 +47,7 @@ class PanicButton extends React.Component {
   }
 }
   render() {
-    const { hasCameraPermission, hasAudioPermission } = this.state;
+    const { hasCameraPermission, hasAudioPermission } = this.props;
     if (hasCameraPermission === null && hasAudioPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false && hasAudioPermission === false) {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import LoginView from './components/Login';
-import {Google, Constants} from 'expo';
+import {Google, Constants, Permissions} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
@@ -25,14 +25,23 @@ const {API_HOST} = Constants.manifest.extra;
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
-      panic: false
+      panic: false,
       existingUser: false,
+      hasAudioPermission: null,
+      hasCameraPermission: null,
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
     this.startPanic = this.startPanic.bind(this);
   }
- 
+  async componentDidMount(){
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const audioStatus = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    this.setState({
+      hasAudioPermission: audioStatus.status === 'granted',
+      hasCameraPermission: status === 'granted'
+    });
+  }
 
   handleGoogleSession = () => {
     const date = Date.parse(this.state.accessTokenExpirationDate);
@@ -86,10 +95,6 @@ const {API_HOST} = Constants.manifest.extra;
   }
 }
 
-   componentDidMount = () => {
-    console.log(this.state.existingUser);
-   }
-
   render() {
 
     if (this.state.signedIn === true && this.state.panic === false) {
@@ -128,7 +133,8 @@ const {API_HOST} = Constants.manifest.extra;
       );
     } else {
       return (
-        <PanicButton />
+        <PanicButton hasAudioPermission={this.state.hasAudioPermission}
+          hasCameraPermission={this.state.hasCameraPermission}/>
       )
     }
   }
