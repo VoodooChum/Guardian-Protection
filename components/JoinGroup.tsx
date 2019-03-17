@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
+import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
 
@@ -17,7 +18,7 @@ var options = {
   auto: "placeholders"
 };
 
-export default class JoinGroupView extends React.Component {
+class JoinGroupView extends React.Component {
   constructor(props: object) {
     super(props);
   }
@@ -87,3 +88,5 @@ var styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+export default withNavigation(JoinGroupView);

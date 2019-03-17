@@ -50,11 +50,13 @@ app.get("/", (req, res) => {
   res.status(200).send("Yea this works"); 
 });
 
-app.post('/login', passport.authenticate('local'), login);
+//login
 
+app.post('/login', passport.authenticate('local'), login);
 
 app.post("/signup", signup);
 
+//group
 
 app.post("/createGroup", createGroup);
 
@@ -62,6 +64,10 @@ app.post("/joinGroup", (req, res) => {
   console.log(req.body);
   res.status(201).send("You hit the join Group Endpoint");
 });
+
+app.get("/myGroups/:id", (req, res)=>{
+  console.log(req.params);
+})
 
 
 

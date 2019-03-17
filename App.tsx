@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { StyleSheet, Text, View, Image} from "react-native";
 import LoginView from './components/Login';
 import {Google, Constants} from 'expo';
@@ -6,7 +7,9 @@ import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
+import JoinGroupView from "./components/JoinGroup";
 import DashboardView from "./components/Dashboard";
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
@@ -56,8 +59,8 @@ const {API_HOST} = Constants.manifest.extra;
           "password": result.user.name
         }
        let sentUser = await axios.post(`${API_HOST}/login`, params)
-        // console.log(sentUser); 
-        this.setState({existingUser: sentUser.data})
+        // console.log(groups);
+        this.setState({existingUser: sentUser.data}) 
       } catch(e){   
         console.log(e.message) 
       } 
@@ -77,14 +80,15 @@ const {API_HOST} = Constants.manifest.extra;
   }
 }
 
-   componentDidMount = () => {
-    console.log(this.state.existingUser);
+   componentDidMount = async () => { 
+      // let groups = await axios.get(`${API_HOST}/myGroups/${this.state.existingUser}`);
    }
 
   render() {
     if (typeof this.state.existingUser === 'object') { 
       return (
         <View style={styles.container}>
+           <AppContainer />
           <Image
             style={{ borderRadius: 20, width: 155, height: 153 }}
             source={{
@@ -92,12 +96,12 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          {/* <DashboardView></DashboardView> */}
-          <CreateGroupView userData={this.state.existingUser}/>  
+          <DashboardView></DashboardView>
+          {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
-      );
+      ); 
   }
-    if (this.state.signedIn === true) {
+    if (this.state.signedIn === true && this.state.existingUser === false) {
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
@@ -119,7 +123,7 @@ const {API_HOST} = Constants.manifest.extra;
     } else {
       return (
           <View style={styles.container}>
-            <Image
+              <Image 
               style={{ width: 155, height: 182 }}
               source={{
                 uri:
@@ -144,4 +148,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App; 
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen: App, 
+     navigationOptions: {
+      header: null,
+    } },
+  Signup: {
+    screen: Signup 
+  },
+  CreatGroupView: {
+    screen: CreateGroupView
+  }, 
+  Dashboard: {
+    screen: DashboardView
+  }, 
+  JoinGroup: {
+    screen: JoinGroupView
+  }
+}, );
+
+const AppContainer = createAppContainer(AppNavigator);
+export default App;
+export default AppContainer

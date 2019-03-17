@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
+import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
 
@@ -17,7 +19,7 @@ var options = {
   auto: "placeholders"
 };
 
-export default class CreatGroupView extends React.Component {
+class CreatGroupView extends React.Component {
   constructor(props: object) {
     super(props);
   }
@@ -87,3 +89,11 @@ var styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+const AppNavigator = createStackNavigator({
+  CreatGroupView: {
+    screen: CreatGroupView
+  }
+});
+
+export default withNavigation(CreatGroupView);
