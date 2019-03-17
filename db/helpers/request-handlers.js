@@ -87,9 +87,22 @@ const requestHandler = {
             .then((group)=>{
                 console.log(group, 'created');
         })
-    }
+    },
+
     upload(req, res, next){
-        res.status(200).send('u connected chief');
+        console.log(req.body);
+        if(req.body.id_user && req.body.url_video){
+            const newPanic = {};
+            Object.assign(newPanic, req.body.id_user);
+            Object.assign(newPanic, req.body.url_video);
+            db.Panic.create(req.body).then((createdPanic) => {
+                res.status(201).send(createdPanic.url_video);
+            }).catch((e) => {
+                res.status(401).send(e.message);
+            })
+        } else {
+            res.status(400).send('bad request');
+        }
     }
 }
 
