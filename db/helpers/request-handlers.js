@@ -87,8 +87,10 @@ const requestHandler = {
             .then((group)=>{
                 console.log(group, 'created');
         })
-   }
-
+    }
+    upload(req, res, next){
+        res.status(200).send('u connected chief');
+    }
 }
 
 module.exports = requestHandler;
