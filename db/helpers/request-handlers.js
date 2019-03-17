@@ -115,7 +115,11 @@ const requestHandler = {
                 }
                 return db.UserGroup.create(groupMember);
             }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));  
-   }
+   }, 
+   
+    upload(req, res, next) {
+        res.status(200).send('u connected chief');
+    }
 
 }
 

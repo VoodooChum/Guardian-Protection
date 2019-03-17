@@ -11,7 +11,8 @@ const {
         login, 
         signup, 
         joinGroup,
-        createGroup } = require('../db/helpers/request-handlers')
+        createGroup,
+        upload} = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -58,6 +59,9 @@ app.post('/login', passport.authenticate('local'), login);
 app.post("/signup", signup);
 
 //group
+app.post('/create', createUser);
+
+app.post('/upload', upload);
 
 app.post("/createGroup", createGroup);
 

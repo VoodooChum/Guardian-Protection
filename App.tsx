@@ -1,15 +1,17 @@
 import * as React from 'react';
 // import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { StyleSheet, Text, View, Image} from "react-native";
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
 import LoginView from './components/Login';
-import {Google, Constants} from 'expo';
+import {Google, Constants, Permissions} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
 import CreateGroupView from "./components/CreateGroup";
 import JoinGroupView from "./components/JoinGroup";
-import DashboardView from "./components/Dashboard";
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import PanicButton from './components/PanicButton';
+import DashboardView from "./components/Dashboard";
+import GroupView from "./components/Group";
 
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
@@ -26,12 +28,23 @@ const {API_HOST} = Constants.manifest.extra;
       email: '',
       accessToken: '',
       accessTokenExpirationDate: '',
+      panic: false,
       existingUser: false,
+      hasAudioPermission: null,
+      hasCameraPermission: null,
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
+    this.startPanic = this.startPanic.bind(this);
   }
- 
+  async componentDidMount(){
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const audioStatus = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    this.setState({
+      hasAudioPermission: audioStatus.status === 'granted',
+      hasCameraPermission: status === 'granted'
+    });
+  }
 
   handleGoogleSession = () => {
     const date = Date.parse(this.state.accessTokenExpirationDate);
@@ -44,6 +57,11 @@ const {API_HOST} = Constants.manifest.extra;
     }
   }
 
+  startPanic() {
+    this.setState({
+      panic: true
+    });
+  };
   signInAsync = async () => {
     try {  
       const result = await Google.logInAsync({
@@ -120,7 +138,7 @@ const {API_HOST} = Constants.manifest.extra;
             />
           </View>
       );
-    } else {
+    } else if(this.state.signedIn === false && this.state.panic === false) {
       return (
           <View style={styles.container}>
               <Image 
@@ -134,6 +152,11 @@ const {API_HOST} = Constants.manifest.extra;
             <LoginView signIn={this.signInAsync} />
           </View>
       );
+    } else {
+      return (
+        <PanicButton hasAudioPermission={this.state.hasAudioPermission}
+          hasCameraPermission={this.state.hasCameraPermission}/>
+      )
     }
   }
 }
