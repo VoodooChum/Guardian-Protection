@@ -1,5 +1,4 @@
 const db = require('../models');
-const cloudinary = require('cloudinary');
 
 const errorHandler = (req, res, err) => {
     console.error(err);
@@ -71,14 +70,6 @@ const requestHandler = {
         console.log(foundUser); 
         res.send(foundUser);
       }).catch((err) => console.log(err))
-<<<<<<< HEAD
-  },
-
-    upload(req, res, next) {
-        console.log(req);
-        res.status(200).send('sent file');
-    }
-=======
   }, 
 /**
     * createGroup: creates a new group for an exisitng user
@@ -96,9 +87,10 @@ const requestHandler = {
             .then((group)=>{
                 console.log(group, 'created');
         })
-   }
-
->>>>>>> 4d1175c34186b31097fc155cba29641623302f72
+    }
+    upload(req, res, next){
+        res.status(200).send('u connected chief');
+    }
 }
 
 module.exports = requestHandler;
