@@ -78,7 +78,7 @@ app.post("/api/messages", (req, res) => {
   res.header("Content-Type", "application/json");
   client.messages
     .create({
-      from: +15042266999,
+      from: process.env.TWILIO_NUMBER,
       to: req.body.recipient,
       body: `Guardian App Alert ${req.body.link}`
     })
