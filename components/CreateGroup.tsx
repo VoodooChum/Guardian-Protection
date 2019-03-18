@@ -31,7 +31,7 @@ class CreatGroupView extends React.Component {
   onPressCreateGroup = async () => {
     try {
   // call getValue() to get the values of the form
-  let group = this.refs.form.getValue();
+  let group = this.refs.form.getValue();   
   if (group) { // if validation fails, value will be null
     // let groupStatus = 'create'; // Sets value of groupStatus to create
     console.log(group); // value here is an instance of group 
