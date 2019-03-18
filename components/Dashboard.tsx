@@ -31,19 +31,27 @@ class DashboardView extends React.Component{
     }
   }
 
-  componentDidUpdate = async () => {
-    let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
-    this.setState({ groups: myGroups.data })
-  };
+  // componentDidUpdate = async () => {
+  //   const CancelToken = axios.CancelToken;
+  //   const source = CancelToken.source();
+  //   let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`, {cancelToken: source.token});
+  //   this.setState({ groups: myGroups.data });
+  //   source.cancel('operationCanceled');
+  // };
 
   componentDidMount = async () => {
+    setInterval(this.getGroupsAsnyc, 5000);
+  };
+  
+  getGroupsAsnyc = async () => {
     let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
-    
-
-    this.componentDidUpdate();
     this.setState({ groups: myGroups.data }) 
-    
   }
+  
+
+  
+
+
 
   clearForm = () => {
     this.setState({value: null});
