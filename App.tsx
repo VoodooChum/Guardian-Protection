@@ -98,10 +98,6 @@ const {API_HOST} = Constants.manifest.extra;
   }
 }
 
-   componentDidMount = async () => { 
-      // let groups = await axios.get(`${API_HOST}/myGroups/${this.state.existingUser}`);
-   }
-
   render() {
     if (typeof this.state.existingUser === 'object') { 
       return (
@@ -155,7 +151,9 @@ const {API_HOST} = Constants.manifest.extra;
     } else {
       return (
         <PanicButton hasAudioPermission={this.state.hasAudioPermission}
-          hasCameraPermission={this.state.hasCameraPermission}/>
+          hasCameraPermission={this.state.hasCameraPermission} 
+          userId={this.state.existingUser.id}
+          />
       )
     }
   }
