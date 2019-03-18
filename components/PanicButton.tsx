@@ -41,7 +41,7 @@ class PanicButton extends React.Component {
           )
           console.log(data.url);
           try {
-            const userId = this.props.userId;
+            const { userId } = this.props.navigation.state.params;
             const body = {
               url_video: data.url,
               id_user: userId
