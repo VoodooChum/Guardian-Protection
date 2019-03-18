@@ -22,6 +22,7 @@ var options = {
 class CreatGroupView extends React.Component {
   constructor(props: object) {
     super(props);
+    
   }
 
   clearForm = () => {
@@ -49,9 +50,16 @@ class CreatGroupView extends React.Component {
 
   
   render() {
+    let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
         {/* display */}
+        <Image
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 15 }}
+          source={{
+            uri: `${userData.url_profile_pic}`
+          }}
+        />
         <Form ref="form" type={Group} options={options} />
         <TouchableHighlight
           style={styles.button}
@@ -67,8 +75,9 @@ class CreatGroupView extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
-    width: 300,
+    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
@@ -80,12 +89,12 @@ var styles = StyleSheet.create({
     alignSelf: "center"
   },
   button: {
-    height: 30,
+    height: 50,
     backgroundColor: "#006edc",
     borderColor: "#006edc",
     borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 10,
+    marginBottom: 150,
     alignSelf: "stretch",
     justifyContent: "center"
   }
