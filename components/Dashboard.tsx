@@ -67,15 +67,14 @@ class DashboardView extends React.Component{
     });
   }
  
-  onPressViewGroup1 = () => {
-    // Do whatever you need here to switch to Joining a group View
-    console.log(`View Group: 1`);
-  }
   onPressViewGroup2 = () => {
     // Do whatever you need here to switch to Joining a group View
-    // console.log(`View Group: 2`);
-    // console.log(this.state.groups);
+    this.props.navigation.navigate('GroupView', {
+      hasAudioPermission: this.props.hasAudioPermission,
+      hasCameraPermission: this.props.hasCameraPermission
+    });
   }
+  
 
   
   render() {

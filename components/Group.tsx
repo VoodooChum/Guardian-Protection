@@ -4,6 +4,7 @@ import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { Card, ThemeProvider, Button, ListItem, Icon, Image} from "react-native-elements";
 import { Google, Constants } from 'expo';
+import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
 
@@ -27,7 +28,7 @@ const list = [
 ];
 
 
-export default class GroupView extends React.Component{
+class GroupView extends React.Component{
   constructor(props: object) {
     super(props);
     this.onUserPress = this.onUserPress.bind(this);
@@ -127,3 +128,5 @@ const styles = StyleSheet.create({
     height: 80
   }
 });
+
+export default withNavigation(GroupView);
