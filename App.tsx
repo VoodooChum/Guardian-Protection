@@ -168,26 +168,27 @@ const styles = StyleSheet.create({
 
 const AppNavigator = createStackNavigator({
   Home: {
-    screen: App, 
-     navigationOptions: {
+    screen: App,
+    navigationOptions: {
       header: null,
-    } },
+    }
+  },
   Signup: {
-    screen: Signup 
+    screen: Signup
   },
   CreatGroupView: {
-    screen: CreateGroupView
-  }, 
+    screen: CreateGroupView,
+  },
   Dashboard: {
-    screen: DashboardView 
-  }, 
+    screen: DashboardView
+  },
   JoinGroup: {
     screen: JoinGroupView
   },
   Panic: {
     screen: PanicButton
   }
-}, );
+});
 
 const AppContainer = createAppContainer(AppNavigator);
 export default App;
