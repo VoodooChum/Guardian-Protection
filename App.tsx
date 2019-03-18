@@ -182,6 +182,9 @@ const AppNavigator = createStackNavigator({
   },
   Panic: {
     screen: PanicButton
+  }, 
+  GroupView: {
+    screen: GroupView 
   }
 }, );
 
