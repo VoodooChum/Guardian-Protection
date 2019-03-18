@@ -114,7 +114,7 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <DashboardView userData={this.state.existingUser} panic={this.startPanic.bind(this)}></DashboardView>
+          <DashboardView userData={this.state.existingUser} panic={this.startPanic.bind(this)} hasAudioPermission={this.state.hasAudioPermission} hasCameraPermission={this.state.hasCameraPermission}></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
       ); 
@@ -152,12 +152,7 @@ const {API_HOST} = Constants.manifest.extra;
             <LoginView signIn={this.signInAsync} />
           </View>
       );
-    } else {
-      return (
-        <PanicButton hasAudioPermission={this.state.hasAudioPermission}
-          hasCameraPermission={this.state.hasCameraPermission}/>
-      )
-    }
+    } 
   }
 }
 
@@ -188,6 +183,9 @@ const AppNavigator = createStackNavigator({
   }, 
   JoinGroup: {
     screen: JoinGroupView
+  },
+  Panic: {
+    screen: PanicButton
   }
 }, );
 

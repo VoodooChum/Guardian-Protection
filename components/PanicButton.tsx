@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
 import { Camera, FileSystem } from 'expo';
 import axios from 'axios';
+import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
+
 
 class PanicButton extends React.Component {
   constructor(props:object){
@@ -47,7 +49,7 @@ class PanicButton extends React.Component {
   }
 }
   render() {
-    const { hasCameraPermission, hasAudioPermission } = this.props;
+    const { hasCameraPermission, hasAudioPermission } = this.props.navigation.state.params;
     if (hasCameraPermission === null && hasAudioPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false && hasAudioPermission === false) {
@@ -100,4 +102,5 @@ class PanicButton extends React.Component {
     }
   }
 }
-export default PanicButton;
+
+export default withNavigation(PanicButton);
