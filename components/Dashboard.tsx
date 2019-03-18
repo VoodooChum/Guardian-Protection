@@ -61,8 +61,10 @@ class DashboardView extends React.Component{
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Panic Button Pressed');
-    this.props.panic();
-    
+    this.props.navigation.navigate('Panic', {
+      hasAudioPermission: this.props.hasAudioPermission,
+      hasCameraPermission: this.props.hasCameraPermission
+    });
   }
  
   onPressViewGroup1 = () => {
