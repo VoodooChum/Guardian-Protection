@@ -31,13 +31,24 @@ class PanicButton extends React.Component {
       console.log('GOT THE FILE', file.slice(0, 10), file.length);
       try {
         console.log('We should send the request');
-        const upload = await axios.post('https://api.cloudinary.com/v1_1/banditation/video/upload', 
+        const { data } = await axios.post('https://api.cloudinary.com/v1_1/banditation/video/upload', 
           {
             "upload_preset": "lk917uwv",
             "file": "data:image/jpeg;base64," + file
           }
           )
-          console.log(upload.data.url);
+          console.log(data.url);
+          try {
+            const userId = this.props.userId;
+            const body = {
+              url_video: data.url,
+              id_user: userId
+            };
+            const uploadToServer = await axios.post('localhost:3000', body);
+            console.log(uploadToServer.status);
+          } catch(e){
+            console.log(e);
+          }
           } catch(e){
             console.log(e);
           }

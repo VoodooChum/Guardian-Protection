@@ -103,7 +103,7 @@ class DashboardView extends React.Component{
           </ThemeProvider>
             <TouchableHighlight
               style={styles.button}
-              onPress={this.onPressPanic}
+              onPress={this.props.startPanic}
               underlayColor="#99d9f4"
             >
               <Text style={styles.buttonText}>Panic</Text>
