@@ -33,6 +33,10 @@ class GroupView extends React.Component{
     super(props);
     this.onUserPress = this.onUserPress.bind(this);
   }
+
+  componentDidMount = () => {
+    
+  }
   
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
