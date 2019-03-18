@@ -70,7 +70,8 @@ class DashboardView extends React.Component{
     console.log('Panic Button Pressed');
     this.props.navigation.navigate('Panic', {
       hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission
+      hasCameraPermission: this.props.hasCameraPermission,
+      userId: this.props.userData.id
     });
   }
  
@@ -79,7 +80,7 @@ class DashboardView extends React.Component{
     console.log(objects.nativeEvent.changedTouches);
     this.props.navigation.navigate('GroupView', {
       hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission
+      hasCameraPermission: this.props.hasCameraPermission,
     });
   }
   
@@ -114,7 +115,7 @@ class DashboardView extends React.Component{
           </ThemeProvider>
             <TouchableHighlight
               style={styles.button}
-              onPress={this.onPressPanic}
+            onPress={this.onPressPanic}
               underlayColor="#99d9f4"
             >
               <Text style={styles.buttonText}>Panic</Text>
