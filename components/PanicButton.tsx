@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Text, View, TouchableOpacity, Button } from 'react-native';
-import { Camera, FileSystem } from 'expo';
+import { Camera, FileSystem, Constants } from 'expo';
 import axios from 'axios';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
-
+const { API_HOST } = Constants.manifest.extra;
 
 class PanicButton extends React.Component {
   constructor(props:object){
@@ -46,7 +46,7 @@ class PanicButton extends React.Component {
               url_video: data.url,
               id_user: userId
             };
-            const uploadToServer = await axios.post('localhost:3000/upload', body);
+            const uploadToServer = await axios.post(API_HOST + '/upload', body);
             console.log(uploadToServer.status);
           } catch(e){
             console.log(e);

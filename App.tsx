@@ -115,7 +115,7 @@ const {API_HOST} = Constants.manifest.extra;
           </View >
       ); 
   }
-    if (this.state.signedIn === true && this.state.existingUser === false && this.state.panic === false) {
+    if (this.state.signedIn === true && this.state.existingUser === false) {
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
@@ -134,7 +134,7 @@ const {API_HOST} = Constants.manifest.extra;
             />
           </View>
       );
-    } else if(this.state.signedIn === false && this.state.panic === false) {
+    } else if(this.state.signedIn === false) {
       return (
           <View style={styles.container}>
               <Image 
@@ -148,13 +148,6 @@ const {API_HOST} = Constants.manifest.extra;
             <LoginView signIn={this.signInAsync} />
           </View>
       );
-    } else {
-      return (
-        <PanicButton hasAudioPermission={this.state.hasAudioPermission}
-          hasCameraPermission={this.state.hasCameraPermission} 
-          userId={this.state.existingUser.id}
-          />
-      )
     }
   }
 }
