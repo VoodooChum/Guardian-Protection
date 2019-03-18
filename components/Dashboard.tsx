@@ -80,7 +80,7 @@ class DashboardView extends React.Component{
     console.log(objects.nativeEvent.changedTouches);
     this.props.navigation.navigate('GroupView', {
       hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission,
+      hasCameraPermission: this.props.hasCameraPermission, 
     });
   }
   
