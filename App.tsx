@@ -99,7 +99,7 @@ const {API_HOST} = Constants.manifest.extra;
 }
 
   render() {
-    if (typeof this.state.existingUser === 'object') { 
+    if (typeof this.state.existingUser === 'object' && this.state.panic === false) { 
       return (
         <View style={styles.container}>
            {/* <AppContainer /> */}
@@ -110,12 +110,12 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <DashboardView userData={this.state.existingUser}></DashboardView>
+          <DashboardView userData={this.state.existingUser} startPanic={this.startPanic}></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
       ); 
   }
-    if (this.state.signedIn === true && this.state.existingUser === false) {
+    if (this.state.signedIn === true && this.state.existingUser === false && this.state.panic === false) {
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
