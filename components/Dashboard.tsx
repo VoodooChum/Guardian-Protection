@@ -71,7 +71,8 @@ class DashboardView extends React.Component{
     // Do whatever you need here to switch to Joining a group View
     this.props.navigation.navigate('GroupView', {
       hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission
+      hasCameraPermission: this.props.hasCameraPermission,
+      userInfo: this.props.userData,
     });
   }
   

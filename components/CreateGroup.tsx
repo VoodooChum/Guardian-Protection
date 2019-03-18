@@ -55,7 +55,7 @@ class CreatGroupView extends React.Component {
       <View style={styles.container}>
         {/* display */}
         <Image
-          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 15 }}
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 55 }}
           source={{
             uri: `${userData.url_profile_pic}`
           }}
