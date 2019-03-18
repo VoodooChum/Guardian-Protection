@@ -30,11 +30,18 @@ class DashboardView extends React.Component{
       groups: [] 
     }
   }
-   
+
+  componentDidUpdate = async () => {
+    let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
+    this.setState({ groups: myGroups.data })
+  };
+
   componentDidMount = async () => {
     let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
-   
-    this.setState({ groups: myGroups.data })
+    
+
+    this.componentDidUpdate();
+    this.setState({ groups: myGroups.data }) 
     
   }
 
@@ -63,12 +70,14 @@ class DashboardView extends React.Component{
     console.log('Panic Button Pressed');
     this.props.navigation.navigate('Panic', {
       hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission
+      hasCameraPermission: this.props.hasCameraPermission,
+      userId: this.props.userData.id
     });
   }
  
-  onPressViewGroup2 = () => {
+  onPressViewGroup = (objects) => {
     // Do whatever you need here to switch to Joining a group View
+    console.log(objects.nativeEvent.changedTouches);
     this.props.navigation.navigate('GroupView', {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
@@ -89,7 +98,7 @@ class DashboardView extends React.Component{
                 group={group.id}
                 title={group.name}
                 key={group.id}
-                onPress={this.onPressViewGroup2}
+                onPress={this.onPressViewGroup}
               />)
             }
           </ThemeProvider>
@@ -107,13 +116,13 @@ class DashboardView extends React.Component{
           </ThemeProvider>
             <TouchableHighlight
               style={styles.button}
-              onPress={this.onPressPanic}
+            onPress={this.onPressPanic}
               underlayColor="#99d9f4"
             >
               <Text style={styles.buttonText}>Panic</Text>
             </TouchableHighlight>
         </ScrollView>
-      </View>
+      </View>  
     );
   }
 }

@@ -57,7 +57,7 @@ class GroupView extends React.Component {
     this.props.navigation.navigate("Panic", {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
-      
+
     });
   };
 
