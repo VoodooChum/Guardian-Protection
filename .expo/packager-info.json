@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
   "webpackServerPort": null,
-  "expoServerNgrokUrl": "https://9g-4p7.anonymous.guardian.exp.direct",
-  "packagerNgrokUrl": "https://packager.9g-4p7.anonymous.guardian.exp.direct",
-  "ngrokPid": 612,
+  "expoServerNgrokUrl": "https://9g-4p7.michaelblemairejr.guardian.exp.direct",
+  "packagerNgrokUrl": "https://packager.9g-4p7.michaelblemairejr.guardian.exp.direct",
+  "ngrokPid": 974,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 50322
+  "packagerPid": 929
 }
