@@ -79,8 +79,8 @@ app.post("/api/messages", (req, res) => {
   client.messages
     .create({
       from: +15042266999,
-      to: +15044442082,
-      body: `Guardian App Alert From Brian Miller "https://www.latlmes.com/arts/return-of-the-golden-age-of-comics-1"`
+      to: req.body.recipient,
+      body: `Guardian App Alert ${req.body.link}`
     })
     .then(() => {
       res.send(JSON.stringify({ success: true }));
