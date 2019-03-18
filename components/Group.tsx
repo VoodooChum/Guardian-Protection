@@ -41,9 +41,9 @@ class GroupView extends React.Component {
     if (objects.nativeEvent.changedTouches[0].pageX >= 310) {
       isChat = true;
     }
-    if (position <= 417) {
+    if (position <= 478) {
       console.log("Brian: User 1", "Chat: ", isChat);
-    } else if (position < 489) {
+    } else if (position < 550) {
       console.log("Akin: User 2", "Chat: ", isChat);
     } else {
       console.log("Michael: User 3", "Chat: ", isChat);
@@ -57,13 +57,20 @@ class GroupView extends React.Component {
     this.props.navigation.navigate("Panic", {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
-
+      userInfo: this.props.navigation.state.params.userData
     });
   };
 
   render() {
+    let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
+        <Image
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 55 }}
+          source={{
+            uri: `${userData.url_profile_pic}`
+          }}
+        />
         {list.map((l, i) => (
           <ListItem
             style={styles.user}
