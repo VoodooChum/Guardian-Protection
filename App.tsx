@@ -98,10 +98,6 @@ const {API_HOST} = Constants.manifest.extra;
   }
 }
 
-  //  componentDidMount = async () => { 
-  //     // let groups = await axios.get(`${API_HOST}/myGroups/${this.state.existingUser}`);
-  //  }
-
   render() {
     if (typeof this.state.existingUser === 'object' && this.state.panic === false) { 
       return (
@@ -138,7 +134,7 @@ const {API_HOST} = Constants.manifest.extra;
             />
           </View>
       );
-    } else if(this.state.signedIn === false && this.state.panic === false) {
+    } else if(this.state.signedIn === false) {
       return (
           <View style={styles.container}>
               <Image 
@@ -152,7 +148,7 @@ const {API_HOST} = Constants.manifest.extra;
             <LoginView signIn={this.signInAsync} />
           </View>
       );
-    } 
+    }
   }
 }
 
