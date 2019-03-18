@@ -44,7 +44,7 @@ class PanicButton extends React.Component {
               url_video: data.url,
               id_user: userId
             };
-            const uploadToServer = await axios.post('localhost:3000', body);
+            const uploadToServer = await axios.post('localhost:3000/upload', body);
             console.log(uploadToServer.status);
           } catch(e){
             console.log(e);
