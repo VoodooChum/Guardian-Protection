@@ -1,5 +1,11 @@
 const db = require('../models');
 
+const client = require("twilio")(
+    process.env.ACCOUNT_SID,
+    process.env.AUTH_TOKEN
+);
+require('dotenv').config();
+
 const errorHandler = (req, res, err) => {
     console.error(err);
     if (err.message === 'Validation error') {
@@ -128,6 +134,21 @@ const requestHandler = {
     upload(req, res, next) {
         console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
+            res.header("Content-Type", "application/json");
+            client.messages
+              .create({
+                from: process.env.TWILIO_NUMBER,
+                to: 15043390763,
+                body: `Guardian App Alert ${req.body.url_video}`
+              })
+              .then(() => {
+                res.send(JSON.stringify({ success: true }));
+              })
+              .catch(err => {
+                console.log(err);
+                res.send(JSON.stringify({ success: false }));
+              });
+
             const newPanic = {};
             Object.assign(newPanic, req.body.id_user);
             Object.assign(newPanic, req.body.url_video);
