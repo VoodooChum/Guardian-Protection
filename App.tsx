@@ -98,12 +98,12 @@ const {API_HOST} = Constants.manifest.extra;
   }
 }
 
-   componentDidMount = async () => { 
-      // let groups = await axios.get(`${API_HOST}/myGroups/${this.state.existingUser}`);
-   }
+  //  componentDidMount = async () => { 
+  //     // let groups = await axios.get(`${API_HOST}/myGroups/${this.state.existingUser}`);
+  //  }
 
   render() {
-    if (typeof this.state.existingUser === 'object') { 
+    if (typeof this.state.existingUser === 'object' && this.state.panic === false) { 
       return (
         <View style={styles.container}>
            {/* <AppContainer /> */}
@@ -114,7 +114,7 @@ const {API_HOST} = Constants.manifest.extra;
             }}
           />
           <Text>{this.state.name}</Text>
-          <DashboardView userData={this.state.existingUser}></DashboardView>
+          <DashboardView userData={this.state.existingUser} panic={this.startPanic.bind(this)}></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
       ); 
