@@ -102,7 +102,7 @@ const {API_HOST} = Constants.manifest.extra;
     if (typeof this.state.existingUser === 'object') { 
       return (
         <View style={styles.container}>
-           <AppContainer />
+           {/* <AppContainer /> */}
           <Image
             style={{ borderRadius: 20, width: 155, height: 153 }}
             source={{
