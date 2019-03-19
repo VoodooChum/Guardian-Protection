@@ -62,7 +62,7 @@ class DashboardView extends React.Component{
       let name = this.props.navigation.state.params.name;
       this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
-      this.setState({ groups: newGroups.data, isLoading: false }) 
+      this.setState({ groups: newGroups.data, isLoading: false })
     }
     
   }
