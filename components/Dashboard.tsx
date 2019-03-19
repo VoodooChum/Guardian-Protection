@@ -33,6 +33,7 @@ class DashboardView extends React.Component{
       isLoading: true,
     }
     this._isMounted = false;
+    this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
   }
 
   // componentDidUpdate = async () => {
@@ -47,7 +48,6 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
-    setInterval(this.getGroupsAsnyc, 5000);
   };
   
   getGroupsAsnyc = async () => {
@@ -62,7 +62,7 @@ class DashboardView extends React.Component{
       let name = this.props.navigation.state.params.name;
       this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
-      this.setState({ groups: newGroups.data, isLoading: false }) 
+      this.setState({ groups: newGroups.data, isLoading: false })
     }
     
   }
@@ -86,12 +86,14 @@ class DashboardView extends React.Component{
     if (this.props.userData) {
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.userData,
-        name: this.props.name
+        name: this.props.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     } else {
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: this.props.navigation.state.params.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     }
   } 
@@ -102,12 +104,14 @@ class DashboardView extends React.Component{
     if(this.props.userData){
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.userData,
-        name: this.props.name
+        name: this.props.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     } else {
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: this.props.navigation.state.params.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     }
     
