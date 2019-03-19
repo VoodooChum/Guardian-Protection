@@ -4,6 +4,7 @@ const bodyParser = require("body-parser"); // Requiring body-parser to obtain th
 const passport = require('passport');
 const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
+const MessagingResponse = require("twilio").twiml.MessagingResponse;
 const app = express();
 const client = require("twilio")(
   process.env.ACCOUNT_SID,
@@ -74,6 +75,7 @@ app.post("/joinGroup", joinGroup);
  
 app.get("/myGroups/:id", getMyGroups ); 
 
+// Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
   res.header("Content-Type", "application/json");
   client.messages
@@ -89,6 +91,16 @@ app.post("/api/messages", (req, res) => {
       console.log(err);
       res.send(JSON.stringify({ success: false }));
     });
+});
+
+// Responding to Incoming Messages
+app.post('/sms', (req, res) => {
+  const twiml = new MessagingResponse();
+
+  twiml.message('Gaurdian App Is Taking Over The World!!!');
+
+  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  res.end(twiml.toString());
 });
 
 
