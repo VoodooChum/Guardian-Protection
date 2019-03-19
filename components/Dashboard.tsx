@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppRegistry, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
+import { AppRegistry, View, Image, StyleSheet, TouchableHighlight, Text, ScrollView, ActivityIndicator } from "react-native";
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { ThemeProvider, Button } from "react-native-elements";
@@ -29,8 +29,10 @@ class DashboardView extends React.Component{
     this.state = {
       groups: [],
       photoUrl: 'a',
-      name: ''
+      name: '',
+      isLoading: true,
     }
+    this._isMounted = false;
   }
 
   // componentDidUpdate = async () => {
@@ -42,26 +44,32 @@ class DashboardView extends React.Component{
   // };
 
   componentDidMount = async () => {
+    this._isMounted = true;
+    this.setState({ name: this.props.name }) 
+    this.getGroupsAsnyc();
     setInterval(this.getGroupsAsnyc, 5000);
   };
   
   getGroupsAsnyc = async () => {
     if (this.props.userData){
-      this.setState({ photoUrl: this.props.userData.url_profile_pic, name: this.props.name })
+      this._isMounted && this.setState({ photoUrl: this.props.userData.url_profile_pic, name: this.props.name })
       let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
       if(myGroups){
-        this.setState({ groups: myGroups.data }) 
+        this.setState({ groups: myGroups.data, isLoading: false }) 
       }
     } else {
       let user = this.props.navigation.state.params.userData;
       let name = this.props.navigation.state.params.name;
       this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
-      this.setState({ groups: newGroups.data }) 
+      this.setState({ groups: newGroups.data, isLoading: false }) 
     }
     
   }
   
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  }
 
   
 
@@ -76,7 +84,7 @@ class DashboardView extends React.Component{
       console.log('Create Group Button Pressed');
     this.props.navigation.navigate('CreatGroupView', {  
       userInfo: this.props.userData,
-      name: this.state.name
+      name: this.props.name
     });
   } 
 
@@ -85,7 +93,7 @@ class DashboardView extends React.Component{
     console.log('Join Group Button Pressed');
     this.props.navigation.navigate('JoinGroup', {
       userInfo: this.props.userData,
-      name: this.state.name
+      name: this.props.name
     });
   }
 
@@ -112,10 +120,19 @@ class DashboardView extends React.Component{
 
   
   render() {
+    const { isLoading } = this.state;
     // console.log(this.state.groups); 
+     
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={scroll.contentContainer}>
+          {isLoading && (
+            <ActivityIndicator
+              style={{ height: 80 }}
+              color="#C00"
+              size="large"
+            />
+          )} 
           <Image
             style={{ borderRadius: 20, width: 155, height: 153, alignSelf: 'center', marginTop: 15 }}
             source={{
@@ -123,7 +140,7 @@ class DashboardView extends React.Component{
             }}
           />
           <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-          >{this.state.name}</Text>
+          >{this.state.name}</Text> 
           <ThemeProvider theme={theme}>
             {
               this.state.groups.map((group) => <Button
