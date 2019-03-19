@@ -25,6 +25,9 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Loging the Registered Chat Servicesdd
+client.chat.services.each(services => console.log(services.sid));
+
 app.all('*', (req, res, next) => {
   // ugly hack to let the browser know the user is logged in
   // not sure if secure
@@ -96,8 +99,16 @@ app.post("/api/messages", (req, res) => {
 // Responding to Incoming Messages
 app.post('/sms', (req, res) => {
   const twiml = new MessagingResponse();
-
-  twiml.message('Gaurdian App Is Taking Over The World!!!');
+  let message = req.body.Body;
+  console.log(req.body.Body);
+  if (message === 'Tiffany' || message ==='tiffany') {
+    twiml.message("The Guardian App Loves You Tiffany!!!");
+  } 
+  else if (message === 'Brian') {
+    twiml.message("Hello Brian Welcome to Guardian!!!");
+  } else {
+    twiml.message('Gaurdian App Is Taking Over The World!!!');
+  }
 
   res.writeHead(200, { 'Content-Type': 'text/xml' });
   res.end(twiml.toString());
