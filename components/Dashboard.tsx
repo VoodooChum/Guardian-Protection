@@ -117,12 +117,12 @@ class DashboardView extends React.Component{
       <View style={styles.container}>
         <ScrollView contentContainerStyle={scroll.contentContainer}>
           <Image
-            style={{ borderRadius: 20, width: 155, height: 153, alignSelf: 'center' }}
+            style={{ borderRadius: 20, width: 155, height: 153, alignSelf: 'center', marginTop: 15 }}
             source={{
               uri: `${this.state.photoUrl}`
             }}
           />
-          <Text style={{ alignSelf: 'center' }}
+          <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
           >{this.state.name}</Text>
           <ThemeProvider theme={theme}>
             {
