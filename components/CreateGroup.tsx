@@ -40,12 +40,21 @@ class CreatGroupView extends React.Component {
   }
       let userData = this.props.navigation.state.params.userInfo;
       let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": userData})
+      
   } catch(error) {
     console.log(JSON.stringify(error)); 
   }
+   
   this.clearForm();
 }
 
+switchViewAndCreateGroup = () => {
+  this.onPressCreateGroup()
+  this.props.navigation.navigate('Dashboard', {
+    userData: this.props.navigation.state.params.userInfo, 
+    name: this.props.navigation.state.params.name
+  }); 
+}
  
 
   
@@ -63,7 +72,7 @@ class CreatGroupView extends React.Component {
         <Form ref="form" type={Group} options={options} />
         <TouchableHighlight
           style={styles.button}
-          onPress={this.onPressCreateGroup}
+          onPress={this.switchViewAndCreateGroup} 
           underlayColor="#99d9f4"
         >
           <Text style={styles.buttonText}>Save and Create</Text>

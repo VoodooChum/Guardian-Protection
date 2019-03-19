@@ -43,7 +43,14 @@ class JoinGroupView extends React.Component {
   }
   this.clearForm();
 }
- 
+
+  switchViewAndJoinGroup = () => {
+    this.onPressJoinGroup()
+    this.props.navigation.navigate('Dashboard', {
+      userData: this.props.navigation.state.params.userInfo,
+      name: this.props.navigation.state.params.name
+    });
+  }
 
 
   
@@ -54,7 +61,7 @@ class JoinGroupView extends React.Component {
         <Form ref="form" type={Group} options={options} />
         <TouchableHighlight
           style={styles.button}
-          onPress={this.onPressJoinGroup}
+          onPress={this.switchViewAndJoinGroup}
           underlayColor="#99d9f4"
         >
           <Text style={styles.buttonText}>Join Group</Text>

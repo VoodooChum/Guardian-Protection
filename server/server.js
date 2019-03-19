@@ -19,7 +19,7 @@ const {
         createGroup,
         getMyGroups,
         upload} = require('../db/helpers/request-handlers')
-// Set Express to use body-parser as a middleware //
+// Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -45,7 +45,7 @@ passport.use(new LocalStrategy(
     .then((user)=>{
       return done(null, user); 
     })
-  }
+  } 
 ));
 
 passport.serializeUser((user, done) => done(null, user.id));
