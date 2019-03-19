@@ -54,7 +54,8 @@ class DashboardView extends React.Component{
       }
     } else {
       let user = this.props.navigation.state.params.userData;
-      this.setState({ photoUrl: user.url_profile_pic })
+      let name = this.props.navigation.state.params.name;
+      this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
       this.setState({ groups: newGroups.data }) 
     }
@@ -75,6 +76,7 @@ class DashboardView extends React.Component{
       console.log('Create Group Button Pressed');
     this.props.navigation.navigate('CreatGroupView', {  
       userInfo: this.props.userData,
+      name: this.state.name
     });
   } 
 
@@ -83,6 +85,7 @@ class DashboardView extends React.Component{
     console.log('Join Group Button Pressed');
     this.props.navigation.navigate('JoinGroup', {
       userInfo: this.props.userData,
+      name: this.state.name
     });
   }
 

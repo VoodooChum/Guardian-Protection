@@ -51,7 +51,8 @@ class CreatGroupView extends React.Component {
 switchViewAndCreateGroup = () => {
   this.onPressCreateGroup()
   this.props.navigation.navigate('Dashboard', {
-    userData: this.props.navigation.state.params.userInfo 
+    userData: this.props.navigation.state.params.userInfo, 
+    name: this.props.navigation.state.params.name
   }); 
 }
  
