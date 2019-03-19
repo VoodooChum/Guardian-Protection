@@ -33,6 +33,7 @@ class DashboardView extends React.Component{
       isLoading: true,
     }
     this._isMounted = false;
+    this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
   }
 
   // componentDidUpdate = async () => {
@@ -47,7 +48,6 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
-    setInterval(this.getGroupsAsnyc, 5000);
   };
   
   getGroupsAsnyc = async () => {
@@ -84,7 +84,8 @@ class DashboardView extends React.Component{
       console.log('Create Group Button Pressed');
     this.props.navigation.navigate('CreatGroupView', {  
       userInfo: this.props.userData,
-      name: this.props.name
+      name: this.props.name,
+      getGroupsAsnyc: this.getGroupsAsnyc
     });
   } 
 
@@ -93,7 +94,8 @@ class DashboardView extends React.Component{
     console.log('Join Group Button Pressed');
     this.props.navigation.navigate('JoinGroup', {
       userInfo: this.props.userData,
-      name: this.props.name
+      name: this.props.name,
+      getGroupsAsnyc: this.getGroupsAsnyc
     });
   }
 
