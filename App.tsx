@@ -103,14 +103,14 @@ const {API_HOST} = Constants.manifest.extra;
       return (
         <View style={styles.container}>
            {/* <AppContainer /> */}
-          <Image
-            style={{ borderRadius: 20, width: 155, height: 153 }}
-            source={{
-              uri: `${this.state.photoUrl}`
-            }}
-          />
           <Text>{this.state.name}</Text>
-          <DashboardView userData={this.state.existingUser} panic={this.startPanic.bind(this)} hasAudioPermission={this.state.hasAudioPermission} hasCameraPermission={this.state.hasCameraPermission}></DashboardView>
+          <DashboardView 
+          userData={this.state.existingUser} 
+          panic={this.startPanic.bind(this)} 
+          hasAudioPermission={this.state.hasAudioPermission} 
+          hasCameraPermission={this.state.hasCameraPermission}
+          name={this.state.name}
+          ></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
       ); 
@@ -176,7 +176,10 @@ const AppNavigator = createStackNavigator({
     screen: CreateGroupView,
   },
   Dashboard: {
-    screen: DashboardView
+    screen: DashboardView, 
+    navigationOptions: {
+      header: null,
+    }
   },
   JoinGroup: {
     screen: JoinGroupView

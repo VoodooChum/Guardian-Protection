@@ -27,7 +27,9 @@ class DashboardView extends React.Component{
   constructor(props: object) {
     super(props);
     this.state = {
-      groups: [] 
+      groups: [],
+      photoUrl: 'a',
+      name: ''
     }
   }
 
@@ -44,8 +46,19 @@ class DashboardView extends React.Component{
   };
   
   getGroupsAsnyc = async () => {
-    let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
-    this.setState({ groups: myGroups.data }) 
+    if (this.props.userData){
+      this.setState({ photoUrl: this.props.userData.url_profile_pic, name: this.props.name })
+      let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
+      if(myGroups){
+        this.setState({ groups: myGroups.data }) 
+      }
+    } else {
+      let user = this.props.navigation.state.params.userData;
+      this.setState({ photoUrl: user.url_profile_pic })
+      let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
+      this.setState({ groups: newGroups.data }) 
+    }
+    
   }
   
 
@@ -100,6 +113,14 @@ class DashboardView extends React.Component{
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={scroll.contentContainer}>
+          <Image
+            style={{ borderRadius: 20, width: 155, height: 153, alignSelf: 'center' }}
+            source={{
+              uri: `${this.state.photoUrl}`
+            }}
+          />
+          <Text style={{ alignSelf: 'center' }}
+          >{this.state.name}</Text>
           <ThemeProvider theme={theme}>
             {
               this.state.groups.map((group) => <Button
@@ -141,12 +162,13 @@ const scroll = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  container: {
+  container: { 
+    flex: 1,
     justifyContent: "center",
-    width: 300,
-    marginTop: 0,
+    width: 375,
+    paddingTop: 30,
     padding: 30,
-    borderRadius: 8,
+    borderRadius: 14,
     backgroundColor: "#0078ef"
   },
   buttonText: {
@@ -163,6 +185,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     alignSelf: "stretch",
+    justifyContent: "center"
+  },
+  image: {
+    width: 80,
+    height: 80,
+    paddingTop: 80,
     justifyContent: "center"
   }
 });
