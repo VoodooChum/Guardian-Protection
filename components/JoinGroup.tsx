@@ -46,11 +46,11 @@ class JoinGroupView extends React.Component {
 
   switchViewAndJoinGroup = () => {
     this.onPressJoinGroup()
-    this.props.navigation.state.params.getGroupsAsnyc();
     this.props.navigation.navigate('Dashboard', {
       userData: this.props.navigation.state.params.userInfo,
       name: this.props.navigation.state.params.name
     });
+    this.props.navigation.state.params.getGroupsAsnyc();
   }
 
 
