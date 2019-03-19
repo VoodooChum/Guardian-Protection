@@ -1,5 +1,4 @@
 const db = require('../models');
-
 const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
@@ -131,9 +130,10 @@ const requestHandler = {
     * be an object with id_user and url_video as properties and saves
     * them to the database, and sends back the status code and the url 
     */
-    upload(req, res, next) {
+    async upload(req, res, next) {
         console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
+            console.log(shortened);
             res.header("Content-Type", "application/json");
             client.messages
               .create({
