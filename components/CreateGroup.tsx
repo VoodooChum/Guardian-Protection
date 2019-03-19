@@ -40,7 +40,6 @@ class CreatGroupView extends React.Component {
   }
       let userData = this.props.navigation.state.params.userInfo;
       let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": userData})
-      
   } catch(error) {
     console.log(JSON.stringify(error)); 
   }
@@ -49,11 +48,13 @@ class CreatGroupView extends React.Component {
 }
 
 switchViewAndCreateGroup = () => {
-  this.onPressCreateGroup()
+  this.onPressCreateGroup();
+  
   this.props.navigation.navigate('Dashboard', {
     userData: this.props.navigation.state.params.userInfo, 
     name: this.props.navigation.state.params.name
-  }); 
+  });
+  this.props.navigation.state.params.getGroupsAsnyc();
 }
  
 
