@@ -5,7 +5,11 @@ const passport = require('passport');
 const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
-const port = process.env.PORT || 3000;
+const client = require("twilio")(
+  process.env.ACCOUNT_SID,
+  process.env.AUTH_TOKEN
+);
+const port = process.env.PORT || 4567;
 const { 
         createUser, 
         login, 
@@ -69,6 +73,23 @@ app.post("/createGroup", createGroup);
 app.post("/joinGroup", joinGroup); 
  
 app.get("/myGroups/:id", getMyGroups ); 
+
+app.post("/api/messages", (req, res) => {
+  res.header("Content-Type", "application/json");
+  client.messages
+    .create({
+      from: process.env.TWILIO_NUMBER,
+      to: req.body.recipient,
+      body: `Guardian App Alert ${req.body.link}`
+    })
+    .then(() => {
+      res.send(JSON.stringify({ success: true }));
+    })
+    .catch(err => {
+      console.log(err);
+      res.send(JSON.stringify({ success: false }));
+    });
+});
 
 
 

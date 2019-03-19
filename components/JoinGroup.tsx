@@ -66,8 +66,9 @@ class JoinGroupView extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
-    width: 300,
+    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,

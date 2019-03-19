@@ -28,42 +28,49 @@ const list = [
 ];
 
 
-class GroupView extends React.Component{
+class GroupView extends React.Component {
   constructor(props: object) {
     super(props);
     this.onUserPress = this.onUserPress.bind(this);
   }
 
-  componentDidMount = () => {
-    
-  }
-  
-  onPressPanic = () => {
-    // Do whatever you need here to switch to Joining a group View
-    console.log('Panic Button Pressed');
-  }
-
-  onUserPress = (objects) => {
+  onUserPress = objects => {
     console.log(objects.nativeEvent.changedTouches);
     let position = objects.nativeEvent.changedTouches[0].pageY;
     let isChat = false;
     if (objects.nativeEvent.changedTouches[0].pageX >= 310) {
       isChat = true;
     }
-    if(position <= 417) {
-      console.log('Brian: User 1', 'Chat: ', isChat);
-    } else if(position < 489) {
-      console.log('Akin: User 2', 'Chat: ', isChat);
+    if (position <= 478) {
+      console.log("Brian: User 1", "Chat: ", isChat);
+    } else if (position < 550) {
+      console.log("Akin: User 2", "Chat: ", isChat);
     } else {
-      console.log('Michael: User 3', 'Chat: ', isChat);
+      console.log("Michael: User 3", "Chat: ", isChat);
     }
     isChat = false;
-  }
-  
+  };
+
+  onPressPanic = () => {
+    // Do whatever you need here to switch to Joining a group View
+    console.log("Panic Button Pressed");
+    this.props.navigation.navigate("Panic", {
+      hasAudioPermission: this.props.hasAudioPermission,
+      hasCameraPermission: this.props.hasCameraPermission,
+      userInfo: this.props.navigation.state.params.userData
+    });
+  };
 
   render() {
+    let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
+        <Image
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 55 }}
+          source={{
+            uri: `${userData.url_profile_pic}`
+          }}
+        />
         {list.map((l, i) => (
           <ListItem
             style={styles.user}
@@ -71,7 +78,7 @@ class GroupView extends React.Component{
             key={i}
             leftAvatar={{ source: { uri: l.avatar_url } }}
             title={l.name}
-            rightIcon={{name: l.icon}}
+            rightIcon={{ name: l.icon }}
             onPress={this.onUserPress}
           />
         ))}
@@ -94,8 +101,9 @@ const scroll = StyleSheet.create({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
-    width: 400,
+    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
