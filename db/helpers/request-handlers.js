@@ -257,6 +257,13 @@ const requestHandler = {
         } else {
             res.status(400).send('Bad request');
         }
+    },
+    /**
+     * 
+     */
+    async getLocation(req, res){
+        console.log(req.params);
+        res.status(200).send('Memes');
     }
 }
 

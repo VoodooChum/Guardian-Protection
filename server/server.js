@@ -20,7 +20,8 @@ const {
         getMyGroups,
         upload,
         createLocation,
-        groupMembers
+        groupMembers,
+        getLocation
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -119,8 +120,5 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-app.get('/locations/:id', (req, res) => {
-  console.log(req.params);
-  res.status(200).send('Yes');
-});
+app.get('/locations/:id', getLocation);
 app.listen(port, () => console.log(`Listening on port ${port}`));
