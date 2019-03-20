@@ -12,6 +12,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import PanicButton from './components/PanicButton';
 import DashboardView from "./components/Dashboard";
 import GroupView from "./components/Group";
+import MapView from "./components/MapView"
 import ChatView from './components/Chat';
 
 // import console = require('console');
@@ -215,6 +216,9 @@ const AppNavigator = createStackNavigator({
   }, 
   GroupView: {
     screen: GroupView 
+  },
+  MapView: {
+    screen: MapView
   },
   ChatView: {
     screen: ChatView
