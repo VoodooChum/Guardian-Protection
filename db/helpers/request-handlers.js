@@ -198,10 +198,9 @@ const requestHandler = {
     async groupMembers(req, res) {
         let currentGroup = req.params.groupName;
         // console.log(currentGroup);
-        let foundGroup = await db.Group.findOne({ where: { name: currentGroup}})
-        let userGroup = await db.UserGroup.findAll({ where: { GroupId: foundGroup.id } })
+        let foundGroup = await db.Group.findOne({ where: { name: currentGroup } }).catch(err => errorHandler(req, res, err));  
+        let userGroup = await db.UserGroup.findAll({ where: { GroupId: foundGroup.id } }).catch(err => errorHandler(req, res, err));  
         let userIds = userGroup.map((groupMember) => groupMember.id_user)
-        userIds;
         let groupMembers = await db.User.findAll({ where: { id: userIds } })
         groupMembers;
         res.send(groupMembers);

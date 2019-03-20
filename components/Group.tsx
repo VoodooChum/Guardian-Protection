@@ -39,8 +39,15 @@ class GroupView extends React.Component {
   }
 
   componentDidMount = async () => {
-    let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
-    this.setState({ members: myMembers.data })
+    if(this.state.name){
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
+      this.setState({ members: myMembers.data })
+    } else {
+      let refreshName = props.navigation.state.params.name;
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${refreshName}`)
+      this.setState({ members: myMembers.data })
+    }
+    
   }
 
   onUserPress = objects => {

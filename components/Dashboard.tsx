@@ -139,11 +139,11 @@ class DashboardView extends React.Component{
         name: name
       });
     } else {
-      this.props.navigation.navigate('GroupView', {
+      this.props.navigation.navigate('GroupView', { 
         hasAudioPermission: this.props.navigation.state.params.hasAudioPermission,
         hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: name
       });
     }
     
@@ -152,7 +152,7 @@ class DashboardView extends React.Component{
 
   
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, name } = this.state;
     // console.log(this.state.groups); 
      
     return (
@@ -172,7 +172,7 @@ class DashboardView extends React.Component{
             }}
           />
           <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-          >{this.props.name}</Text> 
+          >{this.state.name}</Text> 
           <ThemeProvider theme={theme}>
             {
               this.state.groups.map((group) => <Button
