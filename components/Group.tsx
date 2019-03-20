@@ -8,7 +8,18 @@ import { createStackNavigator, createAppContainer, withNavigation } from 'react-
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
 
-
+const theme = {
+  Button: {
+    containerStyle: {
+      marginTop: 10
+    },
+    raised: true,
+    color: "red",
+    borderWidth: 3,
+    borderRadius: 10
+    // color: "#006edc",
+  }
+};
 
 class GroupView extends React.Component {
   constructor(props: object) {
@@ -32,6 +43,8 @@ class GroupView extends React.Component {
     
   }
 
+  
+
   onUserPress = objects => {
     console.log(objects.nativeEvent.changedTouches);
     let position = objects.nativeEvent.changedTouches[0].pageY;
@@ -46,12 +59,6 @@ class GroupView extends React.Component {
     } else {
       console.log("Michael: User 3", "Chat: ", isChat);
     }
-    if (isChat === true) {
-      this.props.navigation.navigate('ChatView', {
-        userInfo: this.props.navigation.state.params,
-      });
-
-    }
     isChat = false;
   };
 
@@ -65,12 +72,18 @@ class GroupView extends React.Component {
     });
   };
 
+  onPressChat = () => {
+    this.props.navigation.navigate('ChatView', {
+      userInfo: this.props.navigation.state.params,
+    });
+  }
+
   render() {
     let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
         <Image
-          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 55 }}
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 30 }}
           source={{
             uri: `${userData.url_profile_pic}`
           }}
@@ -84,10 +97,17 @@ class GroupView extends React.Component {
             key={i}
             leftAvatar={{ source: { uri: member.url_profile_pic } }}
             title={`${member.name_first} ${member.name_last}`}
-            rightIcon={{ name: 'chat' }}
             onPress={this.onUserPress}
           />
         ))}
+        <ThemeProvider theme={theme}>
+        <TouchableHighlight
+          style={styles.buttonChat}
+          onPress={this.onPressChat}
+        >
+          <Text style={styles.chatText}>Chat</Text>
+        </TouchableHighlight>
+        </ThemeProvider>
         <TouchableHighlight
           style={styles.button}
           onPress={this.onPressPanic}
@@ -120,10 +140,26 @@ const styles = StyleSheet.create({
     color: "white",
     alignSelf: "center"
   },
+  chatText: {
+    fontSize: 20,
+    color: "black",
+    alignSelf: "center"
+  },
   button: {
     height: 50,
     backgroundColor: "#800000",
     borderColor: "#800000",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: "stretch",
+    justifyContent: "center"
+  },
+  buttonChat: {
+    height: 48,
+    backgroundColor: "white",
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 20,
