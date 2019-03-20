@@ -10,7 +10,7 @@ const client = require("twilio")(
   process.env.ACCOUNT_SID,
   process.env.AUTH_TOKEN
 );
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT || 4567; 
 const { 
         createUser, 
         login, 
@@ -19,8 +19,8 @@ const {
         createGroup,
         getMyGroups,
         upload,
-        createLocation
-        groupMembers,
+        createLocation,
+        groupMembers
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -119,4 +119,8 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
+app.get('/locations/:id', (req, res) => {
+  console.log(req.params);
+  res.status(200).send('Yes');
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));
