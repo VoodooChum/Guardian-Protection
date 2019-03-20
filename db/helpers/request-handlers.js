@@ -179,9 +179,24 @@ const requestHandler = {
 
     async createLocation(req, res){
         if(req.body.latitude && req.body.userId && req.body.longitude){
-            
+            const query = {
+                longitude: req.body.longitude,
+                latitude: req.body.latitude
+            };
+            try {
+                const foundLocation = await db.Location.findOne({ where: query});
+                console.log(foundLocation);
+                res.send('test');
+                if(foundLocation){
+                    
+                } else {
+                    // const createdLocation = await db.Location.create(query);
+                }
+            } catch(e){
+                console.log(e);
+            }
         } else {
-            res.status(404).send('Bad request');
+            res.status(400).send('Bad request');
         }
     }
 }
