@@ -175,9 +175,11 @@ const requestHandler = {
                 return allGroups;
             }).then(() => console.log('groups sent')) 
             .catch(err => errorHandler(req, res, err));  
-        
-    }
+    },
 
+    async createLocation(req, res){
+        res.status(201).send('connected');
+    }
 }
 
 module.exports = requestHandler;
