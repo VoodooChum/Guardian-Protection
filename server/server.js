@@ -18,7 +18,9 @@ const {
         joinGroup,
         createGroup,
         getMyGroups,
-        upload} = require('../db/helpers/request-handlers')
+        upload,
+        createLocation
+      } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -112,8 +114,6 @@ app.post('/sms', (req, res) => {
   res.end(twiml.toString());
 });
 
-app.post('/locations/create', (req, res) => {
-  res.status(201).send('connected');
-})
+app.post('/locations/create', createLocation);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
