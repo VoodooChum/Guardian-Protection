@@ -25,8 +25,6 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Loging the Registered Chat Servicesdd
-client.chat.services.each(services => console.log(services.sid));
 
 app.all('*', (req, res, next) => {
   // ugly hack to let the browser know the user is logged in
