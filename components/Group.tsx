@@ -31,7 +31,23 @@ const list = [
 class GroupView extends React.Component {
   constructor(props: object) {
     super(props);
+    this.state = {
+      name: props.navigation.state.params.name,
+      members: []
+    }
     this.onUserPress = this.onUserPress.bind(this);
+  }
+
+  componentDidMount = async () => {
+    if(this.state.name){
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
+      this.setState({ members: myMembers.data })
+    } else {
+      let refreshName = props.navigation.state.params.name;
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${refreshName}`)
+      this.setState({ members: myMembers.data })
+    }
+    
   }
 
   onUserPress = objects => {
@@ -71,14 +87,16 @@ class GroupView extends React.Component {
             uri: `${userData.url_profile_pic}`
           }}
         />
-        {list.map((l, i) => (
+        <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
+        >{this.props.navigation.state.params.name}</Text> 
+        {this.state.members.map((member: object, i: number) => (
           <ListItem
             style={styles.user}
             color="#0078ef"
             key={i}
-            leftAvatar={{ source: { uri: l.avatar_url } }}
-            title={l.name}
-            rightIcon={{ name: l.icon }}
+            leftAvatar={{ source: { uri: member.url_profile_pic } }}
+            title={`${member.name_first} ${member.name_last}`}
+            rightIcon={{ name: list[0].icon }}
             onPress={this.onUserPress}
           />
         ))}
