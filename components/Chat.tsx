@@ -10,21 +10,33 @@ const { API_HOST, PUSHER_INSTANCE_LOCATION, TOKEN_PROVIDER_ENDPOINT } = Constant
 const CHATKIT_TOKEN_PROVIDER_ENDPOINT = TOKEN_PROVIDER_ENDPOINT;
 const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
 const CHATKIT_ROOM_ID = "19394009";
-const CHATKIT_USER_NAME = "voodoochum@live.com";
+// const CHATKIT_USER_NAME = "brian@aquavisionnola.com";
 
  class ChatView extends React.Component {
-  state = {
-    messages: []
-  };
+   constructor(props: object) {
+     super(props);
+     this.state = {
+       messages: [],
+      }
+       this.CHATKIT_USER_NAME = props.navigation.state.params.userInfo.userInfo.email;
+     this.avitor = props.navigation.state.params.userInfo.userInfo.url_profile_pic;
+      console.log(props.navigation.state.params.userInfo.userInfo);
+
+    }
+  // state = {
+  //   messages: [],
+  //   CHATKIT_USER_NAME: props.navigation.state.params.userInfo.email
+  // };
 
   componentDidMount() {
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
     });
 
+
     const chatManager = new ChatManager({
       instanceLocator: CHATKIT_INSTANCE_LOCATOR,
-      userId: CHATKIT_USER_NAME,
+      userId: this.CHATKIT_USER_NAME,
       tokenProvider: tokenProvider,
     });
 
@@ -37,14 +49,14 @@ const CHATKIT_USER_NAME = "voodoochum@live.com";
             onMessage: this.onReceive,
           }
         });
-      })
+      }).then()
       .catch(err => {
         console.log(err);
       });
   }
 
   onReceive = data => {
-    const { id, senderId, text, createdAt } = data;
+    const { id, senderId, text, createdAt, avatarUrl } = data;
     const incomingMessage = {
       _id: id,
       text: text,
@@ -52,8 +64,7 @@ const CHATKIT_USER_NAME = "voodoochum@live.com";
       user: {
         _id: senderId,
         name: senderId,
-        avatar:
-          "https://avatars1.githubusercontent.com/u/39815179?s=460&v=4"
+        avatarUrl: avatarUrl
       }
     };
     this.setState(previousState => ({
@@ -88,7 +99,7 @@ const CHATKIT_USER_NAME = "voodoochum@live.com";
         <GiftedChat messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={{
-        id: CHATKIT_USER_NAME
+        id: this.CHATKIT_USER_NAME
       }} />
       </View>
   }
