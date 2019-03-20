@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Location = sequelize.define('Location', {
-        longitude: { type: DataTypes.INTEGER, unique: true, allowNull: true },
-        latitude: { type: DataTypes.INTEGER, unique: true, allowNull: true },
+        longitude: { type: DataTypes.STRING, unique: true, allowNull: true },
+        latitude: { type: DataTypes.STRING, unique: true, allowNull: true },
     });
 
     Location.associate = (models) => {
