@@ -17,6 +17,7 @@ const {
         joinGroup,
         createGroup,
         getMyGroups,
+        groupMembers,
         upload} = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -73,6 +74,8 @@ app.post("/createGroup", createGroup);
 app.post("/joinGroup", joinGroup); 
  
 app.get("/myGroups/:id", getMyGroups ); 
+
+app.get("/groupMembers/:groupName", groupMembers)
 
 app.post("/api/messages", (req, res) => {
   res.header("Content-Type", "application/json");

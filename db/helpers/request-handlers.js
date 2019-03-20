@@ -34,14 +34,14 @@ const requestHandler = {
             .catch(err => errorHandler(req, res, err));
     },
 
-    /*
-  signup
-  on POST /signup
-  expects:
-    req.body: JSON => { "username", "password" }
-  if username in db: 401
-  else on creation: login, send 200, {username, id}
-  */
+        /*
+    signup
+    on POST /signup
+    expects:
+        req.body: JSON => { "username", "password" }
+    if username in db: 401
+    else on creation: login, send 200, {username, id}
+    */
     signup(req, res, next) {
         const newUser = {};
         Object.assign(newUser, req.body.props);
@@ -76,7 +76,9 @@ const requestHandler = {
         res.send(foundUser);
       }).catch((err) => console.log(err))
   }, 
-/**
+
+
+    /**
     * createGroup: creates a new group for an exisitng user
     * @param {object} req: the incoming request message
     * @param {object} res: the outcoming response message
@@ -100,11 +102,11 @@ const requestHandler = {
                 return db.UserGroup.create(groupMember);
             }).catch(err => errorHandler(req, res, err));  
    }, 
-/**
- * joinGroup: allows an exisitng user to join a group
- * @param {object} req: the incoming request message
- * @param {object} res: the outcoming response message
- */
+    /**
+     * joinGroup: allows an exisitng user to join a group
+     * @param {object} req: the incoming request message
+     * @param {object} res: the outcoming response message
+     */
     joinGroup(req, res, next){
         let group = req.body.group;
         let user = req.body.user;
@@ -162,6 +164,14 @@ const requestHandler = {
         }
     },
 
+    /**
+    * @function getMyGroups
+    * @param {object} req
+    * @param {object} res
+    * this function sends the user the groups he/she is currently in to the user's
+    * guardian dashboard.
+    */
+
     async getMyGroups(req, res){
         let myId = req.params.id;
         db.UserGroup.findAll({ where: { id_user: myId} })
@@ -176,6 +186,25 @@ const requestHandler = {
             }).then(() => console.log('groups sent')) 
             .catch(err => errorHandler(req, res, err));  
         
+    },
+
+    /**
+    * @function groupMembers
+    * @param {object} req
+    * @param {object} res
+        * this function sends the group members of a particular group he/she is  in 
+    */
+
+    async groupMembers(req, res) {
+        let currentGroup = req.params.groupName;
+        // console.log(currentGroup);
+        let foundGroup = await db.Group.findOne({ where: { name: currentGroup}})
+        let userGroup = await db.UserGroup.findAll({ where: { GroupId: foundGroup.id } })
+        let userIds = userGroup.map((groupMember) => groupMember.id_user)
+        userIds;
+        let groupMembers = await db.User.findAll({ where: { id: userIds } })
+        groupMembers;
+        res.send(groupMembers);
     }
 
 }

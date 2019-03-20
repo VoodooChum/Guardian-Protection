@@ -60,6 +60,7 @@ class DashboardView extends React.Component{
     } else {
       let user = this.props.navigation.state.params.userData;
       let name = this.props.navigation.state.params.name;
+      this.props.name = name;
       this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
       this.setState({ groups: newGroups.data, isLoading: false })
@@ -171,7 +172,7 @@ class DashboardView extends React.Component{
             }}
           />
           <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-          >{this.state.name}</Text> 
+          >{this.props.name}</Text> 
           <ThemeProvider theme={theme}>
             {
               this.state.groups.map((group) => <Button
