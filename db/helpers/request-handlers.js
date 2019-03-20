@@ -178,7 +178,11 @@ const requestHandler = {
     },
 
     async createLocation(req, res){
-        res.status(201).send('connected');
+        if(req.body.latitude && req.body.userId && req.body.longitude){
+            
+        } else {
+            res.status(404).send('Bad request');
+        }
     }
 }
 
