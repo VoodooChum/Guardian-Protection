@@ -4,6 +4,7 @@ const bodyParser = require("body-parser"); // Requiring body-parser to obtain th
 const passport = require('passport');
 const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
+const MessagingResponse = require("twilio").twiml.MessagingResponse;
 const app = express();
 const client = require("twilio")(  
   process.env.ACCOUNT_SID,
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 app.all('*', (req, res, next) => {
   // ugly hack to let the browser know the user is logged in
@@ -77,6 +79,7 @@ app.get("/myGroups/:id", getMyGroups );
 
 app.get("/groupMembers/:groupName", groupMembers)
 
+// Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
   res.header("Content-Type", "application/json");
   client.messages
@@ -92,6 +95,24 @@ app.post("/api/messages", (req, res) => {
       console.log(err);
       res.send(JSON.stringify({ success: false }));
     });
+});
+
+// Responding to Incoming Messages
+app.post('/sms', (req, res) => {
+  const twiml = new MessagingResponse();
+  let message = req.body.Body;
+  console.log(req.body.Body);
+  if (message === 'Tiffany' || message ==='tiffany') {
+    twiml.message("The Guardian App Loves You Tiffany!!!");
+  } 
+  else if (message === 'Brian') {
+    twiml.message("Hello Brian Welcome to Guardian!!!");
+  } else {
+    twiml.message('Gaurdian App Is Taking Over The World!!!');
+  }
+
+  res.writeHead(200, { 'Content-Type': 'text/xml' });
+  res.end(twiml.toString());
 });
 
 

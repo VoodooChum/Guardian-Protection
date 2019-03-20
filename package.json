@@ -14,6 +14,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
+    "@pusher/chatkit-client": "^1.4.1",
     "@types/jest": "^24.0.11",
     "@types/react": "^16.8.7",
     "@types/react-native": "^0.57.38",
@@ -31,6 +32,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.0.17",
+    "react-native-gifted-chat": "^0.7.2",
     "react-navigation": "^3.4.1",
     "react-test-renderer": "^16.8.4",
     "tcomb-form-native": "^0.6.20",
