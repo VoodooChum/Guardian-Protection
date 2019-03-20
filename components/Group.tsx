@@ -8,31 +8,42 @@ import { createStackNavigator, createAppContainer, withNavigation } from 'react-
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
 
-const list = [
-  {
-    name: "Brian Miller",
-    avatar_url:
-      "https://avatars3.githubusercontent.com/u/39815179?s=400&u=a69fa34fedf78b44cdfcb30cd276b6d519c4cad5&v=4",
-    icon: 'chat'
-  },
-  {
-    name: "Akin Pounds",
-    avatar_url: "https://avatars2.githubusercontent.com/u/42776703?s=460&v=4",
-    icon: 'chat'
-  },
-  {
-    name: "Michael LeMaire",
-    avatar_url: "https://avatars0.githubusercontent.com/u/29212401?s=400&v=4",
-    icon: 'chat'
-  },
-];
-
+const theme = {
+  Button: {
+    containerStyle: {
+      marginTop: 10
+    },
+    raised: true,
+    color: "red",
+    borderWidth: 3,
+    borderRadius: 10
+    // color: "#006edc",
+  }
+};
 
 class GroupView extends React.Component {
   constructor(props: object) {
     super(props);
+    this.state = {
+      name: props.navigation.state.params.name,
+      members: []
+    }
     this.onUserPress = this.onUserPress.bind(this);
   }
+
+  componentDidMount = async () => {
+    if(this.state.name){
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
+      this.setState({ members: myMembers.data })
+    } else {
+      let refreshName = props.navigation.state.params.name;
+      let myMembers = await axios.get(`${API_HOST}/groupMembers/${refreshName}`)
+      this.setState({ members: myMembers.data })
+    }
+    
+  }
+
+  
 
   onUserPress = objects => {
     console.log(objects.nativeEvent.changedTouches);
@@ -61,27 +72,42 @@ class GroupView extends React.Component {
     });
   };
 
+  onPressChat = () => {
+    this.props.navigation.navigate('ChatView', {
+      userInfo: this.props.navigation.state.params,
+    });
+  }
+
   render() {
     let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
         <Image
-          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 55 }}
+          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 30 }}
           source={{
             uri: `${userData.url_profile_pic}`
           }}
         />
-        {list.map((l, i) => (
+        <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
+        >{this.props.navigation.state.params.name}</Text> 
+        {this.state.members.map((member: object, i: number) => (
           <ListItem
             style={styles.user}
             color="#0078ef"
             key={i}
-            leftAvatar={{ source: { uri: l.avatar_url } }}
-            title={l.name}
-            rightIcon={{ name: l.icon }}
+            leftAvatar={{ source: { uri: member.url_profile_pic } }}
+            title={`${member.name_first} ${member.name_last}`}
             onPress={this.onUserPress}
           />
         ))}
+        <ThemeProvider theme={theme}>
+        <TouchableHighlight
+          style={styles.buttonChat}
+          onPress={this.onPressChat}
+        >
+          <Text style={styles.chatText}>Chat</Text>
+        </TouchableHighlight>
+        </ThemeProvider>
         <TouchableHighlight
           style={styles.button}
           onPress={this.onPressPanic}
@@ -114,10 +140,26 @@ const styles = StyleSheet.create({
     color: "white",
     alignSelf: "center"
   },
+  chatText: {
+    fontSize: 20,
+    color: "black",
+    alignSelf: "center"
+  },
   button: {
     height: 50,
     backgroundColor: "#800000",
     borderColor: "#800000",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 20,
+    marginBottom: 10,
+    alignSelf: "stretch",
+    justifyContent: "center"
+  },
+  buttonChat: {
+    height: 48,
+    backgroundColor: "white",
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 20,
@@ -133,7 +175,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     color: "white",
-    alignSelf: "stretch"
+    alignSelf: "center"
   },
   image: {
     width: 80,
