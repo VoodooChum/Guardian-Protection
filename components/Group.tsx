@@ -48,6 +48,12 @@ class GroupView extends React.Component {
     } else {
       console.log("Michael: User 3", "Chat: ", isChat);
     }
+    if (isChat === true) {
+      this.props.navigation.navigate('ChatView', {
+        userInfo: this.props.navigation.state.params.userData,
+      });
+
+    }
     isChat = false;
   };
 
