@@ -8,24 +8,6 @@ import { createStackNavigator, createAppContainer, withNavigation } from 'react-
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
 
-const list = [
-  {
-    name: "Brian Miller",
-    avatar_url:
-      "https://avatars3.githubusercontent.com/u/39815179?s=400&u=a69fa34fedf78b44cdfcb30cd276b6d519c4cad5&v=4",
-    icon: 'chat'
-  },
-  {
-    name: "Akin Pounds",
-    avatar_url: "https://avatars2.githubusercontent.com/u/42776703?s=460&v=4",
-    icon: 'chat'
-  },
-  {
-    name: "Michael LeMaire",
-    avatar_url: "https://avatars0.githubusercontent.com/u/29212401?s=400&v=4",
-    icon: 'chat'
-  },
-];
 
 
 class GroupView extends React.Component {
@@ -66,7 +48,7 @@ class GroupView extends React.Component {
     }
     if (isChat === true) {
       this.props.navigation.navigate('ChatView', {
-        userInfo: this.props.navigation.state.params.userData,
+        userInfo: this.props.navigation.state.params,
       });
 
     }
@@ -102,7 +84,7 @@ class GroupView extends React.Component {
             key={i}
             leftAvatar={{ source: { uri: member.url_profile_pic } }}
             title={`${member.name_first} ${member.name_last}`}
-            rightIcon={{ name: list[0].icon }}
+            rightIcon={{ name: 'chat' }}
             onPress={this.onUserPress}
           />
         ))}
