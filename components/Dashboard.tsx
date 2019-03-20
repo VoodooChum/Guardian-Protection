@@ -127,20 +127,22 @@ class DashboardView extends React.Component{
     });
   }
  
-  onPressViewGroup = (objects) => {
+  onPressViewGroup = (name: string) => {
     // Do whatever you need here to switch to Joining a group View
-    console.log(objects.nativeEvent.changedTouches);
+    console.log(name);
     if(this.props.userData){
       this.props.navigation.navigate('GroupView', {
         hasAudioPermission: this.props.hasAudioPermission,
         hasCameraPermission: this.props.hasCameraPermission,
         userInfo: this.props.userData,
+        name: name
       });
     } else {
       this.props.navigation.navigate('GroupView', {
         hasAudioPermission: this.props.navigation.state.params.hasAudioPermission,
         hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
+        name: this.props.navigation.state.params.name
       });
     }
     
@@ -176,7 +178,7 @@ class DashboardView extends React.Component{
                 group={group.id}
                 title={group.name}
                 key={group.id}
-                onPress={this.onPressViewGroup}
+                onPress={() => this.onPressViewGroup(group.name)}
               />)
             }
           </ThemeProvider>

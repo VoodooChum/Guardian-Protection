@@ -71,6 +71,8 @@ class GroupView extends React.Component {
             uri: `${userData.url_profile_pic}`
           }}
         />
+        <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
+        >{this.props.navigation.state.params.name}</Text> 
         {list.map((l, i) => (
           <ListItem
             style={styles.user}
