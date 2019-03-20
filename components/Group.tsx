@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     color: "white",
-    alignSelf: "stretch"
+    alignSelf: "center"
   },
   image: {
     width: 80,
