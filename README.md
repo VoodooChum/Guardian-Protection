@@ -14,10 +14,13 @@
 
 ## Usage
 
-- Install our App on the appropriate devices and create or join your 1st group.
-- Set your preferences for radius limits and map sharing interval timing.
+- Start the server by running: ```sh
+node server/server.js
+```
+- Start the app by running: ```sh
+expo start
+```
 - Connect to your groups through the User Dashboard View.
-- Activate the Panic Button from any View Inside Guardian if you are in immediate danger.
 
 ## Requirements
 
