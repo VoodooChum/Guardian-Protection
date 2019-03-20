@@ -112,6 +112,8 @@ app.post('/sms', (req, res) => {
   res.end(twiml.toString());
 });
 
-
+app.post('/locations/create', (req, res) => {
+  res.status(201).send('connected');
+})
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
