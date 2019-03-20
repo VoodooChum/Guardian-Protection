@@ -14,13 +14,16 @@
 
 ## Usage
 
-- Start the server by running: ```sh
+- Start the server by running: 
+
+```sh
 node server/server.js
 ```
-- Start the app by running: ```sh
+
+- Start the app by running: 
+```sh
 expo start
 ```
-- Connect to your groups through the User Dashboard View.
 
 ## Requirements
 
