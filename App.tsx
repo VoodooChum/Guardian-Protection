@@ -12,6 +12,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import PanicButton from './components/PanicButton';
 import DashboardView from "./components/Dashboard";
 import GroupView from "./components/Group";
+import MapView from "./components/MapView"
 
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
@@ -213,6 +214,9 @@ const AppNavigator = createStackNavigator({
   }, 
   GroupView: {
     screen: GroupView 
+  },
+  MapView: {
+    screen: MapView
   }
 });
 
