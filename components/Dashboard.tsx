@@ -36,13 +36,7 @@ class DashboardView extends React.Component{
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
   }
 
-  // componentDidUpdate = async () => {
-  //   const CancelToken = axios.CancelToken;
-  //   const source = CancelToken.source();
-  //   let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`, {cancelToken: source.token});
-  //   this.setState({ groups: myGroups.data });
-  //   source.cancel('operationCanceled');
-  // };
+ 
 
   componentDidMount = () => {
     this._isMounted = true;
