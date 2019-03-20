@@ -1,8 +1,8 @@
 import * as React from 'react';
 // import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { StyleSheet, Text, View, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, Platform } from 'react-native';
 import LoginView from './components/Login';
-import {Google, Constants, Permissions} from 'expo';
+import {Google, Constants, Permissions, Location} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
@@ -33,6 +33,7 @@ const {API_HOST} = Constants.manifest.extra;
       existingUser: false,
       hasAudioPermission: null,
       hasCameraPermission: null,
+      hasLocationPermission: null
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
@@ -43,9 +44,32 @@ const {API_HOST} = Constants.manifest.extra;
     const audioStatus = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     this.setState({
       hasAudioPermission: audioStatus.status === 'granted',
-      hasCameraPermission: status === 'granted'
+      hasCameraPermission: status === 'granted',
+      
     });
   }
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+      });
+    } else {
+      this._getLocationAsync()
+    }
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    this.setState({
+      hasLocationPermission: status === 'granted'
+    })
+    if (status !== 'granted') {
+      console.log('PERMISSION NOT GRANTED FOR LOCATION');
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+  };
 
   handleGoogleSession = () => {
     const date = Date.parse(this.state.accessTokenExpirationDate);

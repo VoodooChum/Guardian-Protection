@@ -50,6 +50,7 @@ class JoinGroupView extends React.Component {
       userData: this.props.navigation.state.params.userInfo,
       name: this.props.navigation.state.params.name
     });
+    this.props.navigation.state.params.getGroupsAsnyc();
   }
 
 

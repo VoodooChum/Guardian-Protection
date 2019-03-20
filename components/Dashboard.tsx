@@ -33,6 +33,7 @@ class DashboardView extends React.Component{
       isLoading: true,
     }
     this._isMounted = false;
+    this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
   }
 
  
@@ -41,7 +42,6 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
-    setInterval(this.getGroupsAsnyc, 5000);
   };
   
   getGroupsAsnyc = async () => {
@@ -54,9 +54,10 @@ class DashboardView extends React.Component{
     } else {
       let user = this.props.navigation.state.params.userData;
       let name = this.props.navigation.state.params.name;
+      this.props.name = name;
       this.setState({ photoUrl: user.url_profile_pic, name: name  })
       let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
-      this.setState({ groups: newGroups.data, isLoading: false }) 
+      this.setState({ groups: newGroups.data, isLoading: false })
     }
     
   }
@@ -80,12 +81,14 @@ class DashboardView extends React.Component{
     if (this.props.userData) {
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.userData,
-        name: this.props.name
+        name: this.props.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     } else {
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: this.props.navigation.state.params.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     }
   } 
@@ -96,12 +99,14 @@ class DashboardView extends React.Component{
     if(this.props.userData){
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.userData,
-        name: this.props.name
+        name: this.props.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     } else {
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: this.props.navigation.state.params.name,
+        getGroupsAsnyc: this.getGroupsAsnyc
       });
     }
     
@@ -117,20 +122,22 @@ class DashboardView extends React.Component{
     });
   }
  
-  onPressViewGroup = (objects) => {
+  onPressViewGroup = (name: string) => {
     // Do whatever you need here to switch to Joining a group View
-    console.log(objects.nativeEvent.changedTouches);
+    console.log(name);
     if(this.props.userData){
       this.props.navigation.navigate('GroupView', {
         hasAudioPermission: this.props.hasAudioPermission,
         hasCameraPermission: this.props.hasCameraPermission,
         userInfo: this.props.userData,
+        name: name
       });
     } else {
-      this.props.navigation.navigate('GroupView', {
+      this.props.navigation.navigate('GroupView', { 
         hasAudioPermission: this.props.navigation.state.params.hasAudioPermission,
         hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
+        name: name
       });
     }
     
@@ -139,7 +146,7 @@ class DashboardView extends React.Component{
 
   
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, name } = this.state;
     // console.log(this.state.groups); 
      
     return (
@@ -166,7 +173,7 @@ class DashboardView extends React.Component{
                 group={group.id}
                 title={group.name}
                 key={group.id}
-                onPress={this.onPressViewGroup}
+                onPress={() => this.onPressViewGroup(group.name)}
               />)
             }
           </ThemeProvider>
