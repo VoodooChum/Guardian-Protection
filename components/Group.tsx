@@ -65,7 +65,8 @@ class GroupView extends React.Component {
 
   onMapView = (username: string) => {
     this.props.navigation.navigate('MapView', {
-      username: username
+      username: username,
+      userInfo: this.props.navigation.state.params.userData,
     });
   }
 
