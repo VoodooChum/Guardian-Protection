@@ -258,7 +258,6 @@ const requestHandler = {
         groupMembers;
         res.send(groupMembers);
     },
-
     async createLocation(req, res){
         if(req.body.latitude && req.body.userId && req.body.longitude){
             console.log(req.body.latitude, req.body.longitude);
@@ -267,13 +266,13 @@ const requestHandler = {
                 latitude: req.body.latitude
             };
             try {
-                const { dataValues } = await db.Location.findOne({ where: query });
-                console.log(dataValues);
+                const values = await db.Location.findOne({ where: query });
+                console.log(values);
                 // res.send('test');
-                if(dataValues){
+                if(values){
                     try {
                         const createUserLocation = await db.UserLocation.create({
-                            LocationId: dataValues.id,
+                            LocationId: values.dataValues.id,
                             UserId: req.body.userId
                         });
                     } catch (e) {
@@ -308,7 +307,30 @@ const requestHandler = {
             res.status(400).send('Bad request');
         }
     },
-
+    /**
+     * 
+     */
+    async getLocation(req, res){
+        const { id } = req.params
+        const numberId = parseInt(id);
+        if(typeof numberId === 'number'){
+            try {
+                const locations = await db.UserLocation.findAll({ where: {UserId: numberId}});
+                if(locations){
+                    const latestLocationUser = locations[locations.length - 1];
+                    const lastLocationOfUser = await db.Location.findOne({ where: { id: latestLocationUser.dataValues.LocationId}});
+                    res.status(200).send(lastLocationOfUser.dataValues);
+                } else {
+                    res.status(404).send('This user has no locations');
+                }
+            } catch(e){
+                console.log(e);
+                res.status(500).send('DB Error');
+            }
+        } else {
+            res.send(400);
+        }
+    },
     async getChatId(req, res){
         let groupName = req.params.groupName; 
         let foundGroup = await db.Group.findOne({ where: {name: groupName} })
