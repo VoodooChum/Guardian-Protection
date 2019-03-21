@@ -129,7 +129,7 @@ const {API_HOST} = Constants.manifest.extra;
       return (
         <View style={styles.container}>
            {/* <AppContainer /> */}
-          <Text>{this.state.name}</Text>
+          {/* <Text>{this.state.name}</Text> */}
           <DashboardView 
           userData={this.state.existingUser} 
           panic={this.startPanic.bind(this)} 
