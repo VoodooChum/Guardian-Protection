@@ -103,7 +103,7 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
   render() {
     const { isLoading } = this.state;
     return <View style={styles.container}>
-      <Text style={{ marginTop: 0, alignSelf: 'center', marginBottom: 5 }}>{this.props.navigation.state.params.name}</Text>
+      <Text style={{ marginTop: 0, alignSelf: 'center', marginBottom: 5, color: "white" }}>{this.props.navigation.state.params.name}</Text>
       {isLoading && (
         <ActivityIndicator
           style={{ height: 80 }}
