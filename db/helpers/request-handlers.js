@@ -5,6 +5,13 @@ const client = require("twilio")(
 );
 require('dotenv').config();
 
+const Chatkit = require("@pusher/chatkit-server");
+
+const chatkit = new Chatkit.default({
+    instanceLocator: process.env.PUSHER_INSTANCE_LOCATION,
+    key: process.env.PUSHER_SECRET_KEY
+});
+
 const errorHandler = (req, res, err) => {
     console.error(err);
     if (err.message === 'Validation error') {
@@ -87,20 +94,50 @@ const requestHandler = {
         let newGroup = {};
         Object.assign(newGroup, req.body.userData);
         Object.assign(newGroup, req.body.group);
+        let sendToPusher = newGroup.name;
+        
 
-        newGroup.id_user_creator = newGroup.id;
-        delete newGroup.id;
-        db.Group.create(newGroup) 
-            .then((group)=>{
+        // Creating a user on Pusher - returns a 400 if user already exists but does not harm tbe process
+        chatkit.createUser({
+            id: newGroup.email,
+            name: newGroup.name_first,
+            avatarURL: newGroup.url_profile_pic
+        })
+            .then((user) => {
+                console.log('User created successfully', user);
+            }).catch((err) => {
+                console.log(err);
+            });
+
+        chatkit
+          .createRoom({
+            creatorId: newGroup.email,
+            name: newGroup.name,
+            private: false,
+          })
+          .then((room) => {
+            console.log("Room created successfully", room);
+            newGroup.id_chat = room.id;
+            console.log(newGroup);
+            newGroup.id_user_creator = newGroup.id;
+            delete newGroup.id;
+            return newGroup;
+        }).then((createdGroup) => {
+            return db.Group.create(createdGroup)  
+        }).then((group)=>{
                 // console.log(group);
                 let groupMember = {
                     'id_user': group.id_user_creator,
                     'id_group': group.id,
                     "UserId": group.id_user_creator,
-                    "GroupId": group.id
+                    "GroupId": group.id,
+                    "id_chat": group.id_chat
                 }
                 return db.UserGroup.create(groupMember);
             }).catch(err => errorHandler(req, res, err));  
+          
+
+
    }, 
     /**
      * joinGroup: allows an exisitng user to join a group
@@ -112,6 +149,23 @@ const requestHandler = {
         let user = req.body.user;
         db.Group.findOne({ where: { name: group.groupName, passcode: group.passcode } })
             .then((group)=>{
+                chatkit.createUser({
+                    id: user.email,
+                    name: user.name_first,
+                    avatarURL: user.url_profile_pic
+                })
+                    .then((user) => {
+                        console.log('User created successfully', user);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
+                chatkit.addUsersToRoom({
+                    roomId: group.id_chat,
+                    userIds: [user.email],
+                }).then(() => console.log('added'))
+                    .catch(err => console.error(err));
+
                 res.send(group) 
                 console.log(group)
                 let groupMember = {
@@ -204,16 +258,6 @@ const requestHandler = {
         groupMembers;
         res.send(groupMembers);
     },
-    /**
-     * @function createLocation
-     * @param {object} req
-     *  @property {object} body
-     *    @property {string} longitude
-     *    @property {string} latitude
-     *    @property {number} userId
-     * @param {object} res
-     *  req should have a latitude, longitude, and userId
-     */
     async createLocation(req, res){
         if(req.body.latitude && req.body.userId && req.body.longitude){
             console.log(req.body.latitude, req.body.longitude);
@@ -286,6 +330,12 @@ const requestHandler = {
         } else {
             res.send(400);
         }
+    },
+    async getChatId(req, res){
+        let groupName = req.params.groupName; 
+        let foundGroup = await db.Group.findOne({ where: {name: groupName} })
+        foundGroup;
+        res.send(foundGroup);
     }
 }
 
