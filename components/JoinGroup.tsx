@@ -76,7 +76,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    width: 375,
+    // width: 375, removing for auto sizing
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
