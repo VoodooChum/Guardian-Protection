@@ -49,6 +49,7 @@ class GroupView extends React.Component {
     console.log(objects.nativeEvent.changedTouches);
     let position = objects.nativeEvent.changedTouches[0].pageY;
     let isChat = false;
+    let isMap = false;
     if (objects.nativeEvent.changedTouches[0].pageX >= 310) {
       isChat = true;
     }
@@ -61,6 +62,12 @@ class GroupView extends React.Component {
     }
     isChat = false;
   };
+
+  onMapView = (username: string) => {
+    this.props.navigation.navigate('MapView', {
+      username: username
+    });
+  }
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
@@ -91,13 +98,14 @@ class GroupView extends React.Component {
         <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
         >{this.props.navigation.state.params.name}</Text> 
         {this.state.members.map((member: object, i: number) => (
+          
           <ListItem
             style={styles.user}
             color="#0078ef"
             key={i}
             leftAvatar={{ source: { uri: member.url_profile_pic } }}
             title={`${member.name_first} ${member.name_last}`}
-            onPress={this.onUserPress}
+            onPress={this.onMapView}
           />
         ))}
         <ThemeProvider theme={theme}>

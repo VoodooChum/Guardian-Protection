@@ -1,7 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const UserLocation = sequelize.define('UserReceipt', {
-        id_user: { type: DataTypes.INTEGER, unique: true, allowNull: false },
-        id_location: { type: DataTypes.INTEGER, unique: true, allowNull: false },
+    const UserLocation = sequelize.define('UserLocation', {
         time: { type: DataTypes.DATE, unique: false, allowNull: true },
     });
 

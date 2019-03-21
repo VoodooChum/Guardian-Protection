@@ -238,8 +238,7 @@ const requestHandler = {
                 res.json(allGroups);
                 return allGroups;
             }).then(() => console.log('groups sent')) 
-            .catch(err => errorHandler(req, res, err));  
-        
+            .catch(err => errorHandler(req, res, err));
     },
 
     /**
@@ -260,6 +259,55 @@ const requestHandler = {
         res.send(groupMembers);
     }
 
+    async createLocation(req, res){
+        if(req.body.latitude && req.body.userId && req.body.longitude){
+            console.log(req.body.latitude, req.body.longitude);
+            const query = {
+                longitude: req.body.longitude,
+                latitude: req.body.latitude
+            };
+            try {
+                const { dataValues } = await db.Location.findOne({ where: query });
+                console.log(dataValues);
+                // res.send('test');
+                if(dataValues){
+                    try {
+                        const createUserLocation = await db.UserLocation.create({
+                            LocationId: dataValues.id,
+                            UserId: req.body.userId
+                        });
+                    } catch (e) {
+                        res.status(500).send('error in db for UserLocation');
+                        return;
+                    }
+                } else {
+                    try {
+                        const createdLocation = await db.Location.create(query);
+                        try {
+                            const createUserLocation = await db.UserLocation.create({
+                                LocationId: createdLocation.dataValues.id,
+                                UserId: req.body.userId
+                            });
+                        } catch(e){
+                            console.log(e);
+                            res.status(500).send('Error in creating user location 2');
+                            return;
+                        }
+                    } catch(e) {
+                        res.status(500).send('error in db for Location');
+                        return;
+                    }
+                }
+                res.status(201).send('created location');
+            } catch(e){
+                console.log(e);
+                res.status(500).send('Database error');
+                return;
+            }
+        } else {
+            res.status(400).send('Bad request');
+        }
+    }
 }
 
 module.exports = requestHandler;
