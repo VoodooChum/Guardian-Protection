@@ -5,6 +5,7 @@ import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 import { GiftedChat } from "react-native-gifted-chat";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
+
 const { API_HOST, PUSHER_INSTANCE_LOCATION, TOKEN_PROVIDER_ENDPOINT } = Constants.manifest.extra;
 
 const CHATKIT_TOKEN_PROVIDER_ENDPOINT = TOKEN_PROVIDER_ENDPOINT;
@@ -18,10 +19,11 @@ const CHATKIT_ROOM_ID = "19394009";
      this.state = {
        messages: [],
       }
+     this.CHATKIT_ROOM_ID = props.navigation.
        this.CHATKIT_USER_NAME = props.navigation.state.params.userInfo.userInfo.email;
      this.avitor = props.navigation.state.params.userInfo.userInfo.url_profile_pic;
       console.log(props.navigation.state.params.userInfo.userInfo);
-
+     this._isMounted = false;
     }
   // state = {
   //   messages: [],
@@ -29,10 +31,10 @@ const CHATKIT_ROOM_ID = "19394009";
   // };
 
   componentDidMount() {
+    this._isMounted = true;
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
     });
-
 
     const chatManager = new ChatManager({
       instanceLocator: CHATKIT_INSTANCE_LOCATOR,
@@ -55,8 +57,14 @@ const CHATKIT_ROOM_ID = "19394009";
       });
   }
 
+   componentWillUnmount = () => {
+     this._isMounted = false;
+   }
+
+
+
   onReceive = data => {
-    const { id, senderId, text, createdAt, avatarUrl } = data;
+    const { id, senderId, text, createdAt, avatar_url } = data;
     const incomingMessage = {
       _id: id,
       text: text,
@@ -64,10 +72,11 @@ const CHATKIT_ROOM_ID = "19394009";
       user: {
         _id: senderId,
         name: senderId,
-        avatarUrl: avatarUrl
+        avatar: avatar_url
       }
     };
-    this.setState(previousState => ({
+    
+    this._isMounted && this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, incomingMessage),
     }));
   };
@@ -94,7 +103,7 @@ const CHATKIT_ROOM_ID = "19394009";
                 uri:
                   "https://lh3.googleusercontent.com/UBU_NdCOW0iaVeRmiQmiF6tt5azKKwpSagJWTDWtEi1JXx15TC5AwpkTQ1aC8sqvNPCXPUqPHqcDQpGaXFwjNpKzPgqvdqYxhnEOg-X9635qoNP8S9G9-1jEc35cQ5KF4U6_Z2az9GXYhEBcO2KhBwecqBGkyw7Vcr-R19j48RdqPZjrJtFlwqkMnYytw3_0KTHt7YVr52TLv_f4SrYXB69C68WAXNFPxl-fV1B4y80fUSw3lWyJRCbrWc8fFT53yv4SxaEaDIk-cssp5X3gL2ynfOLIm09DWADiNivNbaVdKEoTfi1DRoY2qFAZDEae-jTl236Pj6W8gSHoMHAEffc_xIg7fFuVXvLQVk4ye142IJitH6RtCcUTKA0AzZY2mXijF2ZfwCX6UJWy77hnmmWOhkhWTZKoN9czQfVP7uizAgM-aGmx3Yu0oHWXOrZ1j_d5eI_p1OxsOvUBOIL5Lo7-fCAcfCiDrGbiUMusvxh0xDWqyS-TdxVZ9G4MmXw3d3MkAQoVKUtN3YWJMnQsyJeIHNDRxXKUTbQEpjaYdB4EQAO1wgfiXv1gPBZqoy7rHP12BvpgKb1-vXlVIBJvbZCr1HN5v76DQX0h1a4qfCyXgCtlMqO0r8XgM2LCh145waCKYWZtH0XIxU0Z1h2aSncmHPbpMXUCRTZ-hK3Z7P-txy1m3ZppPLI3TSWzJdODDc4dhEc6TdHBC3c8-aEm8EA7=w258-h304-no"
                }}
-                style={{ width: 78, height: 91, alignSelf: 'center' }}
+                style={{ marginTop: 0, width: 78, height: 91, alignSelf: 'center', marginBottom: 5 }}
              />
         <GiftedChat messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
