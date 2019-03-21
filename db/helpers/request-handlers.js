@@ -205,9 +205,14 @@ const requestHandler = {
         res.send(groupMembers);
     },
     /**
-     * 
-     * @param {object} req should have 
+     * @function createLocation
+     * @param {object} req
+     *  @property {object} body
+     *    @property {string} longitude
+     *    @property {string} latitude
+     *    @property {number} userId
      * @param {object} res
+     *  req should have a latitude, longitude, and userId
      */
     async createLocation(req, res){
         if(req.body.latitude && req.body.userId && req.body.longitude){
@@ -217,13 +222,13 @@ const requestHandler = {
                 latitude: req.body.latitude
             };
             try {
-                const { dataValues } = await db.Location.findOne({ where: query });
-                console.log(dataValues);
+                const values = await db.Location.findOne({ where: query });
+                console.log(values);
                 // res.send('test');
-                if(dataValues){
+                if(values){
                     try {
                         const createUserLocation = await db.UserLocation.create({
-                            LocationId: dataValues.id,
+                            LocationId: values.dataValues.id,
                             UserId: req.body.userId
                         });
                     } catch (e) {
@@ -262,8 +267,25 @@ const requestHandler = {
      * 
      */
     async getLocation(req, res){
-        console.log(req.params);
-        res.status(200).send('Memes');
+        const { id } = req.params
+        const numberId = parseInt(id);
+        if(typeof numberId === 'number'){
+            try {
+                const locations = await db.UserLocation.findAll({ where: {UserId: numberId}});
+                if(locations){
+                    const latestLocationUser = locations[locations.length - 1];
+                    const lastLocationOfUser = await db.Location.findOne({ where: { id: latestLocationUser.dataValues.LocationId}});
+                    res.status(200).send(lastLocationOfUser.dataValues);
+                } else {
+                    res.status(404).send('This user has no locations');
+                }
+            } catch(e){
+                console.log(e);
+                res.status(500).send('DB Error');
+            }
+        } else {
+            res.send(400);
+        }
     }
 }
 
