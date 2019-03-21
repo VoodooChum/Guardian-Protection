@@ -307,6 +307,13 @@ const requestHandler = {
         } else {
             res.status(400).send('Bad request');
         }
+    },
+
+    async getChatId(req, res){
+        let groupName = req.params.groupName; 
+        let foundGroup = await db.Group.findOne({ where: {name: groupName} })
+        foundGroup;
+        res.send(foundGroup);
     }
 }
 
