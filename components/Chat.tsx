@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ImageBackground } from "react-native";
+import { AppRegistry, ActivityIndicator, View, Image, StyleSheet, TouchableHighlight, Text, ImageBackground } from "react-native";
 import axios from "axios";
 import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
@@ -18,7 +18,8 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
      super(props);
      this.state = {
        messages: [],
-       CHATKIT_ROOM_ID: ''
+       CHATKIT_ROOM_ID: '', 
+       isLoading: true
       }
     //  this.CHATKIT_ROOM_ID = props.navigation.
        this.CHATKIT_USER_NAME = props.navigation.state.params.userInfo.userInfo.email;
@@ -43,7 +44,7 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
  
     let chatID = await axios.get(`${API_HOST}/chatId/${groupName}`)
 
-    this.setState({CHATKIT_ROOM_ID: chatID.data.id_chat})
+    this.setState({ CHATKIT_ROOM_ID: chatID.data.id_chat, isLoading: false})
 
     chatManager.connect()
       .then(currentUser => {
@@ -100,8 +101,16 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
 
 
   render() {
+    const { isLoading } = this.state;
     return <View style={styles.container}>
       <Text style={{ marginTop: 0, alignSelf: 'center', marginBottom: 5 }}>{this.props.navigation.state.params.name}</Text>
+      {isLoading && (
+        <ActivityIndicator
+          style={{ height: 80 }}
+          color="#C00"
+          size="large"
+        />
+      )}
         <GiftedChat messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={{
