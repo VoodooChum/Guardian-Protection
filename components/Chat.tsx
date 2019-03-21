@@ -10,7 +10,7 @@ const { API_HOST, PUSHER_INSTANCE_LOCATION, TOKEN_PROVIDER_ENDPOINT } = Constant
 
 const CHATKIT_TOKEN_PROVIDER_ENDPOINT = TOKEN_PROVIDER_ENDPOINT;
 const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
-const CHATKIT_ROOM_ID = "19394009";
+// const CHATKIT_ROOM_ID = "19394045";
 // const CHATKIT_USER_NAME = "brian@aquavisionnola.com";
 
  class ChatView extends React.Component {
@@ -18,8 +18,9 @@ const CHATKIT_ROOM_ID = "19394009";
      super(props);
      this.state = {
        messages: [],
+       CHATKIT_ROOM_ID: ''
       }
-     this.CHATKIT_ROOM_ID = props.navigation.
+    //  this.CHATKIT_ROOM_ID = props.navigation.
        this.CHATKIT_USER_NAME = props.navigation.state.params.userInfo.userInfo.email;
      this.avitor = props.navigation.state.params.userInfo.userInfo.url_profile_pic;
       console.log(props.navigation.state.params.userInfo.userInfo);
@@ -27,7 +28,8 @@ const CHATKIT_ROOM_ID = "19394009";
     }
  
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    let groupName = this.props.navigation.state.params.name
     this._isMounted = true;
     const tokenProvider = new TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT,
@@ -38,12 +40,16 @@ const CHATKIT_ROOM_ID = "19394009";
       userId: this.CHATKIT_USER_NAME,
       tokenProvider: tokenProvider,
     });
+ 
+    let chatID = await axios.get(`${API_HOST}/chatId/${groupName}`)
+
+    this.setState({CHATKIT_ROOM_ID: chatID.data.id_chat})
 
     chatManager.connect()
       .then(currentUser => {
         this.currentUser = currentUser;
         this.currentUser.subscribeToRoom({
-          roomId: CHATKIT_ROOM_ID,
+          roomId: this.state.CHATKIT_ROOM_ID,
           hooks: {
             onMessage: this.onReceive,
           }
@@ -83,7 +89,7 @@ const CHATKIT_ROOM_ID = "19394009";
       this.currentUser
         .sendMessage({
           text: message.text,
-          roomId: CHATKIT_ROOM_ID,
+          roomId: this.state.CHATKIT_ROOM_ID,
         })
         .then(() => { })
         .catch(err => {
@@ -115,7 +121,6 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,

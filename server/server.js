@@ -21,6 +21,7 @@ const {
         upload,
         createLocation,
         groupMembers,
+        getChatId,
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -58,7 +59,7 @@ passport.deserializeUser((id, done) => db.User.findOne({ where: { id } })
   // associates session with user
 
 
-app.get("/", (req, res) => {
+app.get("/", (req, res) => {  
   res.status(200).send("Yea this works"); 
 });
 
@@ -78,8 +79,10 @@ app.post("/createGroup", createGroup);
 app.post("/joinGroup", joinGroup); 
  
 app.get("/myGroups/:id", getMyGroups ); 
-
+ 
 app.get("/groupMembers/:groupName", groupMembers)
+
+app.get('/chatId/:groupName', getChatId)
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
