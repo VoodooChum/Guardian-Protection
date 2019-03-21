@@ -257,7 +257,7 @@ const requestHandler = {
         let groupMembers = await db.User.findAll({ where: { id: userIds } })
         groupMembers;
         res.send(groupMembers);
-    }
+    },
 
     async createLocation(req, res){
         if(req.body.latitude && req.body.userId && req.body.longitude){

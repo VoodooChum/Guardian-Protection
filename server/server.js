@@ -19,7 +19,7 @@ const {
         createGroup,
         getMyGroups,
         upload,
-        createLocation
+        createLocation,
         groupMembers,
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
