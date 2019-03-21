@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppRegistry, Button, View, Image, StyleSheet, TouchableHighlight, Text, ImageBackground } from "react-native";
+import { AppRegistry, ActivityIndicator, View, Image, StyleSheet, TouchableHighlight, Text, ImageBackground } from "react-native";
 import axios from "axios";
 import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
@@ -18,7 +18,8 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
      super(props);
      this.state = {
        messages: [],
-       CHATKIT_ROOM_ID: ''
+       CHATKIT_ROOM_ID: '', 
+       isLoading: true
       }
     //  this.CHATKIT_ROOM_ID = props.navigation.
        this.CHATKIT_USER_NAME = props.navigation.state.params.userInfo.userInfo.email;
@@ -43,7 +44,7 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
  
     let chatID = await axios.get(`${API_HOST}/chatId/${groupName}`)
 
-    this.setState({CHATKIT_ROOM_ID: chatID.data.id_chat})
+    this.setState({ CHATKIT_ROOM_ID: chatID.data.id_chat, isLoading: false})
 
     chatManager.connect()
       .then(currentUser => {
@@ -100,14 +101,16 @@ const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
 
 
   render() {
+    const { isLoading } = this.state;
     return <View style={styles.container}>
-      <ImageBackground
-             source={{
-                uri:
-                  "https://lh3.googleusercontent.com/UBU_NdCOW0iaVeRmiQmiF6tt5azKKwpSagJWTDWtEi1JXx15TC5AwpkTQ1aC8sqvNPCXPUqPHqcDQpGaXFwjNpKzPgqvdqYxhnEOg-X9635qoNP8S9G9-1jEc35cQ5KF4U6_Z2az9GXYhEBcO2KhBwecqBGkyw7Vcr-R19j48RdqPZjrJtFlwqkMnYytw3_0KTHt7YVr52TLv_f4SrYXB69C68WAXNFPxl-fV1B4y80fUSw3lWyJRCbrWc8fFT53yv4SxaEaDIk-cssp5X3gL2ynfOLIm09DWADiNivNbaVdKEoTfi1DRoY2qFAZDEae-jTl236Pj6W8gSHoMHAEffc_xIg7fFuVXvLQVk4ye142IJitH6RtCcUTKA0AzZY2mXijF2ZfwCX6UJWy77hnmmWOhkhWTZKoN9czQfVP7uizAgM-aGmx3Yu0oHWXOrZ1j_d5eI_p1OxsOvUBOIL5Lo7-fCAcfCiDrGbiUMusvxh0xDWqyS-TdxVZ9G4MmXw3d3MkAQoVKUtN3YWJMnQsyJeIHNDRxXKUTbQEpjaYdB4EQAO1wgfiXv1gPBZqoy7rHP12BvpgKb1-vXlVIBJvbZCr1HN5v76DQX0h1a4qfCyXgCtlMqO0r8XgM2LCh145waCKYWZtH0XIxU0Z1h2aSncmHPbpMXUCRTZ-hK3Z7P-txy1m3ZppPLI3TSWzJdODDc4dhEc6TdHBC3c8-aEm8EA7=w258-h304-no"
-               }}
-                style={{ marginTop: 0, width: 78, height: 91, alignSelf: 'center', marginBottom: 5 }}
-             />
+      <Text style={{ marginTop: 0, alignSelf: 'center', marginBottom: 5, color: "white" }}>{this.props.navigation.state.params.name}</Text>
+      {isLoading && (
+        <ActivityIndicator
+          style={{ height: 80 }}
+          color="#C00"
+          size="large"
+        />
+      )}
         <GiftedChat messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={{
