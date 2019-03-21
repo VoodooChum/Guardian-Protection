@@ -9,10 +9,10 @@ const { API_HOST } = Constants.manifest.extra;
 //https://github.com/react-native-community/react-native-maps
 class Map extends React.Component {
     constructor(props: object) {
-        super(props);
+        super(props); 
         
     }
-
+ 
     componentDidMount = async () => {
         // let currentUser = this.props.navigation.state.params.userData
         // let credentials = await axios.get(`${API_HOST}/locations/${currentUser.id}`);
