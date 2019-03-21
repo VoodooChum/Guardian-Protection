@@ -147,7 +147,6 @@ class DashboardView extends React.Component{
   
   render() {
     const { isLoading, name } = this.state;
-    // console.log(this.state.groups); 
      
     return (
       <View style={styles.container}>
@@ -165,8 +164,10 @@ class DashboardView extends React.Component{
               uri: `${this.state.photoUrl}`
             }}
           />
-          <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-          >{this.state.name}</Text> 
+            <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
+            >{this.state.name}</Text> 
+            <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
+            >{this.props.name}</Text> 
           <ThemeProvider theme={theme}>
             {
               this.state.groups.map((group) => <Button

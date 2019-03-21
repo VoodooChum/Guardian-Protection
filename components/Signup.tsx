@@ -106,7 +106,7 @@ const scroll = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    width: 300,
+    // width: 375, removing for auto sizing
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
