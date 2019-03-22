@@ -34,12 +34,12 @@ class DashboardView extends React.Component{
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
   }
 
- 
-
+  
   componentDidMount = () => {
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
+    setTimeout(this.getGroupsAsnyc, 5000)
   };
   
   getGroupsAsnyc = async () => {
