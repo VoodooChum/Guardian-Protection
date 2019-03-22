@@ -194,7 +194,7 @@ const requestHandler = {
             client.messages
               .create({
                 from: process.env.TWILIO_NUMBER,
-                to: 15043390763,
+                to: 15042107601,
                 body: `Guardian App Alert ${req.body.url_video}`
               })
               .then(() => {
