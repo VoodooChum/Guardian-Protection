@@ -16,10 +16,8 @@ const theme = {
       marginTop: 10
     },
     raised: true,
-    color: 'red',
     borderWidth: 3,
-    borderRadius: 10
-    // color: "#006edc",
+    borderRadius: 10,
   }
 };
 
@@ -193,7 +191,6 @@ class DashboardView extends React.Component{
             <TouchableHighlight
               style={styles.button}
             onPress={this.onPressPanic}
-              underlayColor="#99d9f4"
             >
               <Text style={styles.buttonText}>Panic</Text>
             </TouchableHighlight>
@@ -209,7 +206,7 @@ const scroll = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  container: { 
+  container: {
     flex: 1,
     justifyContent: "center",
     width: 375,
@@ -234,6 +231,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "center"
   },
+  
   image: {
     width: 80,
     height: 80,
