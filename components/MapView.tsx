@@ -39,8 +39,8 @@ class Map extends React.Component {
                         latitude: myLocation.latitude,
                         longitude: myLocation.longitude,
                     }}
-                    title={"title"}
-                    description={"description"}
+                    title={"Your Location"}
+                    description={"Me"}
                 />
             </MapView >
         );
