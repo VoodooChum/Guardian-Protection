@@ -41,7 +41,7 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
-    setTimeout(this.getGroupsAsnyc, 5000)
+    setTimeout(this.getGroupsAsnyc, 3000) 
   };
   
   getGroupsAsnyc = async () => {
@@ -82,13 +82,15 @@ class DashboardView extends React.Component{
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.userData,
         name: this.props.name,
-        getGroupsAsnyc: this.getGroupsAsnyc
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        location: this.props.location
       });
     } else {
       this.props.navigation.navigate('CreatGroupView', {
         userInfo: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name,
-        getGroupsAsnyc: this.getGroupsAsnyc
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        location: this.props.navigation.state.params.location
       });
     }
   } 
@@ -100,13 +102,15 @@ class DashboardView extends React.Component{
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.userData,
         name: this.props.name,
-        getGroupsAsnyc: this.getGroupsAsnyc
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        location: this.props.location
       });
     } else {
       this.props.navigation.navigate('JoinGroup', {
         userInfo: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name,
-        getGroupsAsnyc: this.getGroupsAsnyc
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        location: this.props.navigation.state.params.location
       });
     }
     
@@ -130,14 +134,16 @@ class DashboardView extends React.Component{
         hasAudioPermission: this.props.hasAudioPermission,
         hasCameraPermission: this.props.hasCameraPermission,
         userInfo: this.props.userData,
-        name: name
+        name: name,
+        location: this.props.location
       });
     } else {
       this.props.navigation.navigate('GroupView', { 
         hasAudioPermission: this.props.navigation.state.params.hasAudioPermission,
         hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
-        name: name
+        name: name,
+        location: this.props.navigation.state.params.location
       });
     }
     

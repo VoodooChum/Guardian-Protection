@@ -34,7 +34,8 @@ const {API_HOST} = Constants.manifest.extra;
       existingUser: false,
       hasAudioPermission: null,
       hasCameraPermission: null,
-      hasLocationPermission: null
+      hasLocationPermission: null,
+      myLocation: null
     }
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
@@ -69,7 +70,8 @@ const {API_HOST} = Constants.manifest.extra;
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
+    this.setState({ myLocation: location.coords})
+    // console.log(this.state.myLocation);
   };
 
   handleGoogleSession = () => {
@@ -136,6 +138,7 @@ const {API_HOST} = Constants.manifest.extra;
           hasAudioPermission={this.state.hasAudioPermission} 
           hasCameraPermission={this.state.hasCameraPermission}
           name={this.state.name}
+          location={this.state.myLocation} 
           ></DashboardView>
           {/* <CreateGroupView userData={this.state.existingUser}/>   */}
           </View >
