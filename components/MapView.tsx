@@ -2,8 +2,8 @@ import * as React from 'react';
 import { MapView, Constants, Marker } from 'expo';
 import axios from 'axios';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
-const { API_HOST } = Constants.manifest.extra;
-
+// const { API_HOST } = Constants.manifest.extra;
+const API_HOST = 'http://6ea8cf99.ngrok.io'
 
 
 //https://github.com/react-native-community/react-native-maps

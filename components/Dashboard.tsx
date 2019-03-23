@@ -7,8 +7,8 @@ import { Google, Constants } from 'expo';
 import { cpus } from 'os';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import AppContainer from '../App'
-const {API_HOST} = Constants.manifest.extra;
- 
+// const {API_HOST} = Constants.manifest.extra;
+API_HOST = 'http://6ea8cf99.ngrok.io';
 
 const theme = {
   Button: {

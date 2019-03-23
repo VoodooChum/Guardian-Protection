@@ -77,6 +77,7 @@ const requestHandler = {
      */
 
     login(req, res, next) {
+        console.log(req);
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
         // console.log(foundUser); 

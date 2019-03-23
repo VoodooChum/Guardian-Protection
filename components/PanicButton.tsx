@@ -3,8 +3,8 @@ import { Text, View, TouchableOpacity, Button } from 'react-native';
 import { Camera, FileSystem, Constants } from 'expo';
 import axios from 'axios';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
-const { API_HOST } = Constants.manifest.extra;
-
+// const { API_HOST } = Constants.manifest.extra;
+const API_HOST = 'http://6ea8cf99.ngrok.io'
 class PanicButton extends React.Component {
   constructor(props:object){
     super(props);

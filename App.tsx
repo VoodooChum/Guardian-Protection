@@ -15,6 +15,7 @@ import GroupView from "./components/Group";
 import MapView from "./components/MapView"
 import ChatView from './components/Chat';
 
+
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
 
@@ -94,15 +95,15 @@ const {API_HOST} = Constants.manifest.extra;
         clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
+      console.log(result.type);
       if (result.type === 'success') {
-        // console.log(result);
-      var output;
       try {
         const params = {
           "username": result.user.email,
           "password": result.user.name
         }
-       let sentUser = await axios.post(`${API_HOST}/login`, params)
+        console.log(`http://6ea8cf99.ngrok.io/login`);
+        let sentUser = await axios.post(`http://6ea8cf99.ngrok.io/login`, params)
         // console.log(groups);
         this.setState({existingUser: sentUser.data}) 
       } catch(e){   
