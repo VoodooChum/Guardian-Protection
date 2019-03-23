@@ -35,7 +35,7 @@ class DashboardView extends React.Component{
     }
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
-    // this.sendLocationAsync = this.sendLocationAsync.bind(this);
+    this.sendLocationAsync = this.sendLocationAsync.bind(this);
     this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
   }
 
@@ -44,16 +44,16 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
-    this.registerForPushNotificationsAsync();
-    // this.sendLocationAsync();
+    // this.registerForPushNotificationsAsync();
+    this.sendLocationAsync();
     setTimeout(this.getGroupsAsnyc, 3000) 
   };
 
-  // sendLocationAsync = async () => {
-  //   let location = await Location.getCurrentPositionAsync({});
-  //   let coords = location.coords
-  //   let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude, "longitude": coords.longitude, "userId": this.props.userData.id})
-  // }
+  sendLocationAsync = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    let coords = location.coords
+    let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id})
+  }
 
   registerForPushNotificationsAsync = async () => {
   const { status: existingStatus } = await Permissions.getAsync(
@@ -79,22 +79,7 @@ class DashboardView extends React.Component{
   let token = await Notifications.getExpoPushTokenAsync();
 
   // POST the token to your backend server from where you can retrieve it to send push notifications.
-    let res = await axios.post(`${API_HOST}/push/token`, {token})
-  // return fetch(PUSH_ENDPOINT, {
-  //   method: 'POST',
-  //   headers: {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     token: {
-  //       value: token,
-  //     },
-  //     user: {
-  //       username: this.props.userData.email,
-  //     },
-  //   }),
-  // });
+    // let res = await axios.post(`${API_HOST}/push/token`, {token})
 }
   
   getGroupsAsnyc = async () => {

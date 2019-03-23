@@ -123,12 +123,12 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-app.post("/push/token", (req, res) => { 
-  saveToken(req.body.token.value);  
-  console.log(`Received push token, ${req.body.token}`);
-  console.log(`User, ${req.body.name.value}`)
-  res.send(`Received push token, ${req.body.user}`);
-});
+// app.post("/push/token", (req, res) => { 
+//   saveToken(req.body.token.value);  
+//   console.log(`Received push token, ${req.body.token}`);
+//   console.log(`User, ${req.body.name.value}`)
+//   res.send(`Received push token, ${req.body.user}`);
+// }); 
 
 app.get('/locations/:id', getLocation);
 app.listen(port, () => console.log(`Listening on port ${port}`));
