@@ -104,8 +104,8 @@ const {API_HOST} = Constants.manifest.extra;
           "username": result.user.email,
           "password": result.user.name
         }
-        console.log(`http://6ea8cf99.ngrok.io/login`);
-        let sentUser = await axios.post(`http://6ea8cf99.ngrok.io/login`, params)
+        console.log(`${API_HOST}/login`);
+        let sentUser = await axios.post(`${API_HOST}/login`, params)
         // console.log(groups);
         this.setState({existingUser: sentUser.data}) 
       } catch(e){   
