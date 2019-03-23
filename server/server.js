@@ -81,9 +81,9 @@ app.post("/joinGroup", joinGroup);
  
 app.get("/myGroups/:id", getMyGroups ); 
  
-app.get("/groupMembers/:groupName", groupMembers)
+app.get("/groupMembers/:groupName", groupMembers);
 
-app.get('/chatId/:groupName', getChatId)
+app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
@@ -124,4 +124,8 @@ app.post('/sms', (req, res) => {
 app.post('/locations/create', createLocation);
 
 app.get('/locations/:id', getLocation);
+
+app.post('/locations/routes', (req, res) => {
+  res.status(201).send('Connecting')
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));
