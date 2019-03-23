@@ -112,7 +112,7 @@ app.post('/sms', (req, res) => {
     twiml.message("The Guardian App Loves You Tiffany!!!");
   } 
   else if (message === 'Brian') {
-    twiml.message("Hello Brian Welcome to Guardian!!!");
+    twiml.message("Hello Brian Welcome to Guardian!!!"); 
   } else {
     twiml.message('Gaurdian App Is Taking Over The World!!!');
   }
@@ -122,6 +122,13 @@ app.post('/sms', (req, res) => {
 });
 
 app.post('/locations/create', createLocation);
+
+app.post("/push/token", (req, res) => { 
+  //saveToken(req.body.token.value);  
+  console.log(`Received push token, ${req.body.token}`);
+  console.log(`User, ${req.body.name.value}`)
+  res.send(200);
+}); 
 
 app.get('/locations/:id', getLocation);
 
