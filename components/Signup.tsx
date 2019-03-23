@@ -6,7 +6,7 @@ import axios from "axios";
 import { Google, Constants } from 'expo';
 import CreateGroupView from './CreateGroup'
 const {API_HOST} = Constants.manifest.extra;
-
+// const API_HOST = 'http://6ea8cf99.ngrok.io'
 
 const Form = t.form.Form;
 

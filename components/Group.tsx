@@ -7,7 +7,6 @@ import { Google, Constants } from 'expo';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
-
 const theme = {
   Button: {
     containerStyle: {

@@ -5,8 +5,8 @@ import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
-const { API_HOST } = Constants.manifest.extra;
-
+// const { API_HOST } = Constants.manifest.extra;
+const API_HOST = 'http://6ea8cf99.ngrok.io'
 
 const Form = t.form.Form;
 
