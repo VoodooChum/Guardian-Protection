@@ -3,12 +3,13 @@ import { AppRegistry, View, Image, StyleSheet, TouchableHighlight, Text, ScrollV
 import t from 'tcomb-form-native'; // 0.6.9
 import axios from "axios";
 import { ThemeProvider, Button } from "react-native-elements";
-import { Google, Constants } from 'expo';
+import { Google, Constants, Location } from 'expo';
 import { cpus } from 'os';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import AppContainer from '../App'
+import { Permissions, Notifications } from 'expo';
 const {API_HOST} = Constants.manifest.extra;
- 
+const PUSH_ENDPOINT = `${API_HOST}/push-token`;
 
 const theme = {
   Button: {
@@ -34,6 +35,8 @@ class DashboardView extends React.Component{
     }
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
+    // this.sendLocationAsync = this.sendLocationAsync.bind(this);
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
   }
 
   
@@ -41,8 +44,58 @@ class DashboardView extends React.Component{
     this._isMounted = true;
     this.setState({ name: this.props.name }) 
     this.getGroupsAsnyc();
+    this.registerForPushNotificationsAsync();
+    // this.sendLocationAsync();
     setTimeout(this.getGroupsAsnyc, 3000) 
   };
+
+  // sendLocationAsync = async () => {
+  //   let location = await Location.getCurrentPositionAsync({});
+  //   let coords = location.coords
+  //   let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude, "longitude": coords.longitude, "userId": this.props.userData.id})
+  // }
+
+  registerForPushNotificationsAsync = async () => {
+  const { status: existingStatus } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS
+  );
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+    return;
+  }
+
+  // Get the token that uniquely identifies this device
+  let token = await Notifications.getExpoPushTokenAsync();
+
+  // POST the token to your backend server from where you can retrieve it to send push notifications.
+    let res = await axios.post(`${API_HOST}/push/token`, {token})
+  // return fetch(PUSH_ENDPOINT, {
+  //   method: 'POST',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     token: {
+  //       value: token,
+  //     },
+  //     user: {
+  //       username: this.props.userData.email,
+  //     },
+  //   }),
+  // });
+}
   
   getGroupsAsnyc = async () => {
     if (this.props.userData){
