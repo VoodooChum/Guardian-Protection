@@ -22,6 +22,23 @@ const errorHandler = (req, res, err) => {
     return res.send(500, 'Something went wrong on our part'); 
 }; 
 
+const createLocationRoute = async (locationUserId, routeId) => {
+    return await db.RouteLocation.create({
+        id_user_location: locationUserId,
+        id_route: routeId,
+        RouteId: routeId
+    });
+};
+const createSchedule = async (userId, routeId) => {
+    return await db.Schedule.create({
+        id_user: userId,
+        id_route: routeId
+    })
+}
+const createRoute = async () => {
+    return await db.Route,create({});
+}
+const create
 const requestHandler = {
 
     /**
