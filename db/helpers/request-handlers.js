@@ -3,6 +3,7 @@ const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
 );
+const { Op }= require('sequelize');
 require('dotenv').config();
 
 const Chatkit = require("@pusher/chatkit-server");
@@ -38,9 +39,45 @@ const createSchedule = async (userId, routeId) => {
 const createRoute = async () => {
     return await db.Route,create({});
 }
-const findScheduleByUserIdAndToday = async (userId) => {
+const findSchedulesByUserIdAndToday = async (userId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
 
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.Schedule.findAll({
+        where: {
+            id_user: userId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    });
 }
+const findLocationRouteByUserLocationId = async (userLocationId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.RouteLocation.findAll({
+        where: {
+            id_user_location: userLocationId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    })
+}
+
+const findRouteById = async (id) => {
+    return await db.Route.findOne({
+        where: {
+            id
+        }
+    });
+}
+
 const requestHandler = {
 
     /**
