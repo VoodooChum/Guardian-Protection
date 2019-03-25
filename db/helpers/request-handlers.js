@@ -60,7 +60,7 @@ const findLocationRouteByUserLocationId = async (userLocationId) => {
 
     const end = new Date();
     end.setHours(23, 59, 59, 999);
-    db.RouteLocation.findAll({
+    return await db.RouteLocation.findAll({
         where: {
             id_user_location: userLocationId,
             from: {
@@ -69,6 +69,15 @@ const findLocationRouteByUserLocationId = async (userLocationId) => {
         }
     })
 }
+
+const findRouteById = async (id) => {
+    return await db.Route.findOne({
+        where: {
+            id
+        }
+    });
+}
+
 const requestHandler = {
 
     /**
