@@ -23,7 +23,8 @@ const {
         groupMembers,
         getLocation,
         getChatId,
-        getRoutes
+        getRoutes,
+        getScheduleForToday
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -146,5 +147,7 @@ app.post('/route/create', () => {
 });
 
 app.get('/route/retrieve/:id', getRoutes);
+
+app.get('/schedule/create', getScheduleForToday);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

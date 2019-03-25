@@ -402,6 +402,10 @@ const requestHandler = {
         console.log(req.body);
         res.status(200).send('Connecting');
     },
+    async getScheduleForToday(req, res){
+        console.log(req.body);
+        res.status(200).send('Connecting');
+    }
 }
 
 module.exports = requestHandler;
