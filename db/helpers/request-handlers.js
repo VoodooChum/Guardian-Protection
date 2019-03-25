@@ -397,7 +397,11 @@ const requestHandler = {
     async createRoute(req, res){
         console.log(req.body);
         res.status(200).send('LMAO');
-    }
+    },
+    async getRoutes(req, res){
+        console.log(req.body);
+        res.status(200).send('Connecting');
+    },
 }
 
 module.exports = requestHandler;
