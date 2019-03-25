@@ -38,7 +38,9 @@ const createSchedule = async (userId, routeId) => {
 const createRoute = async () => {
     return await db.Route,create({});
 }
-const create
+const findScheduleByUserIdAndToday = async (userId) => {
+
+}
 const requestHandler = {
 
     /**
