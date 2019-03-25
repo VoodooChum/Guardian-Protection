@@ -135,4 +135,10 @@ app.get('/locations/:id', getLocation);
 app.post('/locations/routes', (req, res) => {
   res.status(201).send('Connecting')
 });
+app.post('/schedule/create', () => {
+  res.status(201).send('Connecting');
+});
+app.post('/route/create', () => {
+  res.status(201).send('Connecting');
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));
