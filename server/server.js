@@ -23,6 +23,7 @@ const {
         groupMembers,
         getLocation,
         getChatId,
+        getRoutes
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -135,10 +136,15 @@ app.get('/locations/:id', getLocation);
 app.post('/locations/routes', (req, res) => {
   res.status(201).send('Connecting')
 });
+
 app.post('/schedule/create', () => {
   res.status(201).send('Connecting');
 });
+
 app.post('/route/create', () => {
   res.status(201).send('Connecting');
 });
+
+app.get('/route/retrieve/:id', getRoutes);
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
