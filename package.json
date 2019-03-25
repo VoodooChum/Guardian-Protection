@@ -7,8 +7,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "jest",
-    "online": "expo start"
+    "test": "jest"
   },
   "jest": {
     "preset": "react-native",
@@ -33,8 +32,9 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "^1.1.0",
+    "react-native-gesture-handler": "^1.0.17",
     "react-native-gifted-chat": "^0.7.2",
-    "react-navigation": "~3.4.1",
+    "react-navigation": "^3.4.1",
     "react-test-renderer": "^16.8.4",
     "tcomb-form-native": "^0.6.20",
     "twilio": "^3.29.2"

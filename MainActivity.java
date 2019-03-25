@@ -1,4 +1,4 @@
-package com.reactnavigation.example;
+ackage com.reactnavigation.example;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
