@@ -81,9 +81,9 @@ app.post("/joinGroup", joinGroup);
  
 app.get("/myGroups/:id", getMyGroups ); 
  
-app.get("/groupMembers/:groupName", groupMembers)
+app.get("/groupMembers/:groupName", groupMembers);
 
-app.get('/chatId/:groupName', getChatId)
+app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
@@ -123,12 +123,16 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-// app.post("/push/token", (req, res) => { 
-//   saveToken(req.body.token.value);  
-//   console.log(`Received push token, ${req.body.token}`);
-//   console.log(`User, ${req.body.name.value}`)
-//   res.send(`Received push token, ${req.body.user}`);
-// }); 
+app.post("/push/token", (req, res) => { 
+  //saveToken(req.body.token.value);  
+  console.log(`Received push token, ${req.body.token}`);
+  console.log(`User, ${req.body.name.value}`)
+  res.send(200);
+}); 
 
 app.get('/locations/:id', getLocation);
+
+app.post('/locations/routes', (req, res) => {
+  res.status(201).send('Connecting')
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -14,18 +14,29 @@ class Map extends React.Component {
         this.state = {
             myLocation: this.props.navigation.state.params.location
         }
+        this._isMounted = false;
     }
  
     componentDidMount = async () => {
+        this._isMounted = true;
         // let currentUser = this.props.navigation.state.params.userData
         // let credentials = await axios.get(`${API_HOST}/locations/${currentUser.id}`);
-        console.log(this.state.myLocation);
+        console.log(this.props.navigation.state.params.username);
         let location = await Location.getCurrentPositionAsync({});
         let coords = location.coords
         this.setState({ myLocation: coords })
     }
 
+    componentWillUnmount = () => {
+        this._isMounted = false;
+    }
+
+    getLastLocation = async () => {
+
+    }
+
     render() {
+
         const { myLocation } = this.state;
         return (
             <MapView

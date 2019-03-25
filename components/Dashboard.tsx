@@ -72,9 +72,9 @@ class DashboardView extends React.Component {
       return;
     }
     // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync();
+    // let token = await Notifications.getExpoPushTokenAsync();
     // POST the token to your backend server from where you can retrieve it to send push notifications.
-    let res = await axios.post(`${API_HOST}/push/token`, {token}).catch(err => console.log(err))
+    // let res = await axios.post(`${API_HOST}/push/token`, {token}).catch(err => console.log(err))
   }
 
   getGroupsAsnyc = async () => {
