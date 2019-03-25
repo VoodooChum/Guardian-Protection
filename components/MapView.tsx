@@ -15,7 +15,7 @@ class Map extends React.Component {
         super(props); 
         this.state = {
             myLocation: this.props.navigation.state.params.location,
-            memberLocation: null
+            memberLocation: this.props.navigation.state.params.location
         }
         this._isMounted = false;
     }
@@ -43,9 +43,9 @@ class Map extends React.Component {
         let memberId = this.props.navigation.state.params.username;
         let groupMemberLocation = await axios.get(`${API_HOST}/locations/${memberId}`)
         let lastLoc = { 'longitude': parseFloat(groupMemberLocation.data.longitude), 'latitude': parseFloat(groupMemberLocation.data.latitude)} 
-        this.setState({ myLocation: lastLoc })  
+        this.setState({ memberLocation: lastLoc })  
         // console.log(lastLoc);
-        // console.log(this.state.myLocation)
+        // console.log(this.state.myLocation) 
     }
 
     
@@ -68,6 +68,14 @@ class Map extends React.Component {
                     }}
                     title={"Your Location"}
                     description={"Me"}
+                />
+                <MapView.Marker
+                    coordinate={{
+                        latitude: parseFloat(memberLocation.latitude),
+                        longitude: parseFloat(memberLocation.longitude),
+                    }}
+                    title={"Your Group Member"}
+                    description={"Last Location"}
                 />
             </MapView >
         );
