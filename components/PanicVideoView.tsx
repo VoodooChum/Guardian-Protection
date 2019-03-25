@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
-import t from 'tcomb-form-native'; // 0.6.9
-import axios from "axios";
 import { Card, ThemeProvider, Button, ListItem, Icon, Image} from "react-native-elements";
 import { Google, Constants } from 'expo';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
+
 const theme = {
   Button: {
     containerStyle: {
@@ -20,7 +19,7 @@ const theme = {
   }
 };
 
-class GroupView extends React.Component {
+class PanicVideoView extends React.Component {
   constructor(props: object) {
     super(props);
     this.state = {
@@ -31,61 +30,21 @@ class GroupView extends React.Component {
   }
 
   componentDidMount = async () => {
-    if(this.state.name){
-      let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
-      this.setState({ members: myMembers.data })
-    } else {
-      let refreshName = this.props.navigation.state.params.name;
-      let myMembers = await axios.get(`${API_HOST}/groupMembers/${refreshName}`)
-      this.setState({ members: myMembers.data })
-    }
+    
     
   }
 
   
 
-  onUserPress = objects => {
-    console.log(objects.nativeEvent.changedTouches);
-    let position = objects.nativeEvent.changedTouches[0].pageY;
-    let isChat = false;
-    let isMap = false;
-    if (objects.nativeEvent.changedTouches[0].pageX >= 310) {
-      isChat = true;
-    }
-    if (position <= 478) {
-      console.log("Brian: User 1", "Chat: ", isChat);
-    } else if (position < 550) {
-      console.log("Akin: User 2", "Chat: ", isChat);
-    } else {
-      console.log("Michael: User 3", "Chat: ", isChat);
-    }
-    isChat = false;
-  };
 
-  onMapView = (username: string) => {
-    this.props.navigation.navigate('MapView', {
-      username: username,
-      userInfo: this.props.navigation.state.params.userData,
-      location: this.props.navigation.state.params.location
-    });
-  } 
+  
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
-    console.log("Panic Button Pressed");
-    this.props.navigation.navigate("Panic", {
-      hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission,
-      userInfo: this.props.navigation.state.params.userData
-    });
+    
   };
 
-  onPressChat = () => {
-    this.props.navigation.navigate('ChatView', {
-      userInfo: this.props.navigation.state.params,
-      name: this.state.name
-    });
-  }
+
 
   render() {
     let userData = this.props.navigation.state.params.userInfo;
@@ -99,23 +58,9 @@ class GroupView extends React.Component {
         />
         <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
         >{this.props.navigation.state.params.name}</Text> 
-        {this.state.members.map((member: object, i: number) => (
-          
-          <ListItem
-            style={styles.user}
-            color="#0078ef"
-            key={i}
-            leftAvatar={{ source: { uri: member.url_profile_pic } }}
-            title={`${member.name_first} ${member.name_last}`}
-            onPress={() => this.onMapView(member.id)}
-          />
-        ))}
+        
         <ThemeProvider theme={theme}>
-        <TouchableHighlight
-          style={styles.buttonChat}
-          onPress={this.onPressChat}
-        >
-          <Text style={styles.chatText}>Chat</Text>
+        
         </TouchableHighlight>
         </ThemeProvider>
         <TouchableHighlight
@@ -193,4 +138,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withNavigation(GroupView);
+export default withNavigation(PanicVideoView);

@@ -96,6 +96,7 @@ const requestHandler = {
      */
 
     login(req, res, next) {
+        console.log(req);
     db.User.findOne({ where: { email: req.body.username } }) 
       .then((foundUser) => {
         // console.log(foundUser); 
@@ -355,6 +356,10 @@ const requestHandler = {
         let foundGroup = await db.Group.findOne({ where: {name: groupName} })
         foundGroup;
         res.send(foundGroup);
+    },
+    async createRoute(req, res){
+        console.log(req.body);
+        res.status(200).send('LMAO');
     }
 }
 
