@@ -69,7 +69,7 @@ class GroupView extends React.Component {
       userInfo: this.props.navigation.state.params.userData,
       location: this.props.navigation.state.params.location
     });
-  }
+  } 
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
