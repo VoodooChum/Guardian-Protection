@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MapView, Constants, Marker } from 'expo';
+import { MapView, Constants, Marker, Location } from 'expo';
 import axios from 'axios';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 // import console = require('console');
@@ -20,6 +20,9 @@ class Map extends React.Component {
         // let currentUser = this.props.navigation.state.params.userData
         // let credentials = await axios.get(`${API_HOST}/locations/${currentUser.id}`);
         console.log(this.state.myLocation);
+        let location = await Location.getCurrentPositionAsync({});
+        let coords = location.coords
+        this.setState({ myLocation: coords })
     }
 
     render() {

@@ -6,7 +6,7 @@ import axios from "axios";
 import { Google, Constants } from 'expo';
 import CreateGroupView from './CreateGroup'
 const {API_HOST} = Constants.manifest.extra;
-// const API_HOST = 'http://6ea8cf99.ngrok.io'
+
 
 const Form = t.form.Form;
 
@@ -106,7 +106,7 @@ const scroll = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    // width: 375, removing for auto sizing
+    width: 300,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,

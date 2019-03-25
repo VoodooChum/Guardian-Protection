@@ -7,6 +7,7 @@ import { Google, Constants } from 'expo';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
+
 const theme = {
   Button: {
     containerStyle: {
@@ -68,7 +69,7 @@ class GroupView extends React.Component {
       userInfo: this.props.navigation.state.params.userData,
       location: this.props.navigation.state.params.location
     });
-  }
+  } 
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // width: 375, removing for auto sizing
+    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,

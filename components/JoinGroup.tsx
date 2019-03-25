@@ -6,8 +6,6 @@ import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
 
-t.form.Form.stylesheet.textbox.normal.color = "white";
-
 
 const Form = t.form.Form;
 
@@ -17,7 +15,7 @@ var Group = t.struct({
 });
 
 var options = {
-  auto: "placeholders",
+  auto: "placeholders"
 };
 
 class JoinGroupView extends React.Component {
@@ -78,7 +76,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // width: 375, removing for auto sizing
+    width: 375,
     marginTop: 0,
     padding: 30,
     borderRadius: 8,
@@ -98,8 +96,7 @@ var styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "stretch",
     justifyContent: "center"
-  },
-  
+  }
 });
 
 export default withNavigation(JoinGroupView);
