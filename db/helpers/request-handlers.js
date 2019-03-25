@@ -48,9 +48,26 @@ const findSchedulesByUserIdAndToday = async (userId) => {
     return await db.Schedule.findAll({
         where: {
             id_user: userId,
-            [Op.between]: [start, end]
+            from: {
+                [Op.between]: [start, end]
+            }
         }
     });
+}
+const findLocationRouteByUserLocationId = async (userLocationId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    db.RouteLocation.findAll({
+        where: {
+            id_user_location: userLocationId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    })
 }
 const requestHandler = {
 
