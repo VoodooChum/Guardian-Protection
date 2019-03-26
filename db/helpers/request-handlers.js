@@ -100,14 +100,18 @@ const findSchedulesByUserIdAndToday = async (userId) => {
 
     const end = new Date();
     end.setHours(23, 59, 59, 999);
-    return await db.Schedule.findAll({
-        where: {
-            id_user: userId,
-            from: {
-                [Op.between]: [start, end]
+    try {
+        return await db.Schedule.findAll({
+            where: {
+                id_user: userId,
+                from: {
+                    [Op.between]: [start, end]
+                }
             }
-        }
-    });
+        });
+    } catch (e) {
+        console.error(e);
+    }
 }
 const findLocationRouteByUserLocationId = async (userLocationId) => {
     const start = new Date();
@@ -466,7 +470,12 @@ else on creation: login, send 200, {username, id}
         const parsedId = parseInt(req.params.id);
         console.log(parsedId);
         if(parsedId){
-            res.status(200).send('Connecting');
+            const schedules = await findSchedulesByUserIdAndToday(parsedId)
+            if(schedules){
+                res.status(200).send(schedules);
+            } else {
+                res.sendStatus(404);
+            }
         } else {
             res.sendStatus(400);
         }
