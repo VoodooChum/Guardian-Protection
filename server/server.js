@@ -5,6 +5,7 @@ const passport = require('passport');
 const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const MessagingResponse = require("twilio").twiml.MessagingResponse;
+const axios = require("axios");
 const app = express();
 const client = require("twilio")(  
   process.env.ACCOUNT_SID,
@@ -26,7 +27,8 @@ const {
         getRoutes,
         getScheduleForToday,
         createRoute,
-        createSchedule
+        createSchedule,
+        savePushToken
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -91,20 +93,9 @@ app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
-  res.header("Content-Type", "application/json");
-  client.messages
-    .create({
-      from: process.env.TWILIO_NUMBER,
-      to: req.body.recipient,
-      body: `Guardian App Alert ${req.body.link}`
-    })
-    .then(() => {
-      res.send(JSON.stringify({ success: true }));
-    })
-    .catch(err => {
-      console.log(err);
-      res.send(JSON.stringify({ success: false }));
-    });
+  axios.post(`https://exp.host/--/api/v2/push/send`, { "to": group, "body": "Guardian Alert" })
+
+
 });
 
 // Responding to Incoming Messages
@@ -127,12 +118,7 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-app.post("/push/token", (req, res) => { 
-  //saveToken(req.body.token.value);  
-  console.log(`Received push token, ${req.body.token}`);
-  console.log(`User, ${req.body.name.value}`)
-  res.send(200);
-}); 
+app.post("/push/token", savePushToken); 
 
 app.get('/locations/:id', getLocation);
 

@@ -94,6 +94,7 @@ const createSchedule = async (userId, routeId) => {
 const createRoute = async () => {
     return await db.Route,create({});
 }
+
 const findSchedulesByUserIdAndToday = async (userId) => {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
