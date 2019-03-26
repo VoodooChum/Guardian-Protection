@@ -26,6 +26,7 @@ class DashboardView extends React.Component {
       photoUrl: 'a',
       name: '',
       isLoading: true,
+      coords: null
     }
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
@@ -44,8 +45,15 @@ class DashboardView extends React.Component {
   sendLocationAsync = async () => {
     let location = await Location.getCurrentPositionAsync({});
     let coords = location.coords
-    let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id })
+    this.setState({ coords: coords});
+    if (this.props.userData){
+      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id });
+    } else {
+      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.navigation.state.params.userData.id })
+    }
   }
+
+  
   registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
@@ -64,9 +72,9 @@ class DashboardView extends React.Component {
       return;
     }
     // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync();
+    // let token = await Notifications.getExpoPushTokenAsync();
     // POST the token to your backend server from where you can retrieve it to send push notifications.
-    let res = await axios.post(`${API_HOST}/push/token`, {token}).catch(err => console.log(err))
+    // let res = await axios.post(`${API_HOST}/push/token`, {token}).catch(err => console.log(err))
   }
 
   getGroupsAsnyc = async () => {
@@ -160,7 +168,7 @@ class DashboardView extends React.Component {
         hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
         name: name,
-        location: this.props.navigation.state.params.location
+        location: this.state.coords
       });
     }
   }

@@ -3,7 +3,7 @@ const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
 );
-const { Op } = require('sequelize');
+const { Op }= require('sequelize');
 require('dotenv').config();
 
 const Chatkit = require("@pusher/chatkit-server");
@@ -38,6 +38,61 @@ const createSchedule = async (userId, routeId) => {
 }
 const createRoute = async () => {
     return await db.Route, create({});
+}
+const findSchedulesByUserIdAndToday = async (userId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.Schedule.findAll({
+        where: {
+            id_user: userId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    });
+}
+const findLocationRouteByUserLocationId = async (userLocationId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.RouteLocation.findAll({
+        where: {
+            id_user_location: userLocationId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    })
+}
+
+const findRouteById = async (id) => {
+    return await db.Route.findOne({
+        where: {
+            id
+        }
+    });
+}
+
+const createLocationRoute = async (locationUserId, routeId) => {
+    return await db.RouteLocation.create({
+        id_user_location: locationUserId,
+        id_route: routeId,
+        RouteId: routeId
+    });
+};
+const createSchedule = async (userId, routeId) => {
+    return await db.Schedule.create({
+        id_user: userId,
+        id_route: routeId
+    })
+}
+const createRoute = async () => {
+    return await db.Route,create({});
 }
 const findSchedulesByUserIdAndToday = async (userId) => {
     const start = new Date();
@@ -134,12 +189,12 @@ else on creation: login, send 200, {username, id}
 
     login(req, res, next) {
         console.log(req);
-        db.User.findOne({ where: { email: req.body.username } })
-            .then((foundUser) => {
-                // console.log(foundUser); 
-                res.send(foundUser);
-            }).catch((err) => console.log(err))
-    },
+    db.User.findOne({ where: { email: req.body.username } }) 
+      .then((foundUser) => {
+        // console.log(foundUser); 
+        res.send(foundUser);
+      }).catch((err) => console.log(err))
+  }, 
 
 
     /**
@@ -399,26 +454,26 @@ else on creation: login, send 200, {username, id}
         foundGroup;
         res.send(foundGroup);
     },
-    async createRoute(req, res) {
+    async createRoute(req, res){
         console.log(req.body);
         res.status(200).send('LMAO');
     },
-    async getRoutes(req, res) {
+    async getRoutes(req, res){
         console.log(req.body);
         res.status(200).send('Connecting');
     },
-    async getScheduleForToday(req, res) {
+    async getScheduleForToday(req, res){
         console.log(req.body);
         res.status(200).send('Connecting');
     },
-    async createSchedule(req, res) {
+    async createSchedule(req, res){
         console.log(req.body);
-        if (req.body.userId && req.body.routeId) {
-            try {
-                const { userId, routeId } = req.body
+        if(req.body.userId && req.body.routeId){
+            try{
+                const {userId, routeId} = req.body
                 const schedule = createSchedule(userId, routeId);
                 res.status(201).send(schedule);
-            } catch (e) {
+            } catch(e) {
                 console.error(e);
                 errorHandler(req, res, e);
             }

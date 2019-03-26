@@ -23,6 +23,10 @@ const {
         groupMembers,
         getLocation,
         getChatId,
+        getRoutes,
+        getScheduleForToday,
+        createRoute,
+        createSchedule
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -81,9 +85,9 @@ app.post("/joinGroup", joinGroup);
  
 app.get("/myGroups/:id", getMyGroups ); 
  
-app.get("/groupMembers/:groupName", groupMembers)
+app.get("/groupMembers/:groupName", groupMembers);
 
-app.get('/chatId/:groupName', getChatId)
+app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
@@ -131,4 +135,13 @@ app.post("/push/token", (req, res) => {
 }); 
 
 app.get('/locations/:id', getLocation);
+
+app.post('/schedule/create', createSchedule);
+
+app.post('/route/create',createRoute);
+
+app.get('/route/retrieve/:id', getRoutes);
+
+app.get('/schedule/retrieve', getScheduleForToday);
+
 app.listen(port, () => console.log(`Listening on port ${port}`));
