@@ -409,7 +409,14 @@ const requestHandler = {
     async createSchedule(req, res){
         console.log(req.body);
         if(req.body.userId && req.body.routeId){
-            res.status(200).send('Connecting');
+            try{
+                const {userId, routeId} = req.body
+                const schedule = createSchedule(userId, routeId);
+                res.status(201).send(schedule);
+            } catch(e) {
+                console.error(e);
+                errorHandler(req, res, e);
+            }
         } else {
             res.status(400).send('Bad request');
         }
