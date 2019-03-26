@@ -16,7 +16,9 @@ class PanicButton extends React.Component {
     this.record = this.record.bind(this);
   }
   async componentDidMount() {
+    const { userId } = this.props.navigation.state.params;
     setTimeout(this.record, 1000);
+    let update = await axios.patch(`${API_HOST}/panic/${userId}`, {"is_panic": true});
   }
 
   async record() {
@@ -29,7 +31,7 @@ class PanicButton extends React.Component {
       });
       const file = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingTypes.Base64
-      })
+      }) 
       console.log('GOT THE FILE', file.slice(0, 10), file.length);
       try {
         console.log('We should send the request');

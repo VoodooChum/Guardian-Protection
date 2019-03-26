@@ -23,6 +23,7 @@ const {
         groupMembers,
         getLocation,
         getChatId,
+        togglePanicStatus
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -141,4 +142,7 @@ app.post('/schedule/create', () => {
 app.post('/route/create', () => {
   res.status(201).send('Connecting');
 });
+
+app.patch('/panic/:id', togglePanicStatus)
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

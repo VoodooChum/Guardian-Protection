@@ -360,7 +360,18 @@ const requestHandler = {
     async createRoute(req, res){
         console.log(req.body);
         res.status(200).send('LMAO');
+    },
+    
+    togglePanicStatus(req, res){
+        let myId = req.params.id 
+        db.User.update({is_panic: true}, {returning: true, where: {id: myId}}) 
+        // db.User.findOne({where: {id: myId}}) 
+            .then(data => res.send(data))
+            .catch(err =>
+                errorHandler(req, res, err)
+            )
     }
+
 }
 
 module.exports = requestHandler;

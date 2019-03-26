@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         update_interval: { type: DataTypes.INTEGER, unique: false, allowNull: true },
         url_profile_pic: { type: DataTypes.STRING, unique: false, allowNull: false },
         email: { type: DataTypes.STRING, unique: true },
+        is_panic: { type: DataTypes.BOOLEAN, unique: false },
+
     });
 
     User.associate = (models) => {
