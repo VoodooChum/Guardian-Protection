@@ -405,6 +405,14 @@ const requestHandler = {
     async getScheduleForToday(req, res){
         console.log(req.body);
         res.status(200).send('Connecting');
+    },
+    async createSchedule(req, res){
+        console.log(req.body);
+        if(req.body.userId && req.body.routeId){
+            res.status(200).send('Connecting');
+        } else {
+            res.status(400).send('Bad request');
+        }
     }
 }
 

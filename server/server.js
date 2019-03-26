@@ -24,7 +24,9 @@ const {
         getLocation,
         getChatId,
         getRoutes,
-        getScheduleForToday
+        getScheduleForToday,
+        createRoute,
+        createSchedule
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -134,20 +136,12 @@ app.post("/push/token", (req, res) => {
 
 app.get('/locations/:id', getLocation);
 
-app.post('/locations/routes', (req, res) => {
-  res.status(201).send('Connecting')
-});
+app.post('/schedule/create', createSchedule);
 
-app.post('/schedule/create', () => {
-  res.status(201).send('Connecting');
-});
-
-app.post('/route/create', () => {
-  res.status(201).send('Connecting');
-});
+app.post('/route/create',createRoute);
 
 app.get('/route/retrieve/:id', getRoutes);
 
-app.get('/schedule/create', getScheduleForToday);
+app.get('/schedule/retrieve', getScheduleForToday);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
