@@ -464,7 +464,12 @@ else on creation: login, send 200, {username, id}
     },
     async getRoutes(req, res){
         console.log(req.body);
+        const parseId = parseInt(req.params.id);
+        if(parseId){
         res.status(200).send('Connecting');
+        } else {
+            res.send(400);
+        }
     },
     async getScheduleForToday(req, res){
         const parsedId = parseInt(req.params.id);
