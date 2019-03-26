@@ -3,6 +3,7 @@ const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
 );
+const { Op } = require('sequelize');
 require('dotenv').config();
 
 const Chatkit = require("@pusher/chatkit-server");
@@ -19,8 +20,63 @@ const errorHandler = (req, res, err) => {
     } if (err.message === 'Cannot read property \'_modelAttribute\' of undefined') {
         return res.send(201, 'No events found');
     }
-    return res.send(500, 'Something went wrong on our part'); 
-}; 
+    return res.send(500, 'Something went wrong on our part');
+};
+
+const createLocationRoute = async (locationUserId, routeId) => {
+    return await db.RouteLocation.create({
+        id_user_location: locationUserId,
+        id_route: routeId,
+        RouteId: routeId
+    });
+};
+const createSchedule = async (userId, routeId) => {
+    return await db.Schedule.create({
+        id_user: userId,
+        id_route: routeId
+    })
+}
+const createRoute = async () => {
+    return await db.Route, create({});
+}
+const findSchedulesByUserIdAndToday = async (userId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.Schedule.findAll({
+        where: {
+            id_user: userId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    });
+}
+const findLocationRouteByUserLocationId = async (userLocationId) => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+    return await db.RouteLocation.findAll({
+        where: {
+            id_user_location: userLocationId,
+            from: {
+                [Op.between]: [start, end]
+            }
+        }
+    })
+}
+
+const findRouteById = async (id) => {
+    return await db.Route.findOne({
+        where: {
+            id
+        }
+    });
+}
 
 const requestHandler = {
 
@@ -31,35 +87,35 @@ const requestHandler = {
      * @param {object} res: the outcoming response message
      */
 
-    createUser(req, res){
+    createUser(req, res) {
         const newUser = req.body;
         db.User.create(newUser)
-            .then((returnedUser) => { 
+            .then((returnedUser) => {
                 res.send('created!')
                 console.log('created');
             })
             .catch(err => errorHandler(req, res, err));
     },
 
-        /*
-    signup
-    on POST /signup
-    expects:
-        req.body: JSON => { "username", "password" }
-    if username in db: 401
-    else on creation: login, send 200, {username, id}
-    */
+    /*
+signup
+on POST /signup
+expects:
+    req.body: JSON => { "username", "password" }
+if username in db: 401
+else on creation: login, send 200, {username, id}
+*/
     signup(req, res, next) {
         const newUser = {};
         Object.assign(newUser, req.body.props);
         Object.assign(newUser, req.body.user);
         newUser.radius = 30;
         newUser.update_interval = 24;
-        db.User.create(newUser) 
+        db.User.create(newUser)
             .then((returnedUser) => {
                 req.login({ username: returnedUser.username, id: returnedUser.id }, (err) => {
                     if (err) return next(err);
-                    console.log('loggedin') 
+                    console.log('loggedin')
                     return res.json(201, {
                         username: returnedUser.username,
                         id: returnedUser.id,
@@ -77,12 +133,13 @@ const requestHandler = {
      */
 
     login(req, res, next) {
-    db.User.findOne({ where: { email: req.body.username } }) 
-      .then((foundUser) => {
-        // console.log(foundUser); 
-        res.send(foundUser);
-      }).catch((err) => console.log(err))
-  }, 
+        console.log(req);
+        db.User.findOne({ where: { email: req.body.username } })
+            .then((foundUser) => {
+                // console.log(foundUser); 
+                res.send(foundUser);
+            }).catch((err) => console.log(err))
+    },
 
 
     /**
@@ -90,12 +147,12 @@ const requestHandler = {
     * @param {object} req: the incoming request message
     * @param {object} res: the outcoming response message
     */
-    createGroup(req, res, next){
+    createGroup(req, res, next) {
         let newGroup = {};
         Object.assign(newGroup, req.body.userData);
         Object.assign(newGroup, req.body.group);
         let sendToPusher = newGroup.name;
-        
+
 
         // Creating a user on Pusher - returns a 400 if user already exists but does not harm tbe process
         chatkit.createUser({
@@ -108,23 +165,22 @@ const requestHandler = {
             }).catch((err) => {
                 console.log(err);
             });
-
         chatkit
-          .createRoom({
-            creatorId: newGroup.email,
-            name: newGroup.name,
-            private: false,
-          })
-          .then((room) => {
-            console.log("Room created successfully", room);
-            newGroup.id_chat = room.id;
-            console.log(newGroup);
-            newGroup.id_user_creator = newGroup.id;
-            delete newGroup.id;
-            return newGroup;
-        }).then((createdGroup) => {
-            return db.Group.create(createdGroup)  
-        }).then((group)=>{
+            .createRoom({
+                creatorId: newGroup.email,
+                name: newGroup.name,
+                private: false,
+            })
+            .then((room) => {
+                console.log("Room created successfully", room);
+                newGroup.id_chat = room.id;
+                console.log(newGroup);
+                newGroup.id_user_creator = newGroup.id;
+                delete newGroup.id;
+                return newGroup;
+            }).then((createdGroup) => {
+                return db.Group.create(createdGroup)
+            }).then((group) => {
                 // console.log(group);
                 let groupMember = {
                     'id_user': group.id_user_creator,
@@ -134,21 +190,27 @@ const requestHandler = {
                     "id_chat": group.id_chat
                 }
                 return db.UserGroup.create(groupMember);
-            }).catch(err => errorHandler(req, res, err));  
-          
+            }).catch(err => errorHandler(req, res, err));
+    },
 
+    savePushToken(req, res) {
+        console.log(`Save token: ${req.body.token} for User: ${req.body.user}`);
+        db.User.update(
+            { token_push: req.body.token },
+            { returning: true, where: { email: req.body.user } }
+        ).then(() => console.log('Push Token Saved')).catch(err => errorHandler(req, res, err));
+    },
 
-   }, 
     /**
      * joinGroup: allows an exisitng user to join a group
      * @param {object} req: the incoming request message
      * @param {object} res: the outcoming response message
      */
-    joinGroup(req, res, next){
+    joinGroup(req, res, next) {
         let group = req.body.group;
         let user = req.body.user;
         db.Group.findOne({ where: { name: group.groupName, passcode: group.passcode } })
-            .then((group)=>{
+            .then((group) => {
                 chatkit.createUser({
                     id: user.email,
                     name: user.name_first,
@@ -166,7 +228,7 @@ const requestHandler = {
                 }).then(() => console.log('added'))
                     .catch(err => console.error(err));
 
-                res.send(group) 
+                res.send(group)
                 console.log(group)
                 let groupMember = {
                     'id_user': user.id,
@@ -175,35 +237,35 @@ const requestHandler = {
                     "GroupId": group.id
                 }
                 return db.UserGroup.create(groupMember);
-            }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));  
-   }, 
-   /**
-    * @function upload
-    * @param {object} req 
-    * @param {object} res 
-    * @param {function} next
-    * this function takes the body of the req param, that should
-    * be an object with id_user and url_video as properties and saves
-    * them to the database, and sends back the status code and the url 
-    */
+            }).then(() => console.log('added to group')).catch(err => errorHandler(req, res, err));
+    },
+    /**
+     * @function upload
+     * @param {object} req 
+     * @param {object} res 
+     * @param {function} next
+     * this function takes the body of the req param, that should
+     * be an object with id_user and url_video as properties and saves
+     * them to the database, and sends back the status code and the url 
+     */
     async upload(req, res, next) {
         console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
             console.log(shortened);
             res.header("Content-Type", "application/json");
             client.messages
-              .create({
-                from: process.env.TWILIO_NUMBER,
-                to: 15042107601,
-                body: `Guardian App Alert ${req.body.url_video}`
-              })
-              .then(() => {
-                res.send(JSON.stringify({ success: true }));
-              })
-              .catch(err => {
-                console.log(err);
-                res.send(JSON.stringify({ success: false }));
-              });
+                .create({
+                    from: process.env.TWILIO_NUMBER,
+                    to: 15042107601,
+                    body: `Guardian App Alert ${req.body.url_video}`
+                })
+                .then(() => {
+                    res.send(JSON.stringify({ success: true }));
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.send(JSON.stringify({ success: false }));
+                });
 
             const newPanic = {};
             Object.assign(newPanic, req.body.id_user);
@@ -226,18 +288,18 @@ const requestHandler = {
     * guardian dashboard.
     */
 
-    async getMyGroups(req, res){
+    async getMyGroups(req, res) {
         let myId = req.params.id;
-        db.UserGroup.findAll({ where: { id_user: myId} })
-            .then( async (groups)=>{
+        db.UserGroup.findAll({ where: { id_user: myId } })
+            .then(async (groups) => {
                 // console.log(groups);
-                let myGroups = groups.map((group)=>{
-                return group.id_group;
+                let myGroups = groups.map((group) => {
+                    return group.id_group;
                 })
                 let allGroups = await db.Group.findAll({ where: { id: myGroups } });
                 res.json(allGroups);
                 return allGroups;
-            }).then(() => console.log('groups sent')) 
+            }).then(() => console.log('groups sent'))
             .catch(err => errorHandler(req, res, err));
     },
 
@@ -251,15 +313,15 @@ const requestHandler = {
     async groupMembers(req, res) {
         let currentGroup = req.params.groupName;
         // console.log(currentGroup);
-        let foundGroup = await db.Group.findOne({ where: { name: currentGroup } }).catch(err => errorHandler(req, res, err));  
-        let userGroup = await db.UserGroup.findAll({ where: { GroupId: foundGroup.id } }).catch(err => errorHandler(req, res, err));  
+        let foundGroup = await db.Group.findOne({ where: { name: currentGroup } }).catch(err => errorHandler(req, res, err));
+        let userGroup = await db.UserGroup.findAll({ where: { GroupId: foundGroup.id } }).catch(err => errorHandler(req, res, err));
         let userIds = userGroup.map((groupMember) => groupMember.id_user)
         let groupMembers = await db.User.findAll({ where: { id: userIds } })
         groupMembers;
         res.send(groupMembers);
     },
-    async createLocation(req, res){
-        if(req.body.latitude && req.body.userId && req.body.longitude){
+    async createLocation(req, res) {
+        if (req.body.latitude && req.body.userId && req.body.longitude) {
             console.log(req.body.latitude, req.body.longitude);
             const query = {
                 longitude: req.body.longitude,
@@ -269,7 +331,7 @@ const requestHandler = {
                 const values = await db.Location.findOne({ where: query });
                 console.log(values);
                 // res.send('test');
-                if(values){
+                if (values) {
                     try {
                         const createUserLocation = await db.UserLocation.create({
                             LocationId: values.dataValues.id,
@@ -287,18 +349,18 @@ const requestHandler = {
                                 LocationId: createdLocation.dataValues.id,
                                 UserId: req.body.userId
                             });
-                        } catch(e){
+                        } catch (e) {
                             console.log(e);
                             res.status(500).send('Error in creating user location 2');
                             return;
                         }
-                    } catch(e) {
+                    } catch (e) {
                         res.status(500).send('error in db for Location');
                         return;
                     }
                 }
                 res.status(201).send('created location');
-            } catch(e){
+            } catch (e) {
                 console.log(e);
                 res.status(500).send('Database error');
                 return;
@@ -310,20 +372,20 @@ const requestHandler = {
     /**
      * 
      */
-    async getLocation(req, res){
+    async getLocation(req, res) {
         const { id } = req.params
         const numberId = parseInt(id);
-        if(typeof numberId === 'number'){
+        if (typeof numberId === 'number') {
             try {
-                const locations = await db.UserLocation.findAll({ where: {UserId: numberId}});
-                if(locations){
+                const locations = await db.UserLocation.findAll({ where: { UserId: numberId } });
+                if (locations) {
                     const latestLocationUser = locations[locations.length - 1];
-                    const lastLocationOfUser = await db.Location.findOne({ where: { id: latestLocationUser.dataValues.LocationId}});
+                    const lastLocationOfUser = await db.Location.findOne({ where: { id: latestLocationUser.dataValues.LocationId } });
                     res.status(200).send(lastLocationOfUser.dataValues);
                 } else {
                     res.status(404).send('This user has no locations');
                 }
-            } catch(e){
+            } catch (e) {
                 console.log(e);
                 res.status(500).send('DB Error');
             }
@@ -331,11 +393,38 @@ const requestHandler = {
             res.send(400);
         }
     },
-    async getChatId(req, res){
-        let groupName = req.params.groupName; 
-        let foundGroup = await db.Group.findOne({ where: {name: groupName} })
+    async getChatId(req, res) {
+        let groupName = req.params.groupName;
+        let foundGroup = await db.Group.findOne({ where: { name: groupName } })
         foundGroup;
         res.send(foundGroup);
+    },
+    async createRoute(req, res) {
+        console.log(req.body);
+        res.status(200).send('LMAO');
+    },
+    async getRoutes(req, res) {
+        console.log(req.body);
+        res.status(200).send('Connecting');
+    },
+    async getScheduleForToday(req, res) {
+        console.log(req.body);
+        res.status(200).send('Connecting');
+    },
+    async createSchedule(req, res) {
+        console.log(req.body);
+        if (req.body.userId && req.body.routeId) {
+            try {
+                const { userId, routeId } = req.body
+                const schedule = createSchedule(userId, routeId);
+                res.status(201).send(schedule);
+            } catch (e) {
+                console.error(e);
+                errorHandler(req, res, e);
+            }
+        } else {
+            res.status(400).send('Bad request');
+        }
     }
 }
 
