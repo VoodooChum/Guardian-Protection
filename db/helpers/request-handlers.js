@@ -463,8 +463,13 @@ else on creation: login, send 200, {username, id}
         res.status(200).send('Connecting');
     },
     async getScheduleForToday(req, res){
-        console.log(req.body);
-        res.status(200).send('Connecting');
+        const parsedId = parseInt(req.params.id);
+        console.log(parsedId);
+        if(parsedId){
+            res.status(200).send('Connecting');
+        } else {
+            res.sendStatus(400);
+        }
     },
     async createSchedule(req, res){
         console.log(req.body);
