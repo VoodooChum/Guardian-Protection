@@ -23,37 +23,63 @@ class DashboardView extends React.Component {
     super(props);
     this.state = {
       groups: [],
-      photoUrl: 'a',
-      name: '',
+      photoUrl: "a",
+      name: "",
       isLoading: true,
-      coords: null
-    }
+      coords: null,
+      notification: {},
+    };
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
     this.sendLocationAsync = this.sendLocationAsync.bind(this);
-    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(
+      this
+    );
   }
 
   componentDidMount = () => {
     this._isMounted = true;
-    this.setState({ name: this.props.name })
+    this.setState({ name: this.props.name });
     this.getGroupsAsnyc();
     this.registerForPushNotificationsAsync();
     this.sendLocationAsync();
-    setTimeout(this.getGroupsAsnyc, 3000)
+    setTimeout(this.getGroupsAsnyc, 3000);
+    this.notificationSubscription = Notifications.addListener(
+      this.handleNotification
+    );
   };
-  sendLocationAsync = async () => {
-    let location = await Location.getCurrentPositionAsync({});
-    let coords = location.coords
-    this.setState({ coords: coords});
-    if (this.props.userData){
-      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id });
-    } else {
-      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.navigation.state.params.userData.id })
-    }
-  }
 
-  
+  handleNotification = notification => {
+    this.setState({
+      notification
+    });
+  };
+
+  sendLocationAsync = async () => {
+    let location = await Location.getCurrentPositionAsync({}).catch(err =>
+      console.log(err)
+    );
+    let coords = location.coords;
+    this.setState({ coords: coords });
+    if (this.props.userData) {
+      let sentLoc = await axios
+        .post(`${API_HOST}/locations/create`, {
+          latitude: coords.latitude.toString(),
+          longitude: coords.longitude.toString(),
+          userId: this.props.userData.id
+        })
+        .catch(err => console.log(err));
+    } else {
+      let sentLoc = await axios
+        .post(`${API_HOST}/locations/create`, {
+          latitude: coords.latitude.toString(),
+          longitude: coords.longitude.toString(),
+          userId: this.props.navigation.state.params.userData.id
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
   registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
@@ -61,101 +87,113 @@ class DashboardView extends React.Component {
     let finalStatus = existingStatus;
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
-    if (existingStatus !== 'granted') {
+    if (existingStatus !== "granted") {
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      const { status } = await Permissions.askAsync(
+        Permissions.NOTIFICATIONS
+      ).catch(err => console.log(err));
       finalStatus = status;
     }
     // Stop here if the user did not grant permissions
-    if (finalStatus !== 'granted') {
+    if (finalStatus !== "granted") {
       return;
     }
     // Get the token that uniquely identifies this device
-    // let token = await Notifications.getExpoPushTokenAsync();
+    let token = await Notifications.getExpoPushTokenAsync();
     // POST the token to your backend server from where you can retrieve it to send push notifications.
-    // let res = await axios.post(`${API_HOST}/push/token`, {token}).catch(err => console.log(err))
-  }
+    let res = await axios
+      .post(`${API_HOST}/push/token`, { token })
+      .catch(err => console.log(err));
+  };
 
   getGroupsAsnyc = async () => {
     if (this.props.userData) {
-      this._isMounted && this.setState({ photoUrl: this.props.userData.url_profile_pic, name: this.props.name })
-      let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
+      this._isMounted &&
+        this.setState({
+          photoUrl: this.props.userData.url_profile_pic,
+          name: this.props.name
+        });
+      let myGroups = await axios
+        .get(`${API_HOST}/myGroups/${this.props.userData.id}`)
+        .catch(err => console.log(err));
       if (myGroups) {
-        this.setState({ groups: myGroups.data, isLoading: false })
+        this.setState({ groups: myGroups.data, isLoading: false });
       }
     } else {
       let user = this.props.navigation.state.params.userData;
       let name = this.props.navigation.state.params.name;
       this.props.name = name;
-      this.setState({ photoUrl: user.url_profile_pic, name: name })
-      let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
-      this.setState({ groups: newGroups.data, isLoading: false })
+      this.setState({ photoUrl: user.url_profile_pic, name: name });
+      let newGroups = await axios
+        .get(`${API_HOST}/myGroups/${user.id}`)
+        .catch(err => console.log(err));
+      this.setState({ groups: newGroups.data, isLoading: false });
     }
-  }
+  };
 
   componentWillUnmount = () => {
     this._isMounted = false;
-  }
+  };
 
   clearForm = () => {
     this.setState({ value: null });
-  }
+  };
   onPressCreateGroup = () => {
     // Do whatever you need here to switch to Creating a group View
-    console.log('Create Group Button Pressed');
+    console.log("Create Group Button Pressed");
 
     if (this.props.userData) {
-      this.props.navigation.navigate('CreatGroupView', {
+      this.props.navigation.navigate("CreatGroupView", {
         userInfo: this.props.userData,
         name: this.props.name,
         getGroupsAsnyc: this.getGroupsAsnyc,
         location: this.props.location
       });
     } else {
-      this.props.navigation.navigate('CreatGroupView', {
+      this.props.navigation.navigate("CreatGroupView", {
         userInfo: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name,
         getGroupsAsnyc: this.getGroupsAsnyc,
         location: this.props.navigation.state.params.location
       });
     }
-  }
+  };
   onPressJoinGroup = () => {
     // Do whatever you need here to switch to Joining a group View
-    console.log('Join Group Button Pressed');
+    console.log("Join Group Button Pressed");
     if (this.props.userData) {
-      this.props.navigation.navigate('JoinGroup', {
+      this.props.navigation.navigate("JoinGroup", {
         userInfo: this.props.userData,
         name: this.props.name,
         getGroupsAsnyc: this.getGroupsAsnyc,
         location: this.props.location
       });
     } else {
-      this.props.navigation.navigate('JoinGroup', {
+      this.props.navigation.navigate("JoinGroup", {
         userInfo: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name,
         getGroupsAsnyc: this.getGroupsAsnyc,
         location: this.props.navigation.state.params.location
       });
     }
-  }
+  };
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
-    console.log('Panic Button Pressed');
-    this.props.navigation.navigate('Panic', {
+    console.log("Panic Button Pressed");
+    this.props.navigation.navigate("Panic", {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
       userId: this.props.userData.id
     });
-  }
+  };
 
   onPressViewGroup = (name: string) => {
     // Do whatever you need here to switch to Joining a group View
     console.log(name);
     if (this.props.userData) {
-      this.props.navigation.navigate('GroupView', {
+      this.props.navigation.navigate("GroupView", {
         hasAudioPermission: this.props.hasAudioPermission,
         hasCameraPermission: this.props.hasCameraPermission,
         userInfo: this.props.userData,
@@ -163,19 +201,21 @@ class DashboardView extends React.Component {
         location: this.props.location
       });
     } else {
-      this.props.navigation.navigate('GroupView', {
-        hasAudioPermission: this.props.navigation.state.params.hasAudioPermission,
-        hasCameraPermission: this.props.navigation.state.params.hasCameraPermission,
+      this.props.navigation.navigate("GroupView", {
+        hasAudioPermission: this.props.navigation.state.params
+          .hasAudioPermission,
+        hasCameraPermission: this.props.navigation.state.params
+          .hasCameraPermission,
         userInfo: this.props.navigation.state.params.userData,
         name: name,
         location: this.state.coords
       });
     }
-  }
+  };
 
   render() {
     const { isLoading, name } = this.state;
-    // console.log(this.state.groups); 
+    // console.log(this.state.groups);
 
     return (
       <View style={styles.container}>
@@ -188,22 +228,31 @@ class DashboardView extends React.Component {
             />
           )}
           <Image
-            style={{ borderRadius: 20, width: 155, height: 153, alignSelf: 'center', marginTop: 15 }}
+            style={{
+              borderRadius: 20,
+              width: 155,
+              height: 153,
+              alignSelf: "center",
+              marginTop: 15
+            }}
             source={{
               uri: `${this.state.photoUrl}`
             }}
           />
-          <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-          >{this.state.name}</Text>
+          <Text
+            style={{ alignSelf: "center", marginBottom: 5, color: "white" }}
+          >
+            {this.state.name}
+          </Text>
           <ThemeProvider theme={theme}>
-            {
-              this.state.groups.map((group) => <Button
+            {this.state.groups.map(group => (
+              <Button
                 group={group.id}
                 title={group.name}
                 key={group.id}
                 onPress={() => this.onPressViewGroup(group.name)}
-              />)
-            }
+              />
+            ))}
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Button
@@ -212,10 +261,7 @@ class DashboardView extends React.Component {
             />
           </ThemeProvider>
           <ThemeProvider theme={theme}>
-            <Button
-              title="Join Group"
-              onPress={this.onPressJoinGroup}
-            />
+            <Button title="Join Group" onPress={this.onPressJoinGroup} />
           </ThemeProvider>
           <TouchableHighlight
             style={styles.button}
