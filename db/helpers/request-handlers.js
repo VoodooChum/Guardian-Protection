@@ -23,22 +23,12 @@ const errorHandler = (req, res, err) => {
     return res.send(500, 'Something went wrong on our part');
 };
 
-const createLocationRoute = async (locationUserId, routeId) => {
-    return await db.RouteLocation.create({
-        id_user_location: locationUserId,
-        id_route: routeId,
-        RouteId: routeId
-    });
-};
-const createSchedule = async (userId, routeId) => {
+const createSchedule = async (userId) => {
     return await db.Schedule.create({
         id_user: userId,
-        id_route: routeId
     })
 }
-const createRoute = async () => {
-    return await db.Route, create({});
-}
+
 const findSchedulesByUserIdAndToday = async (userId) => {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
@@ -54,46 +44,13 @@ const findSchedulesByUserIdAndToday = async (userId) => {
         }
     });
 }
-const findLocationRouteByUserLocationId = async (userLocationId) => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
 
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    return await db.RouteLocation.findAll({
-        where: {
-            id_user_location: userLocationId,
-            from: {
-                [Op.between]: [start, end]
-            }
-        }
-    })
-}
-
-const findRouteById = async (id) => {
-    return await db.Route.findOne({
-        where: {
-            id
-        }
-    });
-}
-
-const createLocationRoute = async (locationUserId, routeId) => {
-    return await db.RouteLocation.create({
-        id_user_location: locationUserId,
-        id_route: routeId,
-        RouteId: routeId
-    });
-};
-const createSchedule = async (userId, routeId) => {
+const createSchedule = async (userId, ) => {
     return await db.Schedule.create({
         id_user: userId,
-        id_route: routeId
     })
 }
-const createRoute = async () => {
-    return await db.Route,create({});
-}
+
 const findSchedulesByUserIdAndToday = async (userId) => {
     const start = new Date();
     start.setHours(0, 0, 0, 0);
@@ -112,29 +69,6 @@ const findSchedulesByUserIdAndToday = async (userId) => {
     } catch (e) {
         console.error(e);
     }
-}
-const findLocationRouteByUserLocationId = async (userLocationId) => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
-
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    return await db.RouteLocation.findAll({
-        where: {
-            id_user_location: userLocationId,
-            from: {
-                [Op.between]: [start, end]
-            }
-        }
-    })
-}
-
-const findRouteById = async (id) => {
-    return await db.Route.findOne({
-        where: {
-            id
-        }
-    });
 }
 
 const requestHandler = {
@@ -458,24 +392,12 @@ else on creation: login, send 200, {username, id}
         foundGroup;
         res.send(foundGroup);
     },
-    async createRoute(req, res){
-        console.log(req.body);
-        res.status(200).send('LMAO');
-    },
-    async getRoutes(req, res){
-        console.log(req.body);
-        const parseId = parseInt(req.params.id);
-        if(parseId){
-        res.status(200).send('Connecting');
-        } else {
-            res.send(400);
-        }
-    },
+    
     async getScheduleForToday(req, res){
         const parsedId = parseInt(req.params.id);
         console.log(parsedId);
         if(parsedId){
-            const schedules = await findSchedulesByUserIdAndToday(parsedId)
+            const schedules = findSchedulesByUserIdAndToday(parsedId)
             if(schedules){
                 res.status(200).send(schedules);
             } else {
@@ -487,10 +409,10 @@ else on creation: login, send 200, {username, id}
     },
     async createSchedule(req, res){
         console.log(req.body);
-        if(req.body.userId && req.body.routeId){
+        if(req.body.userId ){
             try{
-                const {userId, routeId} = req.body
-                const schedule = createSchedule(userId, routeId);
+                const {userId} = req.body
+                const schedule = createSchedule(userId);
                 res.status(201).send(schedule);
             } catch(e) {
                 console.error(e);

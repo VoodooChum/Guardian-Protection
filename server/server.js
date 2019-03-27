@@ -138,10 +138,6 @@ app.get('/locations/:id', getLocation);
 
 app.post('/schedule/create', createSchedule);
 
-app.post('/route/create',createRoute);
-
-app.get('/route/retrieve/:id', getRoutes);
-
 app.get('/schedule/retrieve/:id', getScheduleForToday);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
