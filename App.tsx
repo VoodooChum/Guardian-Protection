@@ -2,7 +2,7 @@ import * as React from 'react';
 // import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { StyleSheet, Text, View, Image, Button, Platform } from 'react-native';
 import LoginView from './components/Login';
-import {Google, Constants, Permissions, Location} from 'expo';
+import {Google, Constants, Permissions, Location, Notifications} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
@@ -26,18 +26,19 @@ const {API_HOST} = Constants.manifest.extra;
     super(props);
     this.state = {
       signedIn: false,
-      name: '',
-      photoUrl: 'a', 
-      email: '',
-      accessToken: '',
-      accessTokenExpirationDate: '',
+      name: "",
+      photoUrl: "a",
+      email: "",
+      accessToken: "",
+      accessTokenExpirationDate: "",
       panic: false,
       existingUser: false,
       hasAudioPermission: null,
       hasCameraPermission: null,
       hasLocationPermission: null,
-      myLocation: null
-    }
+      myLocation: null,
+      
+    };
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
     this.startPanic = this.startPanic.bind(this);
@@ -149,6 +150,9 @@ const {API_HOST} = Constants.manifest.extra;
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
+          {this.state.notification ?
+            this.renderNotification()
+            : null}
             <Image
               style={{ borderRadius: 20, width: 155, height: 153 }}
               source={{
@@ -197,19 +201,19 @@ const AppNavigator = createStackNavigator({
   Home: {
     screen: App,
     navigationOptions: {
-      header: null,
+      header: null
     }
   },
   Signup: {
     screen: Signup
   },
   CreatGroupView: {
-    screen: CreateGroupView,
+    screen: CreateGroupView
   },
   Dashboard: {
-    screen: DashboardView, 
+    screen: DashboardView,
     navigationOptions: {
-      header: null,
+      header: null
     }
   },
   JoinGroup: {
@@ -217,16 +221,17 @@ const AppNavigator = createStackNavigator({
   },
   Panic: {
     screen: PanicButton
-  }, 
+  },
   GroupView: {
-    screen: GroupView 
+    screen: GroupView
   },
   MapView: {
     screen: MapView
   },
   ChatView: {
     screen: ChatView
-  }
+  },
+
 });
 
 const AppContainer = createAppContainer(AppNavigator);

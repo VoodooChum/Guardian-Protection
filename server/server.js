@@ -93,9 +93,9 @@ app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
-  axios.post(`https://exp.host/--/api/v2/push/send`, { "to": group, "body": "Guardian Alert" })
-
-
+  axios.post(`https://exp.host/--/api/v2/push/send`, {
+    "to": "ExponentPushToken[UecR7pHDtX3OXW9JhsD1gz]", "body": "Guardian Alert" })
+    res.send('Push Complete');
 });
 
 // Responding to Incoming Messages

@@ -78,61 +78,61 @@ const findRouteById = async (id) => {
     });
 }
 
-const createLocationRoute = async (locationUserId, routeId) => {
-    return await db.RouteLocation.create({
-        id_user_location: locationUserId,
-        id_route: routeId,
-        RouteId: routeId
-    });
-};
-const createSchedule = async (userId, routeId) => {
-    return await db.Schedule.create({
-        id_user: userId,
-        id_route: routeId
-    })
-}
-const createRoute = async () => {
-    return await db.Route,create({});
-}
+// const createLocationRoute = async (locationUserId, routeId) => {
+//     return await db.RouteLocation.create({
+//         id_user_location: locationUserId,
+//         id_route: routeId,
+//         RouteId: routeId
+//     });
+// };
+// const createSchedule = async (userId, routeId) => {
+//     return await db.Schedule.create({
+//         id_user: userId,
+//         id_route: routeId
+//     })
+// }
+// const createRoute = async () => {
+//     return await db.Route,create({});
+// }
 
-const findSchedulesByUserIdAndToday = async (userId) => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
+// const findSchedulesByUserIdAndToday = async (userId) => {
+//     const start = new Date();
+//     start.setHours(0, 0, 0, 0);
 
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    return await db.Schedule.findAll({
-        where: {
-            id_user: userId,
-            from: {
-                [Op.between]: [start, end]
-            }
-        }
-    });
-}
-const findLocationRouteByUserLocationId = async (userLocationId) => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
+//     const end = new Date();
+//     end.setHours(23, 59, 59, 999);
+//     return await db.Schedule.findAll({
+//         where: {
+//             id_user: userId,
+//             from: {
+//                 [Op.between]: [start, end]
+//             }
+//         }
+//     });
+// }
+// const findLocationRouteByUserLocationId = async (userLocationId) => {
+//     const start = new Date();
+//     start.setHours(0, 0, 0, 0);
 
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    return await db.RouteLocation.findAll({
-        where: {
-            id_user_location: userLocationId,
-            from: {
-                [Op.between]: [start, end]
-            }
-        }
-    })
-}
+//     const end = new Date();
+//     end.setHours(23, 59, 59, 999);
+//     return await db.RouteLocation.findAll({
+//         where: {
+//             id_user_location: userLocationId,
+//             from: {
+//                 [Op.between]: [start, end]
+//             }
+//         }
+//     })
+// }
 
-const findRouteById = async (id) => {
-    return await db.Route.findOne({
-        where: {
-            id
-        }
-    });
-}
+// const findRouteById = async (id) => {
+//     return await db.Route.findOne({
+//         where: {
+//             id
+//         }
+//     });
+// }
 
 const requestHandler = {
 
@@ -307,7 +307,6 @@ else on creation: login, send 200, {username, id}
     async upload(req, res, next) {
         console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
-            console.log(shortened);
             res.header("Content-Type", "application/json");
             client.messages
                 .create({

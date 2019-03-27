@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Schedule.associate = (models) => {
         Schedule.belongsTo(models.User, { constraints: false });
-        Schedule.hasMany(models.Route, { constraints: false });
+        Schedule.hasMany(models.Location, { constraints: false });
     };
 
     return Schedule;
