@@ -38,13 +38,13 @@ class PanicButton extends React.Component {
 
   exitPanic = () => {
     let passcode = this.props.navigation.state.params.userData.passcode;
-    if (this.state.passcode === passcode) {
+    console.log(passcode);
       this.props.navigation.navigate('Dashboard', {
         userData: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name
       });
       this.props.navigation.state.params.getGroupsAsnyc();
-    }
+    
   }
  
   async record() {
@@ -200,6 +200,7 @@ class PanicButton extends React.Component {
                     />
                   }
                 />
+                <Button title="Submit" onPress={this.exitPanic}></Button>
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
