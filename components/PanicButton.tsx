@@ -21,10 +21,7 @@ class PanicButton extends React.Component {
     this.record = this.record.bind(this);
   }
 
-  componentDidUpdate = () => {
-    this.exitPanic();
-  }
-
+  
   async componentDidMount() {
     const { userId } = this.props.navigation.state.params;
     setTimeout(this.record, 1000);
@@ -37,14 +34,14 @@ class PanicButton extends React.Component {
   }
 
   exitPanic = () => {
-    let passcode = this.props.navigation.state.params.userData.passcode;
-    console.log(passcode);
+    let passcode = this.props.navigation.state.params.userData.safeword;
+    if (this.state.passcode === passcode) {
       this.props.navigation.navigate('Dashboard', {
         userData: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name
       });
       this.props.navigation.state.params.getGroupsAsnyc();
-    
+    }
   }
  
   async record() {
@@ -200,7 +197,7 @@ class PanicButton extends React.Component {
                     />
                   }
                 />
-                <Button title="Submit" onPress={this.exitPanic}></Button>
+                <Button title="Submit" onPress={() => {this.exitPanic(); this.setModalVisible(!this.state.modalVisible)}}></Button>
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
