@@ -45,31 +45,6 @@ const findSchedulesByUserIdAndToday = async (userId) => {
     });
 }
 
-const createSchedule = async (userId, ) => {
-    return await db.Schedule.create({
-        id_user: userId,
-    })
-}
-
-const findSchedulesByUserIdAndToday = async (userId) => {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
-
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
-    try {
-        return await db.Schedule.findAll({
-            where: {
-                id_user: userId,
-                from: {
-                    [Op.between]: [start, end]
-                }
-            }
-        });
-    } catch (e) {
-        console.error(e);
-    }
-}
 
 const requestHandler = {
 
@@ -244,7 +219,6 @@ else on creation: login, send 200, {username, id}
     async upload(req, res, next) {
         console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
-            console.log(shortened);
             res.header("Content-Type", "application/json");
             client.messages
                 .create({
