@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         url_profile_pic: { type: DataTypes.STRING, unique: false, allowNull: false },
         email: { type: DataTypes.STRING, unique: true },
         is_panic: { type: DataTypes.BOOLEAN, unique: false },
-
+        token_push: { type: DataTypes.STRING, unique: false, allowNull: true },
     });
 
     User.associate = (models) => {

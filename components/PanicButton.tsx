@@ -73,17 +73,7 @@ class PanicButton extends React.Component {
             };
             const uploadToServer = await axios.post(API_HOST + '/upload', body);
             console.log(uploadToServer.status);
-            //const serverUs = [15044442082, 15043390763, 15042107601];
-            
-            // for await(const number of serverUs) {
-              // let body2 = {
-              //   recipient: 15044442082,
-              //   link: data.url
-              // };
-              //  axios.post(API_HOST + '/api/messages', body2);
-            // }
-      
-
+            axios.post(API_HOST + '/api/messages', body);
           } catch(e){
             console.log(e);
           }
