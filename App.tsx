@@ -220,7 +220,10 @@ const AppNavigator = createStackNavigator({
     screen: JoinGroupView
   },
   Panic: {
-    screen: PanicButton
+    screen: PanicButton, 
+    navigationOptions: {
+      header: null
+    }
   },
   GroupView: {
     screen: GroupView

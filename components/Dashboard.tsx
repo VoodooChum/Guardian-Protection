@@ -57,7 +57,7 @@ class DashboardView extends React.Component {
   };
 
   sendLocationAsync = async () => {
-    let location = await Location.getCurrentPositionAsync({}).catch(err => console.log(err));;
+    let location = await Location.getCurrentPositionAsync({}).catch(err => console.log(err));
     let coords = location.coords
     this.setState({ coords: coords});
     if (this.props.userData){
@@ -87,7 +87,7 @@ class DashboardView extends React.Component {
       return;
     }
     // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync();
+    let token = await Notifications.getExpoPushTokenAsync().catch(err => console.log(err));
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     let res = await axios
       .post(`${API_HOST}/push/token`, { token })
