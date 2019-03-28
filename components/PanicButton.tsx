@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Text, View, TouchableOpacity, Button } from 'react-native';
+import { Text, View, TouchableOpacity, Button, Modal, Alert, TouchableHighlight } from 'react-native';
 import { Camera, FileSystem, Constants } from 'expo';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Overlay, Input} from 'react-native-elements';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 const { API_HOST } = Constants.manifest.extra;
 // const API_HOST = 'http://6ea8cf99.ngrok.io'
@@ -11,14 +13,37 @@ class PanicButton extends React.Component {
     this.state = {
       type: Camera.Constants.Type.front,
       recording: false,
+      modalVisible: true,
+      status: 'frown-o',
+      passcode: ''
     }
     this.camera = null;
     this.record = this.record.bind(this);
   }
+
+  
   async componentDidMount() {
+    const { userId } = this.props.navigation.state.params;
     setTimeout(this.record, 1000);
+    let update = await axios.patch(`${API_HOST}/panic/${userId}`, {"is_panic": true});
   }
 
+  setModalVisible = (visible: boolean) => {
+    this.setState({ modalVisible: visible });
+    
+  }
+
+  exitPanic = () => {
+    let passcode = this.props.navigation.state.params.userData.safeword;
+    if (this.state.passcode === passcode) {
+      this.props.navigation.navigate('Dashboard', {
+        userData: this.props.navigation.state.params.userData,
+        name: this.props.navigation.state.params.name
+      });
+      this.props.navigation.state.params.getGroupsAsnyc();
+    }
+  }
+ 
   async record() {
     const { camera } = this;
   if (camera) {
@@ -29,7 +54,7 @@ class PanicButton extends React.Component {
       });
       const file = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingTypes.Base64
-      })
+      }) 
       console.log('GOT THE FILE', file.slice(0, 10), file.length);
       try {
         console.log('We should send the request');
@@ -109,6 +134,70 @@ class PanicButton extends React.Component {
               </TouchableOpacity>
             </View>
           </Camera>
+          <TouchableHighlight
+            style={{
+              marginBottom: 50,
+            }}
+            onPress={() => {
+              this.setModalVisible(true);
+            }}>
+            <Text>Show Modal</Text>
+          </TouchableHighlight>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
+            
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={{
+              marginTop: 375, 
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center'
+              }}>
+              <View style={{
+                width: 300,
+                height: 300
+              }}>
+                <Text style={{
+                  color: 'white',
+                }}>You are engaged in Panic Mode. Enter Your Passcode to Exit</Text>
+                <Input
+                  placeholder='Enter Passcode'
+                  style={{
+                    color: 'white',
+                  }}
+                  onChangeText={(text) => this.setState({ passcode: text })}
+                  leftIcon={
+                    <Icon
+                      
+                      name='lock'
+                      size={24}
+                      color='black'
+                    />
+                  }
+                  rightIcon={
+                    <Icon
+                      onPress={this.exitPanic}
+                      name={this.state.status}
+                      size={24}
+                      color='black'
+                    />
+                  }
+                />
+                <Button title="Submit" onPress={() => {this.exitPanic(); this.setModalVisible(!this.state.modalVisible)}}></Button>
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalVisible);
+                  }}>
+                  <Text>Hide Modal</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+          
         </View>
       );
     }

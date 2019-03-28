@@ -383,19 +383,50 @@ else on creation: login, send 200, {username, id}
     },
     async createSchedule(req, res){
         console.log(req.body);
-        if(req.body.userId ){
-            try{
-                const {userId} = req.body
+        res.status(200).send('LMAO');
+        if (req.body.userId) {
+            try {
+                const { userId } = req.body
                 const schedule = createSchedule(userId);
                 res.status(201).send(schedule);
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
                 errorHandler(req, res, e);
             }
         } else {
             res.status(400).send('Bad request');
         }
+    },
+    
+    togglePanicStatus(req, res){
+        let myId = req.params.id 
+        db.User.update({is_panic: true}, {returning: true, where: {id: myId}}) 
+        // db.User.findOne({where: {id: myId}}) 
+            .then(data => res.send(data))
+            .catch(err =>
+                errorHandler(req, res, err)
+            )
+    },
+
+    async checkPanicStatus(req, res){
+        const { id } = req.params
+        const numberId = parseInt(id);
+        if (typeof numberId === 'number') {
+            try {
+                const groupMember = await db.User.findOne({ where: { id: numberId } });
+                if (groupMember) {
+                    res.status(200).send(groupMember.is_panic);
+                } else {
+                    res.status(404).send('This user has is not Panicking');
+                }
+            } catch (e) {
+                console.log(e);
+                res.status(500).send('DB Error');
+            }
+        } else {
+            res.send(400);
     }
+
 }
 
 module.exports = requestHandler;

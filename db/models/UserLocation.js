@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     UserLocation.associate = (models) => {
-
     };
 
     return UserLocation;

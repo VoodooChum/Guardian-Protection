@@ -14,6 +14,7 @@ const client = require("twilio")(
 const port = process.env.PORT || 3000; 
 const { 
         createUser, 
+        checkPanicStatus,
         login, 
         signup, 
         joinGroup,
@@ -24,6 +25,7 @@ const {
         groupMembers,
         getLocation,
         getChatId,
+        togglePanicStatus,
         getRoutes,
         getScheduleForToday,
         createRoute,
@@ -94,8 +96,14 @@ app.get('/chatId/:groupName', getChatId);
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
   axios.post(`https://exp.host/--/api/v2/push/send`, {
+<<<<<<< HEAD
+    "to": "ExponentPushToken[UecR7pHDtX3OXW9JhsD1gz]", "body": "Guardian Alert"
+  })
+  res.send('Push Complete');
+=======
     "to": "ExponentPushToken[UecR7pHDtX3OXW9JhsD1gz]", "body": "Guardian Alert" })
     res.send('Push Complete');
+>>>>>>> 1d3154ab56fff64a076573f1158ef3dff27a4a4f
 });
 
 // Responding to Incoming Messages
@@ -122,8 +130,28 @@ app.post("/push/token", savePushToken);
 
 app.get('/locations/:id', getLocation);
 
+<<<<<<< HEAD
+app.post('/locations/routes', (req, res) => {
+  res.status(201).send('Connecting')
+});
+app.post('/schedule/create', () => {
+  res.status(201).send('Connecting');
+});
+app.post('/route/create', () => {
+  res.status(201).send('Connecting');
+});
+
+//panic status
+
+app.patch('/panic/:id', togglePanicStatus)
+
+app.get('/panic/status/:id', checkPanicStatus)
+
+
+=======
 app.post('/schedule/create', createSchedule);
 
 app.get('/schedule/retrieve/:id', getScheduleForToday);
+>>>>>>> 1d3154ab56fff64a076573f1158ef3dff27a4a4f
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
