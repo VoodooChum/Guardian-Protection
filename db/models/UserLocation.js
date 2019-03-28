@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     UserLocation.associate = (models) => {
-        UserLocation.belongsTo(models.RouteLocation, { constraints: false });
     };
 
     return UserLocation;

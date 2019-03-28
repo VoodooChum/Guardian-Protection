@@ -5,6 +5,8 @@ import { createStackNavigator, createAppContainer, withNavigation } from 'react-
 import { parse } from 'url';
 // import console = require('console');
 // import console = require('console');
+// import console = require('console');
+// import console = require('console');
 const { API_HOST } = Constants.manifest.extra;
 
 
@@ -15,7 +17,8 @@ class Map extends React.Component {
         super(props); 
         this.state = {
             myLocation: this.props.navigation.state.params.location,
-            memberLocation: this.props.navigation.state.params.location
+            memberLocation: this.props.navigation.state.params.location,
+            panicStatus: false
         }
         this._isMounted = false;
     }
@@ -27,8 +30,8 @@ class Map extends React.Component {
         // let currentUser = this.props.navigation.state.params.userData
         // let credentials = await axios.get(`${API_HOST}/locations/${currentUser.id}`);
         console.log(this.props.navigation.state.params.username);
-        let location = await Location.getCurrentPositionAsync({});
-
+        let location = await Location.getCurrentPositionAsync({}).catch(err => console.log(err));;
+        this.checkPanicStatus();
         this.getLastLocation();
         let coords = location.coords
         this.setState({ myLocation: coords })
@@ -41,13 +44,19 @@ class Map extends React.Component {
 
     getLastLocation = async () => {
         let memberId = this.props.navigation.state.params.username;
-        let groupMemberLocation = await axios.get(`${API_HOST}/locations/${memberId}`)
+        let groupMemberLocation = await axios.get(`${API_HOST}/locations/${memberId}`).catch(err => console.log(err));
         let lastLoc = { 'longitude': parseFloat(groupMemberLocation.data.longitude), 'latitude': parseFloat(groupMemberLocation.data.latitude)} 
         this.setState({ memberLocation: lastLoc })  
         // console.log(lastLoc);
         // console.log(this.state.myLocation) 
     }
 
+    checkPanicStatus = async () => {
+        let memberId = this.props.navigation.state.params.username;
+        let panicStatus = await axios.get(`${API_HOST}/panic/status/${memberId}`).catch(err => console.log(err));
+        this.setState({ panicStatus: panicStatus})
+        // console.log(panicStatus);
+    }
     
     render() {
         const { myLocation, memberLocation } = this.state;    
@@ -55,8 +64,8 @@ class Map extends React.Component {
             <MapView
                 style={{ flex: 1 }}
                 initialRegion={{
-                    latitude: myLocation.latitude,
-                    longitude: myLocation.longitude,
+                    latitude: parseFloat(memberLocation.latitude),
+                    longitude: parseFloat(memberLocation.longitude),
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}

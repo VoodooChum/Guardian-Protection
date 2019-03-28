@@ -5,6 +5,7 @@ import { ThemeProvider, Button } from "react-native-elements";
 import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
+// import console = require('console');
 const { API_HOST } = Constants.manifest.extra;
 const theme = {
   Button: {
@@ -43,13 +44,13 @@ class DashboardView extends React.Component {
     setTimeout(this.getGroupsAsnyc, 3000)
   };
   sendLocationAsync = async () => {
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({}).catch(err => console.log(err));;
     let coords = location.coords
     this.setState({ coords: coords});
     if (this.props.userData){
-      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id });
+      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.userData.id }).catch(err => console.log(err));;
     } else {
-      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.navigation.state.params.userData.id })
+      let sentLoc = await axios.post(`${API_HOST}/locations/create`, { "latitude": coords.latitude.toString(), "longitude": coords.longitude.toString(), "userId": this.props.navigation.state.params.userData.id }).catch(err => console.log(err));
     }
   }
 
@@ -57,14 +58,14 @@ class DashboardView extends React.Component {
   registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
-    );
+    ).catch(err => console.log(err));
     let finalStatus = existingStatus;
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
     if (existingStatus !== 'granted') {
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS).catch(err => console.log(err));;
       finalStatus = status;
     }
     // Stop here if the user did not grant permissions
@@ -80,7 +81,7 @@ class DashboardView extends React.Component {
   getGroupsAsnyc = async () => {
     if (this.props.userData) {
       this._isMounted && this.setState({ photoUrl: this.props.userData.url_profile_pic, name: this.props.name })
-      let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`);
+      let myGroups = await axios.get(`${API_HOST}/myGroups/${this.props.userData.id}`).catch(err => console.log(err));
       if (myGroups) {
         this.setState({ groups: myGroups.data, isLoading: false })
       }
@@ -89,7 +90,7 @@ class DashboardView extends React.Component {
       let name = this.props.navigation.state.params.name;
       this.props.name = name;
       this.setState({ photoUrl: user.url_profile_pic, name: name })
-      let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`);
+      let newGroups = await axios.get(`${API_HOST}/myGroups/${user.id}`).catch(err => console.log(err));;
       this.setState({ groups: newGroups.data, isLoading: false })
     }
   }
@@ -144,11 +145,24 @@ class DashboardView extends React.Component {
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Panic Button Pressed');
-    this.props.navigation.navigate('Panic', {
-      hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission,
-      userId: this.props.userData.id
-    });
+    if(this.props.userData){
+      this.props.navigation.navigate('Panic', {
+        hasAudioPermission: this.props.hasAudioPermission,
+        hasCameraPermission: this.props.hasCameraPermission,
+        userId: this.props.userData.id,
+        userData: this.props.userData,
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        name: this.props.name,
+      });
+    } else {
+      this.props.navigation.navigate('Panic', { 
+        userId: this.props.navigation.state.params.userData.id,
+        userData: this.props.navigation.state.params.userData,
+        getGroupsAsnyc: this.getGroupsAsnyc,
+        name: this.props.name,
+      });
+    }
+    
   }
 
   onPressViewGroup = (name: string) => {

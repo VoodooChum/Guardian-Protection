@@ -13,6 +13,7 @@ const client = require("twilio")(
 const port = process.env.PORT || 3000; 
 const { 
         createUser, 
+        checkPanicStatus,
         login, 
         signup, 
         joinGroup,
@@ -88,20 +89,10 @@ app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
-  res.header("Content-Type", "application/json");
-  client.messages
-    .create({
-      from: process.env.TWILIO_NUMBER,
-      to: req.body.recipient,
-      body: `Guardian App Alert ${req.body.link}`
-    })
-    .then(() => {
-      res.send(JSON.stringify({ success: true }));
-    })
-    .catch(err => {
-      console.log(err);
-      res.send(JSON.stringify({ success: false }));
-    });
+  axios.post(`https://exp.host/--/api/v2/push/send`, {
+    "to": "ExponentPushToken[UecR7pHDtX3OXW9JhsD1gz]", "body": "Guardian Alert"
+  })
+  res.send('Push Complete');
 });
 
 // Responding to Incoming Messages
@@ -143,6 +134,12 @@ app.post('/route/create', () => {
   res.status(201).send('Connecting');
 });
 
+//panic status
+
 app.patch('/panic/:id', togglePanicStatus)
+
+app.get('/panic/status/:id', checkPanicStatus)
+
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

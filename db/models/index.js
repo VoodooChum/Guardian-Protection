@@ -12,15 +12,10 @@ const models = [
     'UserGroup', 
     'Group',
     'GroupMessage',
-    'Message',
-    'Receipt',
-    'UserReceipt', 
     'Panic',
     'Schedule',
     'Location',
     'UserLocation',
-    'Route',
-    'RouteLocation'
 ];
 
 models.forEach((model) => {

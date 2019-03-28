@@ -370,6 +370,26 @@ const requestHandler = {
             .catch(err =>
                 errorHandler(req, res, err)
             )
+    },
+
+    async checkPanicStatus(req, res){
+        const { id } = req.params
+        const numberId = parseInt(id);
+        if (typeof numberId === 'number') {
+            try {
+                const groupMember = await db.User.findOne({ where: { id: numberId } });
+                if (groupMember) {
+                    res.status(200).send(groupMember.is_panic);
+                } else {
+                    res.status(404).send('This user has is not Panicking');
+                }
+            } catch (e) {
+                console.log(e);
+                res.status(500).send('DB Error');
+            }
+        } else {
+            res.send(400);
+        }
     }
 
 }
