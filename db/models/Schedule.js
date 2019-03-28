@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Schedule = sequelize.define('Schedule', {
-        id_route: { type: DataTypes.STRING, unique: true, allowNull: true },
+        id_location: { type: DataTypes.STRING, unique: true, allowNull: true },
         id_user: { type: DataTypes.INTEGER, unique: true, allowNull: true },
         input_time: { type: DataTypes.DATE, unique: false, allowNull: true },
     });

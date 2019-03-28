@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
+  "expoServerPort": 19000,
   "webpackServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://9g-4p7.voodoochum.guardian.exp.direct",
+  "packagerNgrokUrl": "https://packager.9g-4p7.voodoochum.guardian.exp.direct",
+  "ngrokPid": 566,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null
+  "packagerPort": 19001,
+  "packagerPid": 489
 }
