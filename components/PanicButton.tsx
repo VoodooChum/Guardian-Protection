@@ -167,7 +167,7 @@ class PanicButton extends React.Component {
                   color: 'white',
                 }}>You are engaged in Panic Mode. Enter Your Passcode to Exit</Text>
                 <Input
-                  placeholder='Enter Passcode'
+                  placeholder='Enter Safeword'
                   style={{
                     color: 'white',
                   }}
