@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, TouchableHighlight, Text, ScrollView, ActivityIndicator } from "react-native";
 import axios from "axios";
-import { ThemeProvider, Button } from "react-native-elements";
+import { ThemeProvider, Button, Icon } from "react-native-elements";
 import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
-// import console = require('console');
-const { API_HOST } = Constants.manifest.extra;
+// const { API_HOST } = Constants.manifest.extra;
+const API_HOST = 'http://73376243.ngrok.io';
 const theme = {
   Button: {
     containerStyle: {
@@ -33,9 +33,8 @@ class DashboardView extends React.Component {
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
     this.sendLocationAsync = this.sendLocationAsync.bind(this);
-    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(
-      this
-    );
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
+    this.onPressViewSchedule = this.onPressViewSchedule.bind(this);
   }
 
   componentDidMount = () => {
@@ -204,7 +203,15 @@ class DashboardView extends React.Component {
       });
     }
   };
-
+  onPressViewSchedule(name:string){
+    this.props.navigation.navigate('ScheduleView', {
+      hasAudioPermission: this.props.hasAudioPermission,
+      hasCameraPermission: this.props.hasCameraPermission,
+      userInfo: this.props.userData,
+      name: name,
+      location: this.props.location
+    })
+  }
   render() {
     const { isLoading, name } = this.state;
     // console.log(this.state.groups);
@@ -262,6 +269,13 @@ class DashboardView extends React.Component {
           >
             <Text style={styles.buttonText}>Panic</Text>
           </TouchableHighlight>
+          <Icon name='gear'
+            type='font-awesome'
+            style={{
+              marginTop: 15,
+            }}
+            onPress={() => this.onPressViewSchedule(name)}
+            />
         </ScrollView>
       </View>
     );
