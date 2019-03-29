@@ -6,7 +6,7 @@ import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
 // const { API_HOST } = Constants.manifest.extra;
-const API_HOST = 'http://73376243.ngrok.io';
+const API_HOST = 'https://56bf53d3.ngrok.io';
 const theme = {
   Button: {
     containerStyle: {

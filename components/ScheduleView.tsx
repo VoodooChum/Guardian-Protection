@@ -4,15 +4,17 @@ import axios from 'axios';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { MapView } from 'expo';
 // const {API_HOST} = Constants.manifest.extra;
-const API_HOST = 'http://73376243.ngrok.io';
+const API_HOST = 'https://56bf53d3.ngrok.io';
 class Schedule extends React.Component {
   constructor(props:object){
     super(props);
-    console.log(this.props.navigation.state.params);
+  }
+  componentDidMount(){
+    this.getMarkers();
   }
   async getMarkers(){
     try {
-      const { data } = await axios.get(`${API_HOST}//schedule/retrieve/${this.props.navigation.state.params.userInfo.id}`);
+      const { data } = await axios.get(`${API_HOST}/schedule/retrieve/${this.props.navigation.state.params.userInfo.id}`);
       console.log(data);
     } catch(e){
       console.log(e);

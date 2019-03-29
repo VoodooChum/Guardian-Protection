@@ -18,7 +18,7 @@ import Schedule from './components/ScheduleView';
 
 // import console = require('console');
 // const {API_HOST} = Constants.manifest.extra;
-const API_HOST = 'http://73376243.ngrok.io';
+const API_HOST = 'https://56bf53d3.ngrok.io';
 
 
  class App extends React.Component {
