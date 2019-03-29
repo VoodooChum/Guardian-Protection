@@ -33,13 +33,15 @@ class PanicButton extends React.Component {
     
   }
 
-  exitPanic = () => {
+  exitPanic = async () => {
+    const { userId } = this.props.navigation.state.params;
     let passcode = this.props.navigation.state.params.userData.safeword;
     if (this.state.passcode === passcode) {
       this.props.navigation.navigate('Dashboard', {
         userData: this.props.navigation.state.params.userData,
         name: this.props.navigation.state.params.name
       });
+      let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": false });
       this.props.navigation.state.params.getGroupsAsnyc();
     }
   }
