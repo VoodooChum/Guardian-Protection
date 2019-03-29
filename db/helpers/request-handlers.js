@@ -400,7 +400,7 @@ else on creation: login, send 200, {username, id}
     
     togglePanicStatus(req, res){
         let myId = req.params.id 
-        db.User.update({is_panic: true}, {returning: true, where: {id: myId}}) 
+        db.User.update({is_panic: req.body.is_panic}, {returning: true, where: {id: myId}}) 
         // db.User.findOne({where: {id: myId}}) 
             .then(data => res.send(data))
             .catch(err =>
@@ -425,6 +425,7 @@ else on creation: login, send 200, {username, id}
             }
         } else {
             res.send(400);
+        }
     }
 
 }

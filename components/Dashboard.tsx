@@ -175,7 +175,7 @@ class DashboardView extends React.Component {
         userId: this.props.navigation.state.params.userData.id,
         userData: this.props.navigation.state.params.userData,
         getGroupsAsnyc: this.getGroupsAsnyc,
-        name: this.props.name,
+        name: this.props.navigation.state.params.name,
       });
     }
     
