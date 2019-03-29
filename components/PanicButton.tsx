@@ -25,7 +25,7 @@ class PanicButton extends React.Component {
   async componentDidMount() {
     const { userId } = this.props.navigation.state.params;
     setTimeout(this.record, 1000);
-    let update = await axios.patch(`${API_HOST}/panic/${userId}`, {"is_panic": true});
+    let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": true }).catch((err) => console.log(err));
   }
 
   setModalVisible = (visible: boolean) => {
@@ -39,10 +39,10 @@ class PanicButton extends React.Component {
     if (this.state.passcode === passcode) {
       this.props.navigation.navigate('Dashboard', {
         userData: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: `${this.props.navigation.state.params.userData.name_first} ${this.props.navigation.state.params.userData.name_last}`
       });
-      let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": false });
-      this.props.navigation.state.params.getGroupsAsnyc();
+      let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": false }).catch((err) => console.log(err));
+      // this.props.navigation.state.params.getGroupsAsnyc();
     }
   }
  

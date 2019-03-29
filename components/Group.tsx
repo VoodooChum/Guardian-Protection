@@ -78,7 +78,7 @@ class GroupView extends React.Component {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
       userData: this.props.navigation.state.params.userInfo,
-      getGroupAsnyc: this.props.navigation.state.params.getGroupsAsnyc,
+      getGroupsAsnyc: this.props.navigation.state.params.getGroupsAsnyc,
       name: this.props.navigation.state.params.name
     });
   };
