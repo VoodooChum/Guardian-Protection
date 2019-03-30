@@ -125,16 +125,6 @@ app.post("/push/:token", savePushToken);
 
 app.get('/locations/:id', getLocation);
 
-app.post('/locations/routes', (req, res) => {
-  res.status(201).send('Connecting')
-});
-app.post('/schedule/create', () => {
-  res.status(201).send('Connecting');
-});
-app.post('/route/create', () => {
-  res.status(201).send('Connecting');
-});
-
 //panic status
 
 app.patch('/panic/:id', togglePanicStatus)

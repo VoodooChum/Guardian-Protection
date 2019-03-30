@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, TouchableHighlight, Text, ScrollView, ActivityIndicator } from "react-native";
 import axios from "axios";
-import { ThemeProvider, Button } from "react-native-elements";
+import { ThemeProvider, Button, Icon } from "react-native-elements";
 import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
@@ -9,6 +9,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 
 // import console = require('console');
 const { API_HOST } = Constants.manifest.extra;
+// const API_HOST = 'http://60c7f24d.ngrok.io';
 const theme = {
   Button: {
     containerStyle: {
@@ -35,9 +36,8 @@ class DashboardView extends React.Component {
     this._isMounted = false;
     this.getGroupsAsnyc = this.getGroupsAsnyc.bind(this);
     this.sendLocationAsync = this.sendLocationAsync.bind(this);
-    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(
-      this
-    );
+    this.registerForPushNotificationsAsync = this.registerForPushNotificationsAsync.bind(this);
+    this.onPressViewSchedule = this.onPressViewSchedule.bind(this);
   }
 
   componentDidMount = () => {
@@ -159,7 +159,6 @@ class DashboardView extends React.Component {
       });
     }
   };
-
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Panic Button Pressed');
@@ -206,7 +205,48 @@ class DashboardView extends React.Component {
       });
     }
   };
-
+  onPressViewSchedule(name:string){
+    if (this.props.userData) {
+      this.props.navigation.navigate("ScheduleView", {
+        hasAudioPermission: this.props.hasAudioPermission,
+        hasCameraPermission: this.props.hasCameraPermission,
+        userInfo: this.props.userData,
+        name: name,
+        location: this.props.location
+      });
+    } else {
+      this.props.navigation.navigate("ScheduleView", {
+        hasAudioPermission: this.props.navigation.state.params
+          .hasAudioPermission,
+        hasCameraPermission: this.props.navigation.state.params
+          .hasCameraPermission,
+        userInfo: this.props.navigation.state.params.userData,
+        name: name,
+        location: this.state.coords
+      });
+    }
+  }
+  onPressCreateSchedule(name:string){
+    if (this.props.userData) {
+      this.props.navigation.navigate("CreateSchedule", {
+        hasAudioPermission: this.props.hasAudioPermission,
+        hasCameraPermission: this.props.hasCameraPermission,
+        userInfo: this.props.userData,
+        name: name,
+        location: this.props.location
+      });
+    } else {
+      this.props.navigation.navigate("CreateSchedule", {
+        hasAudioPermission: this.props.navigation.state.params
+          .hasAudioPermission,
+        hasCameraPermission: this.props.navigation.state.params
+          .hasCameraPermission,
+        userInfo: this.props.navigation.state.params.userData,
+        name: name,
+        location: this.state.coords
+      });
+    }
+  }
   render() {
     const { isLoading, name } = this.state;
     // console.log(this.state.groups);
@@ -257,6 +297,16 @@ class DashboardView extends React.Component {
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Button title="Join Group" onPress={this.onPressJoinGroup} />
+          </ThemeProvider>
+          <ThemeProvider
+            theme={theme}
+          >
+            <Button title='View Schedule' onPress={() => this.onPressViewSchedule(name)}/>
+          </ThemeProvider>
+          <ThemeProvider
+            theme={theme}
+          >
+            <Button title='Create Event' onPress={() => this.onPressCreateSchedule(name)} />
           </ThemeProvider>
           <TouchableHighlight
             style={styles.button}
