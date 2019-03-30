@@ -15,11 +15,11 @@ import GroupView from "./components/Group";
 import MapView from "./components/MapView"
 import ChatView from './components/Chat';
 import Schedule from './components/ScheduleView';
-
+import CreateSchedule from './components/CreateSchdule';
 // import console = require('console');
-// const {API_HOST} = Constants.manifest.extra;
-const API_HOST = 'https://56bf53d3.ngrok.io';
-
+const {API_HOST} = Constants.manifest.extra;
+// const API_HOST = 'http://60c7f24d.ngrok.io';
+console.log(API_HOST);
 
  class App extends React.Component {
   constructor(props:object){
@@ -236,6 +236,9 @@ const AppNavigator = createStackNavigator({
   },
   ScheduleView: {
     screen: Schedule
+  },
+  CreateSchedule: {
+    screen: CreateSchedule
   }
 });
 
