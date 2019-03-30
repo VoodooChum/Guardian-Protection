@@ -5,6 +5,8 @@ import axios from "axios";
 import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
+import Toast, { DURATION } from 'react-native-easy-toast'
+
 
 t.form.Form.stylesheet.textbox.normal.color = "white";
 
@@ -30,9 +32,10 @@ class JoinGroupView extends React.Component {
   }
 
   onPressJoinGroup = async () => {
+    let group = this.refs.form.getValue();
+    if (group && group.name !== '' && group.passcode !== '') {
     try {
   // call getValue() to get the values of the form
-  let group = this.refs.form.getValue();
   if (group) { // if validation fails, value will be null
     // let groupStatus = 'create'; // Sets value of groupStatus to create
     console.log(group); // value here is an instance of group 
@@ -43,16 +46,22 @@ class JoinGroupView extends React.Component {
   } catch(error) {
     console.log(JSON.stringify(error));
   }
+} 
   this.clearForm();
 }
 
   switchViewAndJoinGroup = () => {
     this.onPressJoinGroup()
+    let group = this.refs.form.getValue();
+    if (group && group.name !== '' && group.passcode !== '') {
     this.props.navigation.navigate('Dashboard', {
       userData: this.props.navigation.state.params.userInfo,
       name: this.props.navigation.state.params.name
     });
     this.props.navigation.state.params.getGroupsAsnyc();
+    } else {
+      this.refs.toast.show('You have to enter a group name & passcode', 5000);
+    }
   }
 
 
@@ -61,6 +70,7 @@ class JoinGroupView extends React.Component {
     return (
       <View style={styles.container}>
         {/* display */}
+        <Toast ref="toast" />
         <Form ref="form" type={Group} options={options} />
         <TouchableHighlight
           style={styles.button}
