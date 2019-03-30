@@ -1,10 +1,10 @@
+require('dotenv').config();
 const db = require('../models');
 const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
 );
 const { Op }= require('sequelize');
-require('dotenv').config();
 
 const Chatkit = require("@pusher/chatkit-server");
 
@@ -23,9 +23,12 @@ const errorHandler = (req, res, err) => {
     return res.send(500, 'Something went wrong on our part');
 };
 
-const createSchedule = async (userId) => {
-    return await db.Schedule.create({
-        id_user: userId,
+const createSchedule = (userId, locationId) => {
+    return db.Schedule.create({
+        UserId: userId,
+        id_location: locationId,
+        LocationId: locationId,
+        is_user: userId
     })
 }
 
@@ -127,8 +130,6 @@ else on creation: login, send 200, {username, id}
         Object.assign(newGroup, req.body.userData);
         Object.assign(newGroup, req.body.group);
         let sendToPusher = newGroup.name;
-
-
         // Creating a user on Pusher - returns a 400 if user already exists but does not harm tbe process
         chatkit.createUser({
             id: newGroup.email,
@@ -396,18 +397,30 @@ else on creation: login, send 200, {username, id}
     },
     async createSchedule(req, res){
         console.log(req.body);
-        res.status(200).send('LMAO');
-        if (req.body.userId) {
-            try {
-                const { userId } = req.body
-                const schedule = createSchedule(userId);
-                res.status(201).send(schedule);
-            } catch (e) {
-                console.error(e);
-                errorHandler(req, res, e);
+        if(req.body.latitude && req.body.longitude && req.body.userId){
+            try{
+                const {latitude, longitude, userId} = req.body;
+                const location = await db.Location.findOrCreate({
+                    where:{
+                        latitude,
+                        longitude
+                    }
+                });
+                const { dataValues } = location[0];
+                console.log(dataValues);
+                try{
+                    const createEvent = await createSchedule(userId, dataValues.id);
+                    res.status(201).send(createEvent.dataValues);
+                } catch(e){
+                    console.log(e.message);
+                    res.sendStatus(500);
+                }
+            } catch(e){
+                console.log(e.message);
+                res.sendStatus(500);
             }
         } else {
-            res.status(400).send('Bad request');
+            res.sendStatus(400);
         }
     },
     
