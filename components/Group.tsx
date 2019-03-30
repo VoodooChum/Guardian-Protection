@@ -27,10 +27,12 @@ class GroupView extends React.Component {
       name: props.navigation.state.params.name,
       members: []
     }
+    this._isMounted = false;
     this.onUserPress = this.onUserPress.bind(this);
   }
 
   componentDidMount = async () => {
+    this._isMounted = true;
     if(this.state.name){
       let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
       this.setState({ members: myMembers.data })
@@ -42,8 +44,9 @@ class GroupView extends React.Component {
     
   }
 
-  
-
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  }
   onUserPress = objects => {
     console.log(objects.nativeEvent.changedTouches);
     let position = objects.nativeEvent.changedTouches[0].pageY;
