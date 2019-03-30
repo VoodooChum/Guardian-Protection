@@ -5,8 +5,8 @@ import { ThemeProvider, Button, Icon } from "react-native-elements";
 import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
-// const { API_HOST } = Constants.manifest.extra;
-const API_HOST = 'https://56bf53d3.ngrok.io';
+const { API_HOST } = Constants.manifest.extra;
+// const API_HOST = 'http://60c7f24d.ngrok.io';
 const theme = {
   Button: {
     containerStyle: {
@@ -156,7 +156,6 @@ class DashboardView extends React.Component {
       });
     }
   };
-
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
     console.log('Panic Button Pressed');
@@ -204,13 +203,46 @@ class DashboardView extends React.Component {
     }
   };
   onPressViewSchedule(name:string){
-    this.props.navigation.navigate('ScheduleView', {
-      hasAudioPermission: this.props.hasAudioPermission,
-      hasCameraPermission: this.props.hasCameraPermission,
-      userInfo: this.props.userData,
-      name: name,
-      location: this.props.location
-    })
+    if (this.props.userData) {
+      this.props.navigation.navigate("ScheduleView", {
+        hasAudioPermission: this.props.hasAudioPermission,
+        hasCameraPermission: this.props.hasCameraPermission,
+        userInfo: this.props.userData,
+        name: name,
+        location: this.props.location
+      });
+    } else {
+      this.props.navigation.navigate("ScheduleView", {
+        hasAudioPermission: this.props.navigation.state.params
+          .hasAudioPermission,
+        hasCameraPermission: this.props.navigation.state.params
+          .hasCameraPermission,
+        userInfo: this.props.navigation.state.params.userData,
+        name: name,
+        location: this.state.coords
+      });
+    }
+  }
+  onPressCreateSchedule(name:string){
+    if (this.props.userData) {
+      this.props.navigation.navigate("CreateSchedule", {
+        hasAudioPermission: this.props.hasAudioPermission,
+        hasCameraPermission: this.props.hasCameraPermission,
+        userInfo: this.props.userData,
+        name: name,
+        location: this.props.location
+      });
+    } else {
+      this.props.navigation.navigate("CreateSchedule", {
+        hasAudioPermission: this.props.navigation.state.params
+          .hasAudioPermission,
+        hasCameraPermission: this.props.navigation.state.params
+          .hasCameraPermission,
+        userInfo: this.props.navigation.state.params.userData,
+        name: name,
+        location: this.state.coords
+      });
+    }
   }
   render() {
     const { isLoading, name } = this.state;
@@ -262,6 +294,16 @@ class DashboardView extends React.Component {
           <ThemeProvider theme={theme}>
             <Button title="Join Group" onPress={this.onPressJoinGroup} />
           </ThemeProvider>
+          <ThemeProvider
+            theme={theme}
+          >
+            <Button title='View Schedule' onPress={() => this.onPressViewSchedule(name)}/>
+          </ThemeProvider>
+          <ThemeProvider
+            theme={theme}
+          >
+            <Button title='Create Event' onPress={() => this.onPressCreateSchedule(name)} />
+          </ThemeProvider>
           <TouchableHighlight
             style={styles.button}
             onPress={this.onPressPanic}
@@ -269,13 +311,6 @@ class DashboardView extends React.Component {
           >
             <Text style={styles.buttonText}>Panic</Text>
           </TouchableHighlight>
-          <Icon name='gear'
-            type='font-awesome'
-            style={{
-              marginTop: 15,
-            }}
-            onPress={() => this.onPressViewSchedule(name)}
-            />
         </ScrollView>
       </View>
     );
