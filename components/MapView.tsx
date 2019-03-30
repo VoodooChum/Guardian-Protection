@@ -18,7 +18,8 @@ class Map extends React.Component {
         this.state = {
             myLocation: this.props.navigation.state.params.location,
             memberLocation: this.props.navigation.state.params.location,
-            panicStatus: false
+            panicStatus: false,
+            groupMember: this.props.navigation.state.params.name
         }
         this._isMounted = false;
     }
@@ -45,8 +46,8 @@ class Map extends React.Component {
     getLastLocation = async () => {
         let memberId = this.props.navigation.state.params.username;
         let groupMemberLocation = await axios.get(`${API_HOST}/locations/${memberId}`).catch(err => console.log(err));
-        let lastLoc = { 'longitude': parseFloat(groupMemberLocation.data.longitude), 'latitude': parseFloat(groupMemberLocation.data.latitude)} 
-        this.setState({ memberLocation: lastLoc })  
+        // let lastLoc = { 'longitude': parseFloat(groupMemberLocation.data.longitude), 'latitude': parseFloat(groupMemberLocation.data.latitude)} 
+        // this.setState({ memberLocation: lastLoc })   
         // console.log(lastLoc);
         // console.log(this.state.myLocation) 
     }
@@ -75,6 +76,7 @@ class Map extends React.Component {
                         latitude: parseFloat(myLocation.latitude),
                         longitude: parseFloat(myLocation.longitude), 
                     }}
+                    pinColor="blue"
                     title={"Your Location"}
                     description={"Me"}
                 />
@@ -83,7 +85,7 @@ class Map extends React.Component {
                         latitude: parseFloat(memberLocation.latitude),
                         longitude: parseFloat(memberLocation.longitude),
                     }}
-                    title={"Your Group Member"}
+                    title={this.state.groupMember}
                     description={"Last Location"}
                 />
             </MapView >
