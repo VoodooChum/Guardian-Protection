@@ -39,7 +39,7 @@ const findSchedulesByUserIdAndToday = async (userId) => {
     const end = new Date();
     end.setHours(23, 59, 59, 999);
     try{
-        return await db.Schedule.findAll({
+        return db.Schedule.findAll({
             where: {
                 UserId: userId,
                 createdAt: {
@@ -47,8 +47,7 @@ const findSchedulesByUserIdAndToday = async (userId) => {
                     [Op.gt]: new Date(new Date() - 24 * 60 * 60 * 1000)
                 }
             },
-            
-        });
+        }); 
     } catch(e){
         console.log(e);
         return null;
@@ -382,6 +381,20 @@ else on creation: login, send 200, {username, id}
             try {
                 const schedules = await findSchedulesByUserIdAndToday(parsedId);
                 console.log(schedules)
+                try{
+                    const locationIds = [];
+                    schedules.forEach((event) => {
+                        locationIds.push({id: event.id_location});
+                    })
+                    const locationsForSchedules = await db.Location.findAll({
+                        where: {
+                            [Op.or]: locationIds
+                        }
+                    });
+                    res.status(200).send(locationsForSchedules);
+                } catch(e){
+                    res.sendStatus(404);
+                }
                 if(schedules){
                     res.status(200).send(schedules);
                 } else {
