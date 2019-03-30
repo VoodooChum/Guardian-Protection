@@ -5,6 +5,9 @@ import { ThemeProvider, Button, Icon } from "react-native-elements";
 import { Constants, Location } from 'expo';
 import { withNavigation } from 'react-navigation';
 import { Permissions, Notifications } from 'expo';
+import Toast, { DURATION } from 'react-native-easy-toast'
+
+// import console = require('console');
 const { API_HOST } = Constants.manifest.extra;
 // const API_HOST = 'http://60c7f24d.ngrok.io';
 const theme = {
@@ -89,7 +92,7 @@ class DashboardView extends React.Component {
     let token = await Notifications.getExpoPushTokenAsync().catch(err => console.log(err));
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     let res = await axios
-      .post(`${API_HOST}/push/token`, { token })
+      .post(`${API_HOST}/push/${token}`, { "token": token })
       .catch(err => console.log(err));
   };
 
@@ -276,6 +279,7 @@ class DashboardView extends React.Component {
             {this.state.name}
           </Text>
           <ThemeProvider theme={theme}>
+            <Toast ref="toast" />
             {this.state.groups.map(group => (
               <Button
                 group={group.id}

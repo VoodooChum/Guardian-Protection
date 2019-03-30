@@ -121,7 +121,7 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-app.post("/push/token", savePushToken); 
+app.post("/push/:token", savePushToken); 
 
 app.get('/locations/:id', getLocation);
 
