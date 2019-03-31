@@ -425,8 +425,8 @@ else on creation: login, send 200, {username, id}
             }
         } else {
             res.send(400);
+        }
     }
-
 }
 
 module.exports = requestHandler;
