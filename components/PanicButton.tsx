@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Overlay, Input} from 'react-native-elements';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 const { API_HOST } = Constants.manifest.extra;
+import Toast, { DURATION } from 'react-native-easy-toast'
+
 // const API_HOST = 'http://6ea8cf99.ngrok.io'
 class PanicButton extends React.Component {
   constructor(props:object){
@@ -21,11 +23,11 @@ class PanicButton extends React.Component {
     this.record = this.record.bind(this);
   }
 
-  
   async componentDidMount() {
     const { userId } = this.props.navigation.state.params;
     setTimeout(this.record, 1000);
-    let update = await axios.patch(`${API_HOST}/panic/${userId}`, {"is_panic": true});
+    let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": true }).catch((err) => console.log(err));
+    let passcode = this.props.navigation.state.params.userData.safeword;
   }
 
   setModalVisible = (visible: boolean) => {
@@ -33,14 +35,18 @@ class PanicButton extends React.Component {
     
   }
 
-  exitPanic = () => {
+  exitPanic = async () => {
+    const { userId } = this.props.navigation.state.params;
     let passcode = this.props.navigation.state.params.userData.safeword;
     if (this.state.passcode === passcode) {
       this.props.navigation.navigate('Dashboard', {
         userData: this.props.navigation.state.params.userData,
-        name: this.props.navigation.state.params.name
+        name: `${this.props.navigation.state.params.userData.name_first} ${this.props.navigation.state.params.userData.name_last}`
       });
-      this.props.navigation.state.params.getGroupsAsnyc();
+      let update = await axios.patch(`${API_HOST}/panic/${userId}`, { "is_panic": false }).catch((err) => console.log(err));
+      // this.props.navigation.state.params.getGroupsAsnyc();
+    } else {
+      this.refs.toast.show('Wrong Safeword', 10000);
     }
   }
  
@@ -141,8 +147,9 @@ class PanicButton extends React.Component {
             onPress={() => {
               this.setModalVisible(true);
             }}>
-            <Text>Show Modal</Text>
+            <Text>Press To Enter SafeWord</Text>
           </TouchableHighlight>
+          <Toast ref="toast" />
           <Modal
             animationType="slide"
             transparent={true}
@@ -163,9 +170,9 @@ class PanicButton extends React.Component {
               }}>
                 <Text style={{
                   color: 'white',
-                }}>You are engaged in Panic Mode. Enter Your Passcode to Exit</Text>
+                }}>You are engaged in Panic Mode. Enter Your Safeword to Exit</Text>
                 <Input
-                  placeholder='Enter Passcode'
+                  placeholder='Enter Safeword'
                   style={{
                     color: 'white',
                   }}

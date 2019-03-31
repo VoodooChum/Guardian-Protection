@@ -6,6 +6,7 @@ import axios from "axios";
 import { withNavigation } from 'react-navigation';
 import { Google, Constants } from 'expo';
 const { API_HOST } = Constants.manifest.extra;
+import Toast, { DURATION } from 'react-native-easy-toast'
 // const API_HOST = 'http://6ea8cf99.ngrok.io'
 
 const Form = t.form.Form;
@@ -30,31 +31,41 @@ class CreatGroupView extends React.Component {
   }
 
   onPressCreateGroup = async () => {
+    let group = this.refs.form.getValue();
+    if (group && group.name !== '' && group.passcode !== '') {
     try {
   // call getValue() to get the values of the form
-  let group = this.refs.form.getValue();   
-  if (group) { // if validation fails, value will be null
+     
+      // if validation fails, value will be null
     // let groupStatus = 'create'; // Sets value of groupStatus to create
     console.log(group); // value here is an instance of group 
     // console.log(this.state);
-  }
+  
       let userData = this.props.navigation.state.params.userInfo;
       let result = await axios.post(`${API_HOST}/createGroup`, { "group": group, "userData": userData})
+      
   } catch(error) {
     console.log(JSON.stringify(error)); 
   }
-   
+}
+   else {
+      this.refs.toast.show('You have to enter a group name & passcode');
+    }
   this.clearForm();
 }
 
 switchViewAndCreateGroup = () => {
   this.onPressCreateGroup();
-  
+  let group = this.refs.form.getValue();
+  if (group && group.name !== '' && group.passcode !== '') {
   this.props.navigation.navigate('Dashboard', {
     userData: this.props.navigation.state.params.userInfo, 
     name: this.props.navigation.state.params.name
   });
   this.props.navigation.state.params.getGroupsAsnyc();
+  } else {
+    this.refs.toast.show('You have to enter a group name & passcode', 5000);
+  }
 }
  
 
@@ -70,6 +81,7 @@ switchViewAndCreateGroup = () => {
             uri: `${userData.url_profile_pic}`
           }}
         />
+        <Toast ref="toast" />
         <Form ref="form" type={Group} options={options} />
         <TouchableHighlight
           style={styles.button}
@@ -78,6 +90,7 @@ switchViewAndCreateGroup = () => {
         >
           <Text style={styles.buttonText}>Save and Create</Text>
         </TouchableHighlight>
+
       </View>
     );
   }
