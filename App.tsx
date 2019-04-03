@@ -237,19 +237,16 @@ const AppNavigator = createStackNavigator({
   ChatView: {
     screen: ChatView
   },
-<<<<<<< HEAD
   PanicVideoView: {
     screen: PanicVideoView
   },
 
-=======
   ScheduleView: {
     screen: Schedule
   },
   CreateSchedule: {
     screen: CreateSchedule
   }
->>>>>>> e5aeb044b6854f054b0fdab50f8e83b50087ca85
 });
 
 const AppContainer = createAppContainer(AppNavigator);
