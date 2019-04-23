@@ -225,9 +225,9 @@ else on creation: login, send 200, {username, id}
      * them to the database, and sends back the status code and the url 
      */
     async upload(req, res, next) {
-        console.log(req.body);
+        // console.log(req.body);
         if (req.body.id_user && req.body.url_video) {
-            res.header("Content-Type", "application/json");
+            // res.header("Content-Type", "application/json");
             client.messages
                 .create({
                     from: process.env.TWILIO_NUMBER,
@@ -243,9 +243,12 @@ else on creation: login, send 200, {username, id}
                 });
 
             const newPanic = {};
-            Object.assign(newPanic, req.body.id_user);
-            Object.assign(newPanic, req.body.url_video);
-            db.Panic.create(req.body).then((createdPanic) => {
+            // Object.assign(newPanic, req.body.id_user);
+            // Object.assign(newPanic, req.body.url_video);
+            newPanic.id_user = req.body.id_user;
+            newPanic.url_video = req.body.url_video;
+            db.Panic.create(newPanic).then((createdPanic) => {
+                console.log(createdPanic);
                 res.status(201).send(createdPanic.url_video);
             }).catch((e) => {
                 res.status(401).send(e.message);
