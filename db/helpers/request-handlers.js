@@ -4,6 +4,7 @@ const client = require("twilio")(
     process.env.ACCOUNT_SID,
     process.env.AUTH_TOKEN
 );
+const axios = require('axios');
 const { Op }= require('sequelize');
 
 const Chatkit = require("@pusher/chatkit-server");
@@ -169,10 +170,10 @@ else on creation: login, send 200, {username, id}
     },
 
     savePushToken(req, res) {
-        console.log(`Save token: ${req.body.token} for User: ${req.body.user}`);
+        console.log(`Save token: ${req.body.token} for User: ${req.body.user.email}`);
         db.User.update(
             { token_push: req.body.token },
-            { returning: true, where: { email: req.body.user } }
+            { returning: true, where: { email: req.body.user.email } }
         ).then(() => console.log('Push Token Saved')).catch(err => errorHandler(req, res, err));
     },
 
@@ -252,6 +253,15 @@ else on creation: login, send 200, {username, id}
         } else {
             res.status(400).send('bad request');
         }
+        axios.post(`https://exp.host/--/api/v2/push/send`, {
+            "to": "ExponentPushToken[l78gqFCrcC9aquFmiqKl29]",
+            "sound": "default",
+            "title": "Guardian Alert Notification",
+            "data": {
+                "panicView": "true",
+                "url": "http://res.cloudinary.com/banditation/video/upload/v1553640910/wbt94giidzmkoedrgswf.mov"
+            }
+        }).catch(err => console.log(err));;
     },
 
     /**
@@ -436,8 +446,20 @@ else on creation: login, send 200, {username, id}
             res.sendStatus(400);
         }
     },
+
+    checkPanicAll(req, res) {
+        db.Panic.findAll()
+        .then((videos)=>{
+           let panicVideo = videos.filter((video) => {
+               return video.url_video !== null;
+            })
+            res.send(panicVideo);
+            //console.log(videos.data); 
+        })
+        
+    },
     
-    togglePanicStatus(req, res){
+    togglePanicStatus(req, res) {
         let myId = req.params.id 
         db.User.update({is_panic: req.body.is_panic}, {returning: true, where: {id: myId}}) 
         // db.User.findOne({where: {id: myId}}) 
@@ -456,7 +478,7 @@ else on creation: login, send 200, {username, id}
                 if (groupMember) {
                     res.status(200).send(groupMember.is_panic);
                 } else {
-                    res.status(404).send('This user has is not Panicking');
+                    res.status(404).send('This user is not Panicking');
                 }
             } catch (e) {
                 console.log(e);

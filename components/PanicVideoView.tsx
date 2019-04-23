@@ -4,6 +4,21 @@ import PropTypes from "prop-types";
 import { withNavigation } from 'react-navigation';
 import { Video, Constants, Permissions, Location, Notifications } from 'expo';
 class PanicVideoView extends React.Component {
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      groups: [],
+      photoUrl: "a",
+      name: "",
+      isLoading: true,
+      coords: null,
+      notification: {},
+      isPanic: "false",
+      data: {},
+      panicVideoUrl: this.props.navigation.state.params.panicVideoUrl
+    };
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -16,7 +31,8 @@ class PanicVideoView extends React.Component {
         />
         <Video
           source={{
-            uri: "http://res.cloudinary.com/banditation/video/upload/v1553869861/mxqgsttf3fz6y2ww6tel.mp4"
+           //uri: `http://res.cloudinary.com/banditation/video/upload/v1553640910/wbt94giidzmkoedrgswf.mov`
+            uri: `${this.state.panicVideoUrl}`
           }}
           rate={1.0}
           volume={1.0}
@@ -24,7 +40,7 @@ class PanicVideoView extends React.Component {
           resizeMode="cover"
           shouldPlay
           isLooping
-          style={{ alignSelf: "center", width: 400, height: 400 }}
+          style={{ alignSelf: "center", width: 300, height: 500 }}
         />
       </View>
     );
