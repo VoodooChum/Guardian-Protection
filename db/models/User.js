@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         name_first: { type: DataTypes.STRING, unique: false, allowNull: false },
@@ -9,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         update_interval: { type: DataTypes.INTEGER, unique: false, allowNull: true },
         url_profile_pic: { type: DataTypes.STRING, unique: false, allowNull: false },
         email: { type: DataTypes.STRING, unique: true },
+        is_panic: { type: DataTypes.BOOLEAN, unique: false },
+        token_push: { type: DataTypes.STRING, unique: false, allowNull: true },
     });
 
     User.associate = (models) => {

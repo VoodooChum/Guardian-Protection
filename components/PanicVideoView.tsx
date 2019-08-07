@@ -1,84 +1,51 @@
-import * as React from 'react';
-import { View, StyleSheet, TouchableHighlight, Text, ScrollView } from "react-native";
-import { Card, ThemeProvider, Button, ListItem, Icon, Image} from "react-native-elements";
-import { Google, Constants } from 'expo';
-import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
-import { cpus } from 'os';
-const {API_HOST} = Constants.manifest.extra;
-
-const theme = {
-  Button: {
-    containerStyle: {
-      marginTop: 10
-    },
-    raised: true,
-    color: "red",
-    borderWidth: 3,
-    borderRadius: 10
-    // color: "#006edc",
-  }
-};
-
+import React from "react";
+import { Text, View, StyleSheet, Image } from "react-native";
+import PropTypes from "prop-types";
+import { withNavigation } from 'react-navigation';
+import { Video, Constants, Permissions, Location, Notifications } from 'expo';
 class PanicVideoView extends React.Component {
   constructor(props: object) {
     super(props);
     this.state = {
-      name: props.navigation.state.params.name,
-      members: []
-    }
-    this.onUserPress = this.onUserPress.bind(this);
+      groups: [],
+      photoUrl: "a",
+      name: "",
+      isLoading: true,
+      coords: null,
+      notification: {},
+      isPanic: "false",
+      data: {},
+      panicVideoUrl: this.props.navigation.state.params.panicVideoUrl
+    };
   }
-
-  componentDidMount = async () => {
-    
-    
-  }
-
-  
-
-
-  
-
-  onPressPanic = () => {
-    // Do whatever you need here to switch to Joining a group View
-    
-  };
-
-
 
   render() {
-    let userData = this.props.navigation.state.params.userInfo;
     return (
       <View style={styles.container}>
         <Image
-          style={{ alignSelf: "center", borderRadius: 20, width: 155, height: 153, marginBottom: 30 }}
+          style={{ alignSelf: "center", width: 155, height: 182, marginBottom: 10 }}
           source={{
-            uri: `${userData.url_profile_pic}`
+            uri:
+              "https://lh3.googleusercontent.com/UBU_NdCOW0iaVeRmiQmiF6tt5azKKwpSagJWTDWtEi1JXx15TC5AwpkTQ1aC8sqvNPCXPUqPHqcDQpGaXFwjNpKzPgqvdqYxhnEOg-X9635qoNP8S9G9-1jEc35cQ5KF4U6_Z2az9GXYhEBcO2KhBwecqBGkyw7Vcr-R19j48RdqPZjrJtFlwqkMnYytw3_0KTHt7YVr52TLv_f4SrYXB69C68WAXNFPxl-fV1B4y80fUSw3lWyJRCbrWc8fFT53yv4SxaEaDIk-cssp5X3gL2ynfOLIm09DWADiNivNbaVdKEoTfi1DRoY2qFAZDEae-jTl236Pj6W8gSHoMHAEffc_xIg7fFuVXvLQVk4ye142IJitH6RtCcUTKA0AzZY2mXijF2ZfwCX6UJWy77hnmmWOhkhWTZKoN9czQfVP7uizAgM-aGmx3Yu0oHWXOrZ1j_d5eI_p1OxsOvUBOIL5Lo7-fCAcfCiDrGbiUMusvxh0xDWqyS-TdxVZ9G4MmXw3d3MkAQoVKUtN3YWJMnQsyJeIHNDRxXKUTbQEpjaYdB4EQAO1wgfiXv1gPBZqoy7rHP12BvpgKb1-vXlVIBJvbZCr1HN5v76DQX0h1a4qfCyXgCtlMqO0r8XgM2LCh145waCKYWZtH0XIxU0Z1h2aSncmHPbpMXUCRTZ-hK3Z7P-txy1m3ZppPLI3TSWzJdODDc4dhEc6TdHBC3c8-aEm8EA7=w258-h304-no"
           }}
         />
-        <Text style={{ alignSelf: 'center', marginBottom: 5, color: 'white' }}
-        >{this.props.navigation.state.params.name}</Text> 
-        
-        <ThemeProvider theme={theme}>
-        
-        </TouchableHighlight>
-        </ThemeProvider>
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.onPressPanic}
-          // underlayColor="#99d9f4"
-        >
-          <Text style={styles.buttonText}>Panic</Text>
-        </TouchableHighlight>
+        <Video
+          source={{
+           //uri: `http://res.cloudinary.com/banditation/video/upload/v1553640910/wbt94giidzmkoedrgswf.mov`
+            uri: `${this.state.panicVideoUrl}`
+          }}
+          rate={1.0}
+          volume={1.0}
+          isMuted={false}
+          resizeMode="cover"
+          shouldPlay
+          isLooping
+          style={{ alignSelf: "center", width: 300, height: 500 }}
+        />
       </View>
     );
   }
 }
-const scroll = StyleSheet.create({
-  contentContainer: {
-    paddingVertical: 20
-  }
-});
 
 const styles = StyleSheet.create({
   container: {

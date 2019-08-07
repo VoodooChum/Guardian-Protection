@@ -5,6 +5,7 @@ const passport = require('passport');
 const db = require('../db/models');
 const LocalStrategy = require('passport-local').Strategy;
 const MessagingResponse = require("twilio").twiml.MessagingResponse;
+const axios = require("axios");
 const app = express();
 const client = require("twilio")(  
   process.env.ACCOUNT_SID,
@@ -13,6 +14,7 @@ const client = require("twilio")(
 const port = process.env.PORT || 3000; 
 const { 
         createUser, 
+        checkPanicStatus,
         login, 
         signup, 
         joinGroup,
@@ -23,6 +25,13 @@ const {
         groupMembers,
         getLocation,
         getChatId,
+        togglePanicStatus,
+        getRoutes,
+        getScheduleForToday,
+        createRoute,
+        createSchedule,
+        savePushToken,
+        checkPanicAll,
       } = require('../db/helpers/request-handlers')
 // Set Express to use body-parser as a middleware //  
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -32,8 +41,6 @@ app.use(passport.session());
 
 
 app.all('*', (req, res, next) => {
-  // ugly hack to let the browser know the user is logged in
-  // not sure if secure
   if (req.isAuthenticated()) {
     res.set({ Login: 'true', User: req.user.username });
   } else {
@@ -81,26 +88,16 @@ app.post("/joinGroup", joinGroup);
  
 app.get("/myGroups/:id", getMyGroups ); 
  
-app.get("/groupMembers/:groupName", groupMembers)
+app.get("/groupMembers/:groupName", groupMembers);
 
-app.get('/chatId/:groupName', getChatId)
+app.get('/chatId/:groupName', getChatId);
 
 // Sending Messages from Panic to Group Members
 app.post("/api/messages", (req, res) => {
-  res.header("Content-Type", "application/json");
-  client.messages
-    .create({
-      from: process.env.TWILIO_NUMBER,
-      to: req.body.recipient,
-      body: `Guardian App Alert ${req.body.link}`
-    })
-    .then(() => {
-      res.send(JSON.stringify({ success: true }));
-    })
-    .catch(err => {
-      console.log(err);
-      res.send(JSON.stringify({ success: false }));
-    });
+  axios.post(`https://exp.host/--/api/v2/push/send`, {
+    "to": "ExponentPushToken[UecR7pHDtX3OXW9JhsD1gz]", "body": "Guardian Alert"
+  })
+  res.send('Push Complete');
 });
 
 // Responding to Incoming Messages
@@ -123,12 +120,20 @@ app.post('/sms', (req, res) => {
 
 app.post('/locations/create', createLocation);
 
-app.post("/push/token", (req, res) => { 
-  //saveToken(req.body.token.value);  
-  console.log(`Received push token, ${req.body.token}`);
-  console.log(`User, ${req.body.name.value}`)
-  res.send(200);
-}); 
+app.post("/push/:token", savePushToken); 
 
 app.get('/locations/:id', getLocation);
+
+//panic status for any group member check
+app.get('/panic/anyMember/:id', checkPanicAll);
+
+app.patch('/panic/:id', togglePanicStatus);
+
+app.get('/panic/status/:id', checkPanicStatus)
+
+
+app.post('/schedule/create', createSchedule);
+
+app.get('/schedule/retrieve/:id', getScheduleForToday);
+
 app.listen(port, () => console.log(`Listening on port ${port}`));

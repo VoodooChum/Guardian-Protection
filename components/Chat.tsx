@@ -6,8 +6,8 @@ import { Google, Constants } from 'expo';
 import { GiftedChat } from "react-native-gifted-chat";
 import { ChatManager, TokenProvider } from "@pusher/chatkit-client";
 
-const { API_HOST, PUSHER_INSTANCE_LOCATION, TOKEN_PROVIDER_ENDPOINT } = Constants.manifest.extra;
-
+const {API_HOST, PUSHER_INSTANCE_LOCATION, TOKEN_PROVIDER_ENDPOINT } = Constants.manifest.extra;
+// const API_HOST = 'http://6ea8cf99.ngrok.io'
 const CHATKIT_TOKEN_PROVIDER_ENDPOINT = TOKEN_PROVIDER_ENDPOINT;
 const CHATKIT_INSTANCE_LOCATOR = PUSHER_INSTANCE_LOCATION;
 // const CHATKIT_ROOM_ID = "19394045";

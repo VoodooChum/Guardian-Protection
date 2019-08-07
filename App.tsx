@@ -2,7 +2,7 @@ import * as React from 'react';
 // import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { StyleSheet, Text, View, Image, Button, Platform } from 'react-native';
 import LoginView from './components/Login';
-import {Google, Constants, Permissions, Location} from 'expo';
+import {Google, Constants, Permissions, Location, Notifications} from 'expo';
 import axios from 'axios';
 import { ANDROID_CLIENT_ID, IOS_CLIENT_ID } from 'react-native-dotenv';
 import Signup from "./components/Signup";
@@ -14,29 +14,34 @@ import DashboardView from "./components/Dashboard";
 import GroupView from "./components/Group";
 import MapView from "./components/MapView"
 import ChatView from './components/Chat';
+import PanicVideoView from "./components/PanicVideoView";
 
+
+import Schedule from './components/ScheduleView';
+import CreateSchedule from './components/CreateSchdule';
 // import console = require('console');
 const {API_HOST} = Constants.manifest.extra;
-
-
+// const API_HOST = 'http://60c7f24d.ngrok.io';
+console.log(API_HOST);
 
  class App extends React.Component {
   constructor(props:object){
     super(props);
     this.state = {
       signedIn: false,
-      name: '',
-      photoUrl: 'a', 
-      email: '',
-      accessToken: '',
-      accessTokenExpirationDate: '',
+      name: "",
+      photoUrl: "a",
+      email: "",
+      accessToken: "",
+      accessTokenExpirationDate: "",
       panic: false,
       existingUser: false,
       hasAudioPermission: null,
       hasCameraPermission: null,
       hasLocationPermission: null,
-      myLocation: null
-    }
+      myLocation: null,
+      
+    };
     this.signInAsync = this.signInAsync.bind(this);
     this.handleGoogleSession = this.handleGoogleSession.bind(this);
     this.startPanic = this.startPanic.bind(this);
@@ -96,15 +101,15 @@ const {API_HOST} = Constants.manifest.extra;
         clientId: ANDROID_CLIENT_ID,
         scopes: ['profile', 'email'],
       });
+      console.log(result.type);
       if (result.type === 'success') {
-        // console.log(result);
-      var output;
       try {
         const params = {
           "username": result.user.email,
           "password": result.user.name
         }
-       let sentUser = await axios.post(`${API_HOST}/login`, params)
+        console.log(`${API_HOST}/login`);
+        let sentUser = await axios.post(`${API_HOST}/login`, params)
         // console.log(groups);
         this.setState({existingUser: sentUser.data}) 
       } catch(e){   
@@ -148,6 +153,9 @@ const {API_HOST} = Constants.manifest.extra;
       this.handleGoogleSession();
       return (
           <View style={styles.container}>
+          {this.state.notification ?
+            this.renderNotification()
+            : null}
             <Image
               style={{ borderRadius: 20, width: 155, height: 153 }}
               source={{
@@ -196,35 +204,48 @@ const AppNavigator = createStackNavigator({
   Home: {
     screen: App,
     navigationOptions: {
-      header: null,
+      header: null
     }
   },
   Signup: {
     screen: Signup
   },
   CreatGroupView: {
-    screen: CreateGroupView,
+    screen: CreateGroupView
   },
   Dashboard: {
-    screen: DashboardView, 
+    screen: DashboardView,
     navigationOptions: {
-      header: null,
+      header: null
     }
   },
   JoinGroup: {
     screen: JoinGroupView
   },
   Panic: {
-    screen: PanicButton
-  }, 
+    screen: PanicButton, 
+    navigationOptions: {
+      header: null
+    }
+  },
   GroupView: {
-    screen: GroupView 
+    screen: GroupView
   },
   MapView: {
     screen: MapView
   },
   ChatView: {
     screen: ChatView
+  },
+  PanicVideoView: {
+    screen: PanicVideoView
+  },
+
+  ScheduleView: {
+    screen: Schedule
+  },
+  CreateSchedule: {
+    screen: CreateSchedule
   }
 });
 

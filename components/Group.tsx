@@ -7,7 +7,6 @@ import { Google, Constants } from 'expo';
 import { createStackNavigator, createAppContainer, withNavigation } from 'react-navigation';
 import { cpus } from 'os';
 const {API_HOST} = Constants.manifest.extra;
-
 const theme = {
   Button: {
     containerStyle: {
@@ -28,10 +27,12 @@ class GroupView extends React.Component {
       name: props.navigation.state.params.name,
       members: []
     }
+    this._isMounted = false;
     this.onUserPress = this.onUserPress.bind(this);
   }
 
   componentDidMount = async () => {
+    this._isMounted = true;
     if(this.state.name){
       let myMembers = await axios.get(`${API_HOST}/groupMembers/${this.state.name}`)
       this.setState({ members: myMembers.data })
@@ -43,8 +44,9 @@ class GroupView extends React.Component {
     
   }
 
-  
-
+  componentWillUnmount = () => {
+    this._isMounted = false;
+  }
   onUserPress = objects => {
     console.log(objects.nativeEvent.changedTouches);
     let position = objects.nativeEvent.changedTouches[0].pageY;
@@ -63,13 +65,14 @@ class GroupView extends React.Component {
     isChat = false;
   };
 
-  onMapView = (username: string) => {
+  onMapView = (username: string, name: string) => {
     this.props.navigation.navigate('MapView', {
       username: username,
       userInfo: this.props.navigation.state.params.userData,
-      location: this.props.navigation.state.params.location
+      location: this.props.navigation.state.params.location,
+      name: name
     });
-  }
+  } 
 
   onPressPanic = () => {
     // Do whatever you need here to switch to Joining a group View
@@ -77,7 +80,9 @@ class GroupView extends React.Component {
     this.props.navigation.navigate("Panic", {
       hasAudioPermission: this.props.hasAudioPermission,
       hasCameraPermission: this.props.hasCameraPermission,
-      userInfo: this.props.navigation.state.params.userData
+      userData: this.props.navigation.state.params.userInfo,
+      getGroupsAsnyc: this.props.navigation.state.params.getGroupsAsnyc,
+      name: this.props.navigation.state.params.name
     });
   };
 
@@ -108,7 +113,7 @@ class GroupView extends React.Component {
             key={i}
             leftAvatar={{ source: { uri: member.url_profile_pic } }}
             title={`${member.name_first} ${member.name_last}`}
-            onPress={this.onMapView}
+            onPress={() => this.onMapView(member.id, `${member.name_first} ${member.name_last}`)}
           />
         ))}
         <ThemeProvider theme={theme}>

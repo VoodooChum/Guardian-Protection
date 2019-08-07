@@ -8,9 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Group.associate = (models) => {
         Group.belongsToMany(models.User, { through: models.UserGroup });
-        Group.belongsToMany(models.Message, { through: models.GroupMessage });
         Group.belongsTo(models.User, { constraints: false });
-        Group.hasMany(models.Message)
     };
 
     return Group;
